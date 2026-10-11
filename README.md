@@ -28,6 +28,23 @@ imports, path resolution, and `doctor` never create directories. See
 
 ## Bootstrap validation
 
+The version-controlled [data source manifest](configs/data_sources.toml) records
+source metadata and intended research roles. Inspect or validate it without
+downloading scientific data:
+
+```sh
+PYTHONPATH=src python3 -m stability_label_curation sources list
+PYTHONPATH=src python3 -m stability_label_curation sources list --json
+PYTHONPATH=src python3 -m stability_label_curation sources validate
+PYTHONPATH=src python3 -m stability_label_curation sources show netmhcstabpan_2016 --json
+PYTHONPATH=src python3 -m stability_label_curation sources validate --manifest /path/to/manifest.toml
+```
+
+See [the manifest schema and provenance policy](docs/DATA_SOURCE_MANIFEST.md).
+Metadata validation does not certify individual experimental rows or authorize
+scientific inclusion. Kinetic half-life, thermal melting temperature, synthetic
+negatives, and model predictions remain distinct.
+
 Requires Python 3.11 or later; no dependency installation is needed for these source-layout checks:
 
 ```sh

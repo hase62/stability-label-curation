@@ -1,0 +1,127 @@
+schema_version = 1
+
+# Metadata only: no source-level classification certifies every external row.
+[[sources]]
+source_id = "netmhcstabpan_2016"
+title = "NetMHCstabpan — Rasmussen et al., Journal of Immunology, 2016"
+publication_doi = "10.4049/jimmunol.1600582"
+source_type = "experimental_dataset"
+research_role = "primary_kinetic_candidate"
+species_scope = "human_hla_i"
+measurement_type = "kinetic_half_life"
+provenance_status = "row_audit_required"
+landing_url = "https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/"
+download_url = "https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/Stability.txt"
+artifact_name = "Stability.txt"
+target_relative_path = "netmhcstabpan_2016/Stability.txt"
+expected_record_count = 28166
+expected_allele_count = 75
+count_basis = "published_expectation"
+measurement_unit = "hours"
+columns = ["HLA", "Pep", "Thalf"]
+license = "not_yet_verified"
+assay_conditions = "not_yet_verified"
+evidence_urls = ["https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/", "https://pubmed.ncbi.nlm.nih.gov/27402703/"]
+verification_notes = "2026-10-11: DTU supplementary HTML checked directly; its ./Stability.txt href resolves to the recorded download_url, and its displayed format is HLA/Pep/Thalf. Artifact not fetched; availability and bytes not tested. Indexed original publication and PubMed metadata confirm DOI and published counts. No exact-artifact SHA256 established."
+notes = "Primary kinetic candidate subject to row-level provenance auditing before training. Numerical zeros in the public file do not establish artificial negatives. Human HLA-I only; exclude mouse and rat. Published counts are not verified local counts or proof of row validity."
+
+[[sources]]
+source_id = "netmhcstab_2013"
+title = "NetMHCstab 2013 historical stability measurements"
+publication_doi = "10.1111/imm.12160"
+source_type = "experimental_dataset"
+research_role = "historical_overlap_audit"
+species_scope = "human_hla_i"
+measurement_type = "kinetic_half_life"
+provenance_status = "row_audit_required"
+landing_url = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3893846/"
+expected_record_count = 5509
+expected_allele_count = 10
+count_basis = "published_expectation"
+license = "not_yet_verified"
+evidence_urls = ["https://pmc.ncbi.nlm.nih.gov/articles/PMC3893846/", "https://pubmed.ncbi.nlm.nih.gov/23927693/"]
+verification_notes = "2026-10-11: PMC returned a browser challenge. PubMed publication page confirms DOI, PMC mapping, and the published 5509 measurements across 10 HLA-I molecules. Direct artifact mapping, license, and checksum remain unverified."
+notes = "Historical source for overlap auditing. Retain requested 2013 source ID; PubMed lists the journal issue as January 2014 and copyright as 2013. Do not assume independence from NetMHCstabpan 2016 or sum the two published counts as independent observations. Requires row-level audit."
+
+[[sources]]
+source_id = "jappe_2020"
+title = "Jappe 2020 — Thermostability profiling of MHC-bound peptides"
+source_type = "mixed_dataset"
+research_role = "secondary_thermal_candidate"
+species_scope = "human_hla_i"
+measurement_type = "thermal_melting_temperature"
+provenance_status = "row_audit_required"
+publication_doi = "10.1038/s41467-020-20166-4"
+landing_url = "https://www.nature.com/articles/s41467-020-20166-4"
+measurement_unit = "degrees_Celsius"
+license = "not_yet_verified"
+assay_conditions = "not_yet_verified"
+evidence_urls = ["https://www.nature.com/articles/s41467-020-20166-4", "https://pmc.ncbi.nlm.nih.gov/articles/PMC7726561/"]
+verification_notes = "2026-10-11: Nature search-index publication content confirms DOI, Tm, and supplementary data availability; direct page retrieval failed and alternative PMC returned a challenge. Exact supplementary artifact mapping, direct URLs, licenses, checksums, and assay metadata remain unverified."
+notes = "Supplementary peptide-level data are available through the publication. Keep measured thermal melting temperature (Tm) separate from kinetic half-life. Supplementary materials may include measured values, synthetic negatives, and model predictions; future parsing and provenance validation must separate these. Do not assume every row is an observed Tm."
+
+[[sources]]
+source_id = "bigmhc_v4"
+title = "BigMHC Training and Evaluation Data, version 4"
+source_type = "mixed_dataset"
+research_role = "downstream_immunogenicity"
+species_scope = "human_hla_i"
+measurement_type = "immunogenicity"
+provenance_status = "row_audit_required"
+publication_doi = "10.17632/dvmz6pkzvb.4"
+landing_url = "https://data.mendeley.com/datasets/dvmz6pkzvb/4"
+published_version = "4"
+artifact_name = "datasets.zip"
+target_relative_path = "bigmhc_v4/datasets.zip"
+expected_sha256 = "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa"
+license = "CC-BY-4.0"
+training_datasets = ["el_train.csv", "im_train.csv"]
+validation_datasets = ["el_val.csv", "im_val.csv"]
+evaluation_datasets = ["el_test.csv", "im_test.csv", "iedb.csv", "manafest.csv"]
+evidence_urls = ["https://data.mendeley.com/datasets/dvmz6pkzvb/4"]
+verification_notes = "2026-10-11: version 4 Mendeley landing page checked. It ties the recorded SHA256 unambiguously to datasets.zip and states CC BY 4.0. This is a published checksum, not a locally computed verification. File download links were not exposed in the retrieved page; direct download URL remains unresolved. No archive downloaded."
+notes = "Primary downstream immunogenicity source. EL files concern epitope presentation; IM files concern immunogenicity transfer learning. iedb.csv is infectious disease epitope evaluation; manafest.csv contains neoepitope immunogenicity validated using MANAFEST assays. Archive also lists summary.csv and pseudoseqs.csv. Other columns contain predictor outputs. Exact split independence and row provenance require auditing. el.csv.zip is prediction output; eltrainval_models.zip contains checkpoints, not experimental datasets."
+
+[[sources]]
+source_id = "itsndb"
+title = "ITSNdb — tumor-specific neoantigen immunogenicity database"
+source_type = "dataset_reference"
+research_role = "independent_evaluation_candidate"
+species_scope = "human_hla_i"
+measurement_type = "immunogenicity"
+provenance_status = "not_yet_verified"
+publication_doi = "10.3389/fimmu.2023.1094236"
+landing_url = "https://github.com/elmerfer/ITSNdb"
+published_version = "not_yet_verified"
+license = "not_yet_verified"
+evidence_urls = ["https://github.com/elmerfer/ITSNdb", "https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2023.1094236/full"]
+verification_notes = "2026-10-11: repository README and Frontiers publication checked; DOI, core inclusion criteria, and publication-to-repository mapping confirmed. Repository displays GPL-3.0, but exact dataset artifact licensing remains unverified. Exact downloadable version, file mapping, direct URL, and checksum require verification."
+notes = "Potential independent neoantigen immunogenicity evaluation source. Never fabricate labels or infer missing labels. Repository includes Val_dataset and TNB_dataset with distinct evidence levels; do not equate them to the core curated database. Independence from downstream training sources requires overlap auditing."
+
+[[sources]]
+source_id = "spearmint_stability_audit"
+title = "SPEARMINT stability provenance audit candidate"
+source_type = "dataset_reference"
+research_role = "audit_only"
+species_scope = "not_yet_verified"
+measurement_type = "not_yet_verified"
+provenance_status = "unresolved_pending_audit"
+landing_url = "https://github.com/dhuvik/spearmint"
+license = "not_yet_verified"
+evidence_urls = ["https://github.com/dhuvik/spearmint"]
+verification_notes = "2026-10-11: repository landing page accessible. Exact Stage 2 CSV versions, mapping, measurement provenance, direct artifact URLs, licenses, and checksums unresolved."
+notes = "Audit-only candidate for future row-level provenance comparison against original DTU stability data. Stage 2 CSVs must not automatically become primary training data. Synthetic negatives and prediction-only values are not experimental measurements; a zero alone does not prove synthetic origin."
+
+[[sources]]
+source_id = "tlstab_reference"
+title = "TL-MHC / TLStab published model and dataset reference"
+source_type = "model_reference"
+research_role = "model_comparison"
+species_scope = "not_yet_verified"
+measurement_type = "not_applicable"
+provenance_status = "not_yet_verified"
+landing_url = "https://github.com/KavrakiLab/TL-MHC"
+license = "not_yet_verified"
+evidence_urls = ["https://github.com/KavrakiLab/TL-MHC"]
+verification_notes = "2026-10-11: repository retrieval failed. Publication DOI, dataset versions, artifact mappings, direct URLs, license, checksum, and species coverage remain unresolved."
+notes = "Published model and dataset reference for model comparison and historical dataset overlap auditing. Model predictions must not be treated as measured half-life data. Model checkpoints are not experimental datasets."
