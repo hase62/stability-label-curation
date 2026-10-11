@@ -45,6 +45,21 @@ Metadata validation does not certify individual experimental rows or authorize
 scientific inclusion. Kinetic half-life, thermal melting temperature, synthetic
 negatives, and model predictions remain distinct.
 
+Create a run only when explicitly requested, from a clean committed checkout;
+then inspect its provenance without changing storage:
+
+```sh
+PYTHONPATH=src python3 -m stability_label_curation runs create --kind infrastructure --seed 0
+PYTHONPATH=src python3 -m stability_label_curation runs list --json
+PYTHONPATH=src python3 -m stability_label_curation runs show <run_id> --json
+PYTHONPATH=src python3 -m stability_label_curation runs validate <run_id>
+```
+
+Creation supports `--description`, `--config`, repeatable `--input`, and a strict
+`--run-id`. `--allow-dirty` creates an explicitly noncanonical development run.
+See [run manifests and reproducibility limits](docs/RUN_MANIFEST.md). Run outputs
+remain outside Git, and this infrastructure performs no scientific experiments.
+
 Requires Python 3.11 or later; no dependency installation is needed for these source-layout checks:
 
 ```sh

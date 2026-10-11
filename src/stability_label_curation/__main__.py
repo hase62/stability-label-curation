@@ -7,6 +7,7 @@ import sys
 
 from .paths import check_storage, initialize_storage, resolve_paths
 from .data_sources import load_manifest
+from . import run_manifest
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -27,9 +28,52 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             subparser.add_argument("--json", action="store_true")
         if command == "show":
             subparser.add_argument("source_id")
+    runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
+    run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
+    create_parser = run_commands.add_parser("create", help="Create one run from committed code")
+    create_parser.add_argument("--kind", required=True)
+    create_parser.add_argument("--seed", type=int)
+    create_parser.add_argument("--description")
+    create_parser.add_argument("--run-id")
+    create_parser.add_argument("--allow-dirty", action="store_true")
+    create_parser.add_argument("--config", help="Configuration in checkout or project data/runs")
+    create_parser.add_argument("--input", action="append", default=[], help="Explicit project data/runs file; repeatable")
+    for command in ("list", "show", "validate"):
+        subparser = run_commands.add_parser(command)
+        if command != "list":
+            subparser.add_argument("run_id")
+        if command != "validate":
+            subparser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "runs":
+            if args.run_command == "create":
+                target = run_manifest.create_run(
+                    paths=paths, run_id=args.run_id, kind=args.kind, seed=args.seed,
+                    description=args.description, config=args.config, inputs=args.input,
+                    allow_dirty=args.allow_dirty,
+                    argv=list(sys.orig_argv) if argv is None else [sys.executable, "-m", "stability_label_curation", *argv],
+                )
+                manifest = run_manifest.load_manifest(target.name, paths=paths)
+                for warning in manifest["reproducibility"]["warnings"]:
+                    print(f"WARNING: {warning}", file=sys.stderr)
+                print(f"Run created: {target.name}\nPath: {target}")
+            elif args.run_command == "list":
+                runs = run_manifest.list_runs(paths=paths)
+                if args.json:
+                    print(json.dumps(runs, indent=2, sort_keys=True))
+                else:
+                    for run in runs:
+                        print(f"{run['run_id']}: {run['status']}; {run.get('reproducibility', {}).get('status', run.get('error', ''))}")
+            else:
+                manifest = run_manifest.load_manifest(args.run_id, paths=paths)
+                if args.run_command == "validate":
+                    print(f"OK: {args.run_id}; schema version {manifest['schema_version']}; "
+                          f"{manifest['reproducibility']['status']} (schema/evidence consistency only).")
+                else:
+                    print(json.dumps(manifest, indent=2, sort_keys=True))
+            return 0
         if args.command == "sources":
             registry = load_manifest(args.manifest, paths=paths)
             if args.source_command == "validate":
