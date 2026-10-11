@@ -1,0 +1,60 @@
+# Python caches and test tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments and build artifacts
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Editor and OS clutter
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Accidental local data and run directories
+data/
+runs/
+checkpoints/
+
+# Large local datasets, archives, arrays, and model artifacts
+*.csv
+*.tsv
+*.parquet
+*.arrow
+*.feather
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.pkl
+*.pickle
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.gz
