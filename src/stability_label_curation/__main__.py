@@ -1,0 +1,44 @@
+"""Standard-library storage CLI."""
+
+import argparse
+from collections.abc import Mapping, Sequence
+import json
+import sys
+
+from .paths import check_storage, initialize_storage, resolve_paths
+
+
+def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Portable project storage")
+    commands = parser.add_subparsers(dest="command", required=True)
+    paths_parser = commands.add_parser("paths", help="Display resolved storage paths")
+    paths_parser.add_argument("--json", action="store_true", help="Emit a JSON object")
+    commands.add_parser("doctor", help="Read-only environment checks")
+    commands.add_parser("init-storage", help="Create project data and runs directories")
+    args = parser.parse_args(argv)
+    try:
+        paths = resolve_paths(env)
+        if args.command == "paths":
+            if args.json:
+                print(json.dumps(paths.as_dict(), indent=2, sort_keys=True))
+            else:
+                for name, value in paths.as_dict().items():
+                    print(f"{name}: {value}")
+        elif args.command == "init-storage":
+            for path in initialize_storage(paths):
+                print(f"Storage ready: {path}")
+        else:
+            findings = check_storage(paths)
+            for severity, message in findings:
+                print(f"{severity}: {message}")
+            if not findings:
+                print("OK: configured directories exist and storage is accessible.")
+            return int(any(severity == "ERROR" for severity, _ in findings))
+    except (ValueError, OSError, RuntimeError) as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
