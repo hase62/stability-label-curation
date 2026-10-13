@@ -66,3 +66,17 @@ Requires Python 3.11 or later; no dependency installation is needed for these so
 PYTHONPATH=src python3 -B -c "import stability_label_curation; print(stability_label_curation.__file__)"
 PYTHONPATH=src python3 -B -m unittest discover -s tests -v
 ```
+
+Task 1.1 provides [original DTU 2016 acquisition and raw inventory](docs/NETMHCSTABPAN_2016_RAW_AUDIT.md).
+The raw artifact stays in project data storage. Only `fetch` downloads; inspection
+is offline and read-only unless `--report` is explicitly supplied:
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation dtu2016 fetch
+PYTHONPATH=src python3 -B -m stability_label_curation dtu2016 inspect --json
+PYTHONPATH=src python3 -B -m stability_label_curation dtu2016 inspect --input /path/to/local/Stability.txt --json
+```
+
+Preserve the acquisition JSON receipt. Published counts and numerical zeros do
+not establish individual rows' experimental or synthetic origin; Task 1.2
+provenance questions remain open.

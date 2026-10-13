@@ -1,6 +1,7 @@
 """Standard-library storage CLI."""
 
 import argparse
+from http.client import HTTPException
 from collections.abc import Mapping, Sequence
 import json
 import sys
@@ -8,6 +9,7 @@ import sys
 from .paths import check_storage, initialize_storage, resolve_paths
 from .data_sources import load_manifest
 from . import run_manifest
+from . import netmhcstabpan_2016 as dtu2016
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -17,6 +19,15 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     paths_parser.add_argument("--json", action="store_true", help="Emit a JSON object")
     commands.add_parser("doctor", help="Read-only environment checks")
     commands.add_parser("init-storage", help="Create project data and runs directories")
+    dtu_parser = commands.add_parser("dtu2016", help="DTU 2016 raw acquisition and read-only inventory")
+    dtu_commands = dtu_parser.add_subparsers(dest="dtu_command", required=True)
+    fetch_parser = dtu_commands.add_parser("fetch", help="Acquire official raw bytes or identify existing artifact")
+    fetch_parser.add_argument("--timeout", type=float, default=30, help="Finite connection/read timeout in seconds")
+    fetch_parser.add_argument("--receipt", help="Explicit JSON receipt destination under project runs")
+    inspect_parser = dtu_commands.add_parser("inspect", help="Offline, read-only structural inventory")
+    inspect_parser.add_argument("--input", help="Local input override; never downloads")
+    inspect_parser.add_argument("--json", action="store_true")
+    inspect_parser.add_argument("--report", help="Explicit JSON report destination under project runs")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -47,6 +58,19 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "dtu2016":
+            if args.dtu_command == "fetch":
+                document = dtu2016.fetch(paths=paths, timeout=args.timeout)
+                destination = args.receipt
+            else:
+                source = load_manifest(paths=paths).get(dtu2016.SOURCE_ID)
+                document = dtu2016.inventory(args.input or source.target_path(paths), source=source)
+                destination = args.report
+            if destination:
+                dtu2016.write_report(destination, document, paths=paths)
+            # JSON is the compact reproducible interface, also the default text form.
+            print(dtu2016.json_report(document), end="")
+            return 0
         if args.command == "runs":
             if args.run_command == "create":
                 target = run_manifest.create_run(
@@ -108,7 +132,7 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             if not findings:
                 print("OK: configured directories exist and storage is accessible.")
             return int(any(severity == "ERROR" for severity, _ in findings))
-    except (ValueError, OSError, RuntimeError) as error:
+    except (ValueError, OSError, RuntimeError, HTTPException) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     return 0
