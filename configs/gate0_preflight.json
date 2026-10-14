@@ -1,0 +1,68 @@
+{
+  "bin_convention": "Negative and exact-zero bins separate; positive bins (lower, upper], final (48, infinity). No censoring interpretation.",
+  "half_life_positive_bin_upper_bounds_hours": [
+    "0.1",
+    "0.5",
+    "1",
+    "2",
+    "5",
+    "10",
+    "24",
+    "48"
+  ],
+  "high_zero_fraction_threshold": "0.5",
+  "inputs": {
+    "aliases": {
+      "parent_relative_path": "reports/spearmint_stage2_aliases.jsonl",
+      "sha256": "6a07b46999dc9814dbeef5b457ef047dcdf18b26d7bd7726189c2eb27abd21e9"
+    },
+    "evidence": {
+      "parent_relative_path": "reports/source_evidence_manifest.json",
+      "sha256": "26be9e7f5f6611a642b1b0d2d6f68369d34fa0adfca48964c3582cf4a82c7fa1"
+    },
+    "lineage": {
+      "parent_relative_path": "reports/source_lineage_matrix.json",
+      "sha256": "b5d3411af37ef60543168b46086b4203d063b90fdde6e87f83fd8996eeb2010f"
+    },
+    "observations": {
+      "parent_relative_path": "reports/canonical_observations.jsonl",
+      "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+    },
+    "parent_manifest": {
+      "parent_relative_path": "manifest.json",
+      "sha256": "13ecca0a28aefd6418ef28bb1fbeec28e72b7fa3caae54eaa9a047eed4204270"
+    },
+    "validation": {
+      "parent_relative_path": "reports/registry_validation_summary.json",
+      "sha256": "fbd2c397c6c12d7f2e783926176db7202aa2ea0d648b02e3035d88696b0387e9"
+    }
+  },
+  "minimum_support_descriptive_counts": [
+    50,
+    100,
+    200
+  ],
+  "parent_registry_commit": "b3b7d060e83d76dbaa2c55b3aa4bbc72187135ad",
+  "parent_registry_run_id": "task-1_8-canonical-observation-registry",
+  "positive_quantiles_percent": [
+    5,
+    25,
+    50,
+    75,
+    95,
+    99
+  ],
+  "quantile_convention": "Type 7, h=(n-1)*p; linear interpolation, Decimal precision 50",
+  "repository_evidence": [
+    {
+      "relative_path": "configs/observation_registry.lock.json",
+      "sha256": "7b484afb96970e301b0e2d57eae4d22b38e0420b5f4bf6d133309dcbb684f51e"
+    },
+    {
+      "relative_path": "configs/data_sources.toml",
+      "sha256": "86f195cbd61a64a4e53740d4f59ebc84c976dfca65b06666e29855f15a545e80"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Aggregate decision evidence only; no observation eligibility masks, split assignments, target transforms or model training."
+}

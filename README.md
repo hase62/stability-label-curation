@@ -165,3 +165,14 @@ Validation is read-only and offline. Build requires an explicit hashed-input run
 The registry preserves 28,166 kinetic and 2,720 thermal measurement-value records;
 27,031 SPEARMINT rows become lineage aliases, not additional observations.
 Training eligibility and experimental independence remain unassessed.
+
+Task 1.9 prepares the [Gate 0 scientific decision dossier](docs/GATE0_SCIENTIFIC_DECISION_DOSSIER.md):
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation gate0 inspect --json
+```
+
+Inspection is offline and read-only from pinned Task 1.8 outputs. It quantifies
+zero/construct alternatives and leakage evidence while every eligibility decision
+remains pending. Explicit `--reports-dir` writes aggregate reports into an existing
+hashed-input run; it creates no training tables, inclusion masks or split assignments.

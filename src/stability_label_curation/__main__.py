@@ -19,6 +19,7 @@ from . import jappe_2020_sources as jappe
 from . import jappe_2020_row_audit as jappe_rows
 from . import jappe_2020_figure_audit as jappe_figures
 from . import observation_registry as observations
+from . import scientific_gate0_preflight as gate0
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -112,6 +113,15 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
         registry_command.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
         if name == "build":
             registry_command.add_argument("--output-dir", required=True, help="Explicit existing project run reports directory")
+    gate0_parser = commands.add_parser("gate0", help="Read-only scientific decision evidence; no policy implementation")
+    gate0_commands = gate0_parser.add_subparsers(dest="gate0_command", required=True)
+    gate0_inspect = gate0_commands.add_parser("inspect")
+    gate0_inspect.add_argument("--json", action="store_true")
+    gate0_inspect.add_argument("--registry", help="Explicit canonical observation JSONL override")
+    gate0_inspect.add_argument("--aliases", help="Explicit Stage 2 lineage JSONL override")
+    gate0_inspect.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH", help="Other parent report/manifest overrides")
+    gate0_inspect.add_argument("--config", help="Pinned preflight configuration or synthetic-fixture configuration")
+    gate0_inspect.add_argument("--reports-dir", help="Explicit existing project run reports directory")
     runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
     run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
     create_parser = run_commands.add_parser("create", help="Create one run from committed code")
@@ -131,6 +141,23 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "gate0":
+            files = {}
+            if args.registry:
+                files["observations"] = args.registry
+            if args.aliases:
+                files["aliases"] = args.aliases
+            for item in args.input:
+                key, separator, value = item.partition("=")
+                if not separator or not value or key in files:
+                    raise ValueError("--input requires a unique INPUT_ID=PATH")
+                files[key] = value
+            result = gate0.inspect(paths=paths, files=files, config_path=args.config)
+            if args.reports_dir:
+                gate0.write_reports(result, args.reports_dir, paths=paths)
+            document = result.reports if args.json else result.reports['gate0_data_coverage.json']
+            print(dtu2016.json_report(document), end="")
+            return 0
         if args.command == "registry":
             files = {}
             for item in args.input:
