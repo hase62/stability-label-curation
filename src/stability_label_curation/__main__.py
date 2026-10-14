@@ -13,6 +13,7 @@ from . import run_manifest
 from . import netmhcstabpan_2016 as dtu2016
 from . import dtu2016_source_audit as source_audit
 from . import spearmint_overlap_audit as spearmint
+from . import netmhcstab_historical_evidence as historical
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -50,6 +51,15 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     overlap_parser.add_argument("--dtu", help="Local DTU-format input override")
     overlap_parser.add_argument("--expected-dtu-sha256", help="Requires --dtu; independently pinned local fixture identity")
     overlap_parser.add_argument("--reports-dir", help="Explicit existing project run reports directory")
+    historical_parser = commands.add_parser("historical", help="Offline historical NetMHCstab evidence audit")
+    historical_commands = historical_parser.add_subparsers(dest="historical_command", required=True)
+    historical_audit = historical_commands.add_parser("audit")
+    historical_audit.add_argument("--json", action="store_true")
+    historical_audit.add_argument("--evidence", help="Captured offline evidence register override")
+    historical_audit.add_argument("--dtu", help="Local immutable DTU input override")
+    historical_audit.add_argument("--expected-dtu-sha256", help="Requires --dtu; pinned fixture identity")
+    historical_audit.add_argument("--secondary", help="Explicit pinned TLStab secondary score CSV override")
+    historical_audit.add_argument("--reports-dir", help="Write reports into an existing project run")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -80,6 +90,16 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "historical":
+            if args.expected_dtu_sha256 and not args.dtu:
+                raise ValueError("--expected-dtu-sha256 requires --dtu")
+            reports = historical.audit(paths=paths, evidence_path=args.evidence,
+                dtu_path=args.dtu, expected_dtu_sha256=args.expected_dtu_sha256 or source_audit.TASK11_LOCAL_SHA256,
+                secondary_path=args.secondary)
+            if args.reports_dir:
+                historical.write_reports(reports, args.reports_dir, paths=paths)
+            print(dtu2016.json_report(reports if args.json else reports['conditional_row_overlap_summary.json']), end="")
+            return 0
         if args.command == "spearmint":
             if args.expected_dtu_sha256 and not args.dtu:
                 raise ValueError("--expected-dtu-sha256 requires explicit --dtu")

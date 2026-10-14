@@ -1,0 +1,228 @@
+{
+  "access_limitations": [
+    "PMC returned HTTP 200 reCAPTCHA pages, not article content; challenge pages are not scientific evidence artifacts. Wiley full text and institutional/author PDFs were available via web tooling.",
+    "Original supplement download links failed in web tooling; supplement roles verified from article listings only.",
+    "No verified source version or assay-level IEDB input available. No emails, license requests, or software downloads performed.",
+    "No verified dataset redistribution license or publisher checksum for recovered secondary CSV.",
+    "TLStab points to Supplementary Methods online; no complete local supplementary-methods artifact was recovered. The main paper and pinned repository code are the verified processing evidence."
+  ],
+  "accessed_at_utc": "2026-10-14T03:54:53Z",
+  "acquisition_deviation": {
+    "confirmed_model_blob": {
+      "byte_size": 8904535,
+      "git_blob_sha": "92e8ade7efa50029fd2714dc08d45e0aff11ce1a",
+      "path": "TLBind/models/Pretrained_BA-EL.pt"
+    },
+    "description": "git ls-tree -r -l HEAD in the filtered no-checkout TL-MHC clone triggered unintended lazy blob downloads, including a pretrained TLBind model and unrelated TLImm data blobs. Listing and fetch processes were stopped.",
+    "limitations": "Full unintended blob inventory is not established. Git cache retained without deletion; seven provenance source files were subsequently selected explicitly. No model or external code was executed/loaded; no dependencies installed.",
+    "prevention": "Use name-only Git tree inspection with GIT_NO_LAZY_FETCH=1; explicitly selected HTTPS CSV verified against pinned Git blob identity."
+  },
+  "discovery": [
+    {
+      "result": "Original study verified; two figure supplements listed; no original row table recovered.",
+      "role": "original_article_and_supplement_listing",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "result": "Discontinued; software license request does not establish dataset access.",
+      "role": "official_service",
+      "url": "https://services.healthtech.dtu.dk/services/NetMHCstab-1.0/"
+    },
+    {
+      "result": "Study description and counts; no verified raw-table link.",
+      "role": "official_publication_reference",
+      "url": "https://services.healthtech.dtu.dk/services/NetMHCstab-1.0/4-Abstract.php"
+    },
+    {
+      "result": "Paper PDF verified via web; direct local PDF request timed out. No measurement release identified.",
+      "role": "institutional_article_copy",
+      "url": "https://ri.conicet.gov.ar/handle/11336/17953"
+    },
+    {
+      "result": "Access blocked; archive recovery unresolved.",
+      "role": "archival_discovery",
+      "url": "https://web.archive.org/cdx/search/cdx?url=www.cbs.dtu.dk/services/NetMHCstab/*&output=json&filter=statuscode:200&collapse=urlkey"
+    },
+    {
+      "result": "Pinned secondary CSV recovered. Not the authenticated original table.",
+      "role": "author_released_secondary_data_and_code",
+      "url": "https://github.com/KavrakiLab/TL-MHC"
+    }
+  ],
+  "evidence": [
+    {
+      "does_not_establish": "A source release version or row identity.",
+      "evidence_id": "bibliography",
+      "location": "Publication history; Immunology 141(1), 18\u201326",
+      "scope": "publication",
+      "statement": "First online 8 August 2013; January 2014 issue; DOI 10.1111/imm.12160. Source ID retains 2013.",
+      "status": "confirmed",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "does_not_establish": "Recovery of the original table, individual row origins, or independence from the 2016 corpus.",
+      "evidence_id": "experimental_dataset",
+      "location": "Methods: Data; Table 1; institutional PDF printed p.19",
+      "scope": "dataset",
+      "statement": "Scintillation proximity peptide\u2013MHC-I dissociation assay; half-lives in hours; 5,509 measured nine-mers across ten HLA-I alleles. Table 1 counts captured separately.",
+      "status": "confirmed",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "does_not_establish": "That the 5,509 measured count includes these artificial targets, that all numerical zeros are synthetic, or that augmentation files were separately distributed.",
+      "evidence_id": "artificial_augmentation",
+      "location": "Methods / Data / Artificial neural network training; Wiley lines 170\u2013171",
+      "scope": "model_training",
+      "statement": "Each allele training dataset was enriched with 1,000 peptides with experimentally determined weak binding affinity (>20,000 nM) from an in-house affinity database and assigned artificial half-life zero. The experimental count precedes this augmentation.",
+      "status": "confirmed",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "does_not_establish": "Original raw-file numerical encoding or any permission to transform current data.",
+      "evidence_id": "historical_transformation",
+      "location": "Methods: Artificial neural network training (before Evaluation methods); institutional PDF printed p.19; Wiley lines 144\u2013145",
+      "scope": "preprocessing",
+      "statement": "Half-life Th in hours was encoded as 2^(-2/Th), except HLA-B*40:01 used 2^(-0.7/Th).",
+      "status": "confirmed",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "does_not_establish": "Inspection of inaccessible file bodies or proof that no other public or author-held table exists.",
+      "evidence_id": "original_supplements",
+      "location": "Supporting Information; institutional PDF printed p.26",
+      "scope": "artifact_discovery",
+      "statement": "Listed supplements are imm12160-sup-0001-FigureS1.docx (predicted IEDB half-lives) and imm12160-sup-0002-FigureS2.pdf (sequence logos). No measurement-table supplement is listed.",
+      "status": "confirmed",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "does_not_establish": "Public availability of its original training measurements.",
+      "evidence_id": "service_discontinued",
+      "location": "Service heading and availability notice",
+      "scope": "artifact_discovery",
+      "statement": "Official NetMHCstab 1.0 service is marked discontinued; it directs users to the software download directory.",
+      "status": "confirmed",
+      "url": "https://services.healthtech.dtu.dk/services/NetMHCstab-1.0/"
+    },
+    {
+      "does_not_establish": "A separately applicable dataset license or freely redistributable measurement table.",
+      "evidence_id": "software_restrictions",
+      "location": "Academic software request/license form",
+      "scope": "artifact_discovery",
+      "statement": "Software 1.0a is provided through an email/license request with internal-use and redistribution restrictions. The request was not submitted and the package was not downloaded.",
+      "status": "confirmed",
+      "url": "https://services.healthtech.dtu.dk/cgi-bin/sw_request?packageversion=1.0a&platform=Linux&software=netMHCstab&version=1.0"
+    },
+    {
+      "does_not_establish": "Equality with the original 5,509 rows or the one-row difference from the pinned 6,297-row CSV.",
+      "evidence_id": "tlstab_counts",
+      "location": "Section 2.2.1: Datasets",
+      "scope": "dataset",
+      "statement": "TLStab reports 6,298 NetMHCstab-derived training records across ten alleles.",
+      "status": "confirmed",
+      "url": "https://kavrakilab.org/publications/fasoulis2024-transfer.pdf"
+    },
+    {
+      "does_not_establish": "A dated IEDB export, assay IDs, original study membership of each row, or an explanation of the count difference.",
+      "evidence_id": "tlstab_iedb",
+      "location": "Section 3.1: Evaluation of pMHC stability predictions",
+      "scope": "dataset",
+      "statement": "Authors describe acquiring public stability datasets through IEDB, including NetMHCstab study data and other test studies.",
+      "status": "confirmed",
+      "url": "https://kavrakilab.org/publications/fasoulis2024-transfer.pdf"
+    },
+    {
+      "does_not_establish": "An archived IEDB input version, exact row lineage, or proof that the released CSV was generated by this script without other steps.",
+      "evidence_id": "secondary_processing",
+      "location": "Lines 11, 18\u201330, 35\u201358, 74\u201375, 131\u2013136",
+      "scope": "preprocessing",
+      "statement": "Code reads mhc_ligand_full.csv, selects half-life/class-I and pseudosequence-mappable alleles, accepts equality or blank inequality and nonmissing values in its final call, selects training rows by an exact Authors string, keeps lengths 8\u201315, and writes allele/peptide/measurement_value. It does not restrict training by reference IRI.",
+      "status": "confirmed",
+      "url": "https://github.com/KavrakiLab/TL-MHC/blob/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/src/Dataset_processing.R"
+    },
+    {
+      "does_not_establish": "Verified original units for each released row, exact-zero meaning, or a justified inverse transformation for provenance certification.",
+      "evidence_id": "secondary_score",
+      "location": "Lines 41\u201349 and 131\u2013136",
+      "scope": "preprocessing",
+      "statement": "The final default call encodes purported input minutes as dimensionless 2^(-1/(value/60)). Two named test-study IRI exceptions use hours in other calls. Column naming does not make the transformed score an hours measurement.",
+      "status": "confirmed",
+      "url": "https://github.com/KavrakiLab/TL-MHC/blob/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/src/Dataset_processing.R"
+    },
+    {
+      "does_not_establish": "That the 6,298 training count is explained by duplicate aggregation.",
+      "evidence_id": "secondary_duplicates",
+      "location": "Lines 60\u201372",
+      "scope": "preprocessing",
+      "statement": "The code averages duplicate test keys and removes test keys found in training. These operations are on test_data, not train_data.",
+      "status": "confirmed",
+      "url": "https://github.com/KavrakiLab/TL-MHC/blob/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/src/Dataset_processing.R"
+    },
+    {
+      "does_not_establish": "That no such table exists anywhere; historical row overlap is not computed.",
+      "evidence_id": "original_table_missing",
+      "location": "Task 1.4 source discovery, accessed 2026-10-14",
+      "scope": "artifact_discovery",
+      "statement": "No adequately authenticated machine-readable original 5,509-row table was recovered from examined publication, official service, institutional, and indexed sources.",
+      "status": "unresolved",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    },
+    {
+      "does_not_establish": "The cause of either published or released count discrepancies.",
+      "evidence_id": "secondary_lineage_missing",
+      "location": "Tracked tree and preprocessing input declaration",
+      "scope": "artifact_discovery",
+      "statement": "mhc_ligand_full.csv is not present in the pinned tracked tree. Export date/version and assay/reference lineage are unresolved.",
+      "status": "unresolved",
+      "url": "https://github.com/KavrakiLab/TL-MHC/blob/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/src/Dataset_processing.R"
+    }
+  ],
+  "historical_source_recovered": false,
+  "publication": {
+    "count_basis": "published_expectation",
+    "doi": "10.1111/imm.12160",
+    "expected_alleles": 10,
+    "expected_rows": 5509,
+    "institutional_url": "https://ri.conicet.gov.ar/bitstream/handle/11336/17953/CONICET_Digital_Nro.21885_A.pdf?sequence=2",
+    "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3893846/",
+    "table_1_counts": {
+      "HLA-A*01:01": 259,
+      "HLA-A*02:01": 890,
+      "HLA-A*03:01": 812,
+      "HLA-A*11:01": 335,
+      "HLA-A*24:02": 571,
+      "HLA-A*26:01": 277,
+      "HLA-B*07:02": 530,
+      "HLA-B*15:01": 1059,
+      "HLA-B*35:01": 470,
+      "HLA-B*40:01": 306
+    },
+    "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+  },
+  "schema_version": 1,
+  "source_id": "netmhcstab_2013",
+  "tlstab": {
+    "count_basis": "published_expectation",
+    "doi": "10.1016/j.immuno.2023.100030",
+    "expected_rows": 6298,
+    "external_commit": "ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb",
+    "secondary_artifact": {
+      "byte_size": 237419,
+      "classification": "secondary_reprocessed_source",
+      "content_length_reported": "237419",
+      "filename": "tlstab_secondary.csv",
+      "final_url": "https://raw.githubusercontent.com/KavrakiLab/TL-MHC/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/misc/datasets/training_data/cleaned_data/cleaned_train_data.csv",
+      "git_blob_sha": "3cbfd2708cd1f207c4b1cd08faac60c6ec720ce2",
+      "http_status": 200,
+      "measurement_representation": "dimensionless_score; preprocessing code specifies 2^(-1/t_hours); row input units unverified",
+      "publisher_verified_checksum": null,
+      "relative_path": "tlstab_2024_secondary/cleaned_train_data.csv",
+      "repository_path": "TLStab/misc/datasets/training_data/cleaned_data/cleaned_train_data.csv",
+      "retrieved_at_utc": "2026-10-14T03:54:19.371651Z",
+      "sha256": "2d2c2a8ed0319ade9ec8657cbc4246d38924d0b21b33717b2ef7887e7f238fa7",
+      "source_url": "https://raw.githubusercontent.com/KavrakiLab/TL-MHC/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/misc/datasets/training_data/cleaned_data/cleaned_train_data.csv",
+      "validation": "byte identity verified locally; scientific role assessed separately"
+    },
+    "url": "https://kavrakilab.org/publications/fasoulis2024-transfer.pdf"
+  }
+}

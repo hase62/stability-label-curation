@@ -71,6 +71,67 @@
       "repository_name": "spearmint",
       "source_id": "spearmint_stability_audit",
       "url": "https://github.com/dhuvik/spearmint.git"
+    },
+    {
+      "accessed_at_utc": "2026-10-14T03:54:53Z",
+      "branch_at_acquisition": "master",
+      "checkout_relative_path": "TL-MHC",
+      "clone_strategy": "Shallow filtered no-checkout HTTPS clone, then explicit seven-file sparse checkout. Unintended lazy blob acquisition is documented in netmhcstab_2013_evidence.json. Read-only after acquisition. Secondary CSV fetched separately from pinned raw URL.",
+      "commit_sha": "ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb",
+      "files": [
+        {
+          "byte_size": 2074,
+          "git_blob_sha": "03c117543485fd1b0d6b704294b0c431e0701409",
+          "path": "README.md",
+          "sha256": "547c7136c59ff1183c0c16000084c888f710375c839a39dd38dda5e4ad0e0099"
+        },
+        {
+          "byte_size": 889,
+          "git_blob_sha": "122bb36a64dc6813bdaa99b5b5cb75077ec256ef",
+          "path": "TLStab/README.md",
+          "sha256": "fea7542f3a57a902bfe1fbe34d67aeeb02c601056c2bd464d373ac599efad064"
+        },
+        {
+          "byte_size": 2186,
+          "git_blob_sha": "abdfdd0ef6cd6c4f289da783bf0d6f59c1350b2b",
+          "path": "TLStab/TLStab.py",
+          "sha256": "3ae744fc480853a0397d084aa1e3c402892f493c26bb5ef8528d28cfd10c8583"
+        },
+        {
+          "byte_size": 7688,
+          "git_blob_sha": "85d6ef25f6bf82a81c1047b3cdec54e6e6847a93",
+          "path": "TLStab/dataloader.py",
+          "sha256": "d6168b4eafd044af369a4a83ab7ac639c9774e49b7d36f18a535a1ce64762b5e"
+        },
+        {
+          "byte_size": 12832,
+          "git_blob_sha": "915a551b7a4157c684e70c03379e1351df3aabff",
+          "path": "TLStab/src/Dataset_processing.R",
+          "sha256": "f051be72284931eb189089d21e7da24dd612e58a1e3c750fa452fa05dad2ee26"
+        },
+        {
+          "byte_size": 6404,
+          "git_blob_sha": "2309a001e7d2dbd13c471e98ea8ca2e05c17ec65",
+          "path": "TLStab/src/train.py",
+          "sha256": "6adf019debb787b0817ab7c6a31d4eff71c79f6cc30774c8f80d75b647089e00"
+        },
+        {
+          "byte_size": 7538,
+          "git_blob_sha": "0330c67cdb5e7327c7127b5e5161a32899801454",
+          "path": "TLStab/src/10-fold_train.py",
+          "sha256": "bf0f0c5974c6e693699114e020562454dae23fadbaff7e8774c09d7869b63c21"
+        },
+        {
+          "byte_size": 237419,
+          "git_blob_sha": "3cbfd2708cd1f207c4b1cd08faac60c6ec720ce2",
+          "path": "TLStab/misc/datasets/training_data/cleaned_data/cleaned_train_data.csv",
+          "sha256": "2d2c2a8ed0319ade9ec8657cbc4246d38924d0b21b33717b2ef7887e7f238fa7",
+          "snapshot_only": true
+        }
+      ],
+      "repository_name": "TL-MHC",
+      "source_id": "tlstab_reference",
+      "url": "https://github.com/KavrakiLab/TL-MHC.git"
     }
   ],
   "schema_version": 1

@@ -105,3 +105,16 @@ Inspection is offline and read-only. `--reports-dir` explicitly writes audit
 reports into an existing project run with every input recorded. The external
 lockfile pins source bytes; matching SPEARMINT rows are never added as independent
 measurements. No external code, dependencies, or weights are loaded.
+
+Task 1.4 documents [historical NetMHCstab source recovery and limitations](docs/NETMHCSTAB_2013_HISTORICAL_PROVENANCE.md).
+The original 5,509-row table remains unrecovered; overlap is not computed.
+A separately pinned TLStab secondary score CSV is inventoried without treating
+it as the original measurements:
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation historical audit --json
+```
+
+Inspection is offline and read-only. `--evidence`, `--dtu`, and `--secondary`
+support explicit local inputs; `--reports-dir` explicitly publishes evidence-only
+reports into an existing run with matching hashed inputs. No training table is created.
