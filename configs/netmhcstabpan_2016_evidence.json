@@ -1,0 +1,659 @@
+{
+  "items": [
+    {
+      "does_not_establish": "Does not provide replicate-level records or certify individual row origins.",
+      "id": "dtu_source_chain",
+      "location": "DTU supplementary landing page: publication heading and Stability data link",
+      "scope": "dataset",
+      "statement": "DTU links the original three-column stability table to Rasmussen et al. (2016).",
+      "status": "verified_statement",
+      "url": "https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/"
+    },
+    {
+      "does_not_establish": "Does not explain the numeric-zero reporting mechanism in the downloadable rows.",
+      "id": "assay",
+      "location": "Materials and Methods / Peptide-MHC-I complex stability; manuscript p. 3",
+      "scope": "assay",
+      "statement": "Stability screening used scintillation proximity-based dissociation assays.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Does not identify the two replicates, their fitting outcomes, or applicability to each earlier-study row.",
+      "id": "replicate_summary",
+      "location": "Materials and Methods / Peptide-MHC-I complex stability; manuscript p. 3",
+      "scope": "assay",
+      "statement": "Reported half-life is the geometric mean of two independent experiments.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Does not map prior-study rows to raw lines or establish independence from the earlier NetMHCstab dataset.",
+      "id": "combined_dataset",
+      "location": "Materials and Methods / Peptide-MHC-I complex stability; Results / Large scale analysis; manuscript pp. 3, 5",
+      "scope": "dataset",
+      "statement": "Earlier in-house data were incorporated: 28,939 measurements, 80 allotypes.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "This historical selection is not a filter applied here and does not explain individual zeros.",
+      "id": "selected_dataset",
+      "location": "Materials and Methods / Data sets; Results / Large scale analysis; manuscript pp. 3, 5-6",
+      "scope": "preprocessing",
+      "statement": "Selection required one stable and two non-stable observations per allotype at a 2-hour threshold (37 C), leaving 28,166 measurements and 75 allotypes.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Does not identify augmentation rows in Stability.txt; table-sized input and augmentation must remain distinct.",
+      "id": "augmentation",
+      "location": "Materials and Methods / Data sets; manuscript p. 3",
+      "scope": "model_training",
+      "statement": "Training added 1,000 random natural 9-mers/allotype with predicted affinity >20,000 nM (NetMHCpan-2.8), assigning zero hours.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Count agreement is dataset consistency, not row-level measurement evidence or a verified percentile implementation.",
+      "id": "table_ii",
+      "location": "Table II / Summary of pHLA-I stability data; manuscript pp. 17-18",
+      "scope": "publication_table",
+      "statement": "Table II lists the three C67S molecules separately and reports per-allotype counts and fifth/95th percentiles.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Absence in this reviewed main article does not establish absence in underlying assay protocols or unpublished records.",
+      "id": "zero_reporting_limits",
+      "location": "Reviewed main article: Methods, Results, Table II, Discussion",
+      "scope": "individual_rows",
+      "statement": "No explicit rule for individual raw zeros, rounding, quantification/detection limits, or censoring was located.",
+      "status": "unresolved_after_main_article_review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Does not prove equivalence to wild-type HLA or justify normalization/exclusion; underlying protocols remain unreviewed.",
+      "id": "c67s_explanation",
+      "location": "Reviewed main article: Table II and surrounding Methods/Results",
+      "scope": "assay",
+      "statement": "C67S annotations are present; no narrative explanation of the modification or its experimental role was located.",
+      "status": "unresolved_after_main_article_review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Exact historical row overlap is not audited; 5,509 earlier observations must not be added as independent data.",
+      "id": "prior_study_reference",
+      "location": "Reference 23; DOI 10.1111/imm.12160",
+      "scope": "dataset",
+      "statement": "The article cites the earlier NetMHCstab study.",
+      "status": "verified_statement",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "does_not_establish": "Publisher indexed metadata only; no earlier stability file retrieved and no exact row overlap measured.",
+      "id": "prior_study_publication_dates",
+      "location": "Publisher publication-history metadata; bibliographic issue listing",
+      "scope": "dataset",
+      "statement": "Jorgensen et al., DOI 10.1111/imm.12160: Immunology 141 (2014), 18-26; accepted manuscript first online August 8, 2013.",
+      "status": "verified_statement",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/imm.12160"
+    }
+  ],
+  "limitations": [
+    "Main article verified from a captured PMC HTML response. Web browser tool was challenged; direct HTTPS retrieval succeeded.",
+    "DTU author manuscript browser text corroborated Methods and Table II; direct PDF retrieval returned HTTP 403; PDF snapshot unavailable.",
+    "Underlying assay reference 24 and supplementary protocols not reviewed; no row-specific zero mechanism established.",
+    "All evidence concerns source-level statements or publication counts; all individual row origins remain unverified."
+  ],
+  "publication_doi": "10.4049/jimmunol.1600582",
+  "schema_version": 1,
+  "snapshots": [
+    {
+      "byte_size": 223571,
+      "filename": "publication_article.html",
+      "sha256": "cf7dc4a8488c659cfdcf65988d20e382aa8bed206def57f1f66c262030585a8d",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/"
+    },
+    {
+      "byte_size": 723,
+      "filename": "dtu_landing.html",
+      "sha256": "fd92bdb93003e7b15331f407c92e7e3f11a0daf0d1215a6e71add7a3eddbd6f0",
+      "url": "https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/"
+    }
+  ],
+  "source_id": "netmhcstabpan_2016",
+  "table_ii": {
+    "coverage": "complete",
+    "entries": [
+      {
+        "count": 220,
+        "p05_text": "0",
+        "p95_text": "40.3",
+        "publication_identifier": "HLA-A*01:01",
+        "raw_identifier": "HLA-A*01:01"
+      },
+      {
+        "count": 1023,
+        "p05_text": "0.1",
+        "p95_text": "28.7",
+        "publication_identifier": "HLA-A*02:01",
+        "raw_identifier": "HLA-A*02:01"
+      },
+      {
+        "count": 379,
+        "p05_text": "0.3",
+        "p95_text": "46.7",
+        "publication_identifier": "HLA-A*02:03",
+        "raw_identifier": "HLA-A*02:03"
+      },
+      {
+        "count": 21,
+        "p05_text": "0.6",
+        "p95_text": "26.3",
+        "publication_identifier": "HLA-A*02:05",
+        "raw_identifier": "HLA-A*02:05"
+      },
+      {
+        "count": 370,
+        "p05_text": "0.1",
+        "p95_text": "31.3",
+        "publication_identifier": "HLA-A*02:10",
+        "raw_identifier": "HLA-A*02:10"
+      },
+      {
+        "count": 379,
+        "p05_text": "0.8",
+        "p95_text": "28.9",
+        "publication_identifier": "HLA-A*02:11",
+        "raw_identifier": "HLA-A*02:11"
+      },
+      {
+        "count": 372,
+        "p05_text": "0.4",
+        "p95_text": "37.4",
+        "publication_identifier": "HLA-A*02:12",
+        "raw_identifier": "HLA-A*02:12"
+      },
+      {
+        "count": 373,
+        "p05_text": "0.4",
+        "p95_text": "36.5",
+        "publication_identifier": "HLA-A*02:16",
+        "raw_identifier": "HLA-A*02:16"
+      },
+      {
+        "count": 354,
+        "p05_text": "0.2",
+        "p95_text": "39.6",
+        "publication_identifier": "HLA-A*02:19",
+        "raw_identifier": "HLA-A*02:19"
+      },
+      {
+        "count": 375,
+        "p05_text": "0.7",
+        "p95_text": "23.2",
+        "publication_identifier": "HLA-A*02:50",
+        "raw_identifier": "HLA-A*02:50"
+      },
+      {
+        "count": 861,
+        "p05_text": "0",
+        "p95_text": "52.2",
+        "publication_identifier": "HLA-A*03:01",
+        "raw_identifier": "HLA-A*03:01"
+      },
+      {
+        "count": 577,
+        "p05_text": "0.1",
+        "p95_text": "71.7",
+        "publication_identifier": "HLA-A*11:01",
+        "raw_identifier": "HLA-A*11:01"
+      },
+      {
+        "count": 372,
+        "p05_text": "0.4",
+        "p95_text": "37.3",
+        "publication_identifier": "HLA-A*23:01",
+        "raw_identifier": "HLA-A*23:01"
+      },
+      {
+        "count": 573,
+        "p05_text": "0.2",
+        "p95_text": "30.2",
+        "publication_identifier": "HLA-A*24:02",
+        "raw_identifier": "HLA-A*24:02"
+      },
+      {
+        "count": 512,
+        "p05_text": "0.2",
+        "p95_text": "37.6",
+        "publication_identifier": "HLA-A*24:03",
+        "raw_identifier": "HLA-A*24:03"
+      },
+      {
+        "count": 352,
+        "p05_text": "0.2",
+        "p95_text": "24.4",
+        "publication_identifier": "HLA-A*24:07",
+        "raw_identifier": "HLA-A*24:07"
+      },
+      {
+        "count": 378,
+        "p05_text": "0",
+        "p95_text": "2.7",
+        "publication_identifier": "HLA-A*24:19",
+        "raw_identifier": "HLA-A*24:19"
+      },
+      {
+        "count": 363,
+        "p05_text": "0",
+        "p95_text": "21.7",
+        "publication_identifier": "HLA-A*25:01",
+        "raw_identifier": "HLA-A*25:01"
+      },
+      {
+        "count": 272,
+        "p05_text": "0",
+        "p95_text": "23.8",
+        "publication_identifier": "HLA-A*26:01",
+        "raw_identifier": "HLA-A*26:01"
+      },
+      {
+        "count": 343,
+        "p05_text": "0",
+        "p95_text": "35.6",
+        "publication_identifier": "HLA-A*26:02",
+        "raw_identifier": "HLA-A*26:02"
+      },
+      {
+        "count": 341,
+        "p05_text": "0",
+        "p95_text": "15.3",
+        "publication_identifier": "HLA-A*26:03",
+        "raw_identifier": "HLA-A*26:03"
+      },
+      {
+        "count": 383,
+        "p05_text": "0.1",
+        "p95_text": "20.4",
+        "publication_identifier": "HLA-A*29:02",
+        "raw_identifier": "HLA-A*29:02"
+      },
+      {
+        "count": 386,
+        "p05_text": "0",
+        "p95_text": "37.4",
+        "publication_identifier": "HLA-A*30:01",
+        "raw_identifier": "HLA-A*30:01"
+      },
+      {
+        "count": 367,
+        "p05_text": "0",
+        "p95_text": "14.1",
+        "publication_identifier": "HLA-A*30:02",
+        "raw_identifier": "HLA-A*30:02"
+      },
+      {
+        "count": 382,
+        "p05_text": "0",
+        "p95_text": "77.3",
+        "publication_identifier": "HLA-A*31:01",
+        "raw_identifier": "HLA-A*31:01"
+      },
+      {
+        "count": 32,
+        "p05_text": "0",
+        "p95_text": "57.2",
+        "publication_identifier": "HLA-A*32:01",
+        "raw_identifier": "HLA-A*32:01"
+      },
+      {
+        "count": 364,
+        "p05_text": "0",
+        "p95_text": "43.5",
+        "publication_identifier": "HLA-A*32:07",
+        "raw_identifier": "HLA-A*32:07"
+      },
+      {
+        "count": 371,
+        "p05_text": "0",
+        "p95_text": "56",
+        "publication_identifier": "HLA-A*33:03",
+        "raw_identifier": "HLA-A*33:03"
+      },
+      {
+        "count": 359,
+        "p05_text": "0",
+        "p95_text": "6.7",
+        "publication_identifier": "HLA-A*43:01",
+        "raw_identifier": "HLA-A*43:01"
+      },
+      {
+        "count": 382,
+        "p05_text": "0",
+        "p95_text": "3.6",
+        "publication_identifier": "HLA-A*66:01",
+        "raw_identifier": "HLA-A*66:01"
+      },
+      {
+        "count": 387,
+        "p05_text": "0",
+        "p95_text": "56",
+        "publication_identifier": "HLA-A*68:01",
+        "raw_identifier": "HLA-A*68:01"
+      },
+      {
+        "count": 16,
+        "p05_text": "0.1",
+        "p95_text": "15.8",
+        "publication_identifier": "HLA-A*68:02",
+        "raw_identifier": "HLA-A*68:02"
+      },
+      {
+        "count": 369,
+        "p05_text": "0",
+        "p95_text": "9.9",
+        "publication_identifier": "HLA-A*68:23",
+        "raw_identifier": "HLA-A*68:23"
+      },
+      {
+        "count": 15,
+        "p05_text": "0",
+        "p95_text": "4.1",
+        "publication_identifier": "HLA-A*69:01",
+        "raw_identifier": "HLA-A*69:01"
+      },
+      {
+        "count": 361,
+        "p05_text": "0",
+        "p95_text": "94.5",
+        "publication_identifier": "HLA-A*74:01",
+        "raw_identifier": "HLA-A*74:01"
+      },
+      {
+        "count": 351,
+        "p05_text": "0",
+        "p95_text": "2",
+        "publication_identifier": "HLA-A*80:01",
+        "raw_identifier": "HLA-A*80:01"
+      },
+      {
+        "count": 647,
+        "p05_text": "0",
+        "p95_text": "9.8",
+        "publication_identifier": "HLA-B*07:02",
+        "raw_identifier": "HLA-B*07:02"
+      },
+      {
+        "count": 465,
+        "p05_text": "0",
+        "p95_text": "1.2",
+        "publication_identifier": "HLA-B*08:01",
+        "raw_identifier": "HLA-B*08:01"
+      },
+      {
+        "count": 350,
+        "p05_text": "0",
+        "p95_text": "1.9",
+        "publication_identifier": "HLA-B*08:03",
+        "raw_identifier": "HLA-B*08:03"
+      },
+      {
+        "count": 7,
+        "p05_text": "0",
+        "p95_text": "6",
+        "publication_identifier": "HLA-B*13:02",
+        "raw_identifier": "HLA-B*13:02"
+      },
+      {
+        "count": 374,
+        "p05_text": "0",
+        "p95_text": "0.6",
+        "publication_identifier": "HLA-B*14:01 (C67S)",
+        "raw_identifier": "HLA-B*14:01(C67S)"
+      },
+      {
+        "count": 382,
+        "p05_text": "0",
+        "p95_text": "4.5",
+        "publication_identifier": "HLA-B*14:02 (C67S)",
+        "raw_identifier": "HLA-B*14:02(C67S)"
+      },
+      {
+        "count": 1070,
+        "p05_text": "0",
+        "p95_text": "12.5",
+        "publication_identifier": "HLA-B*15:01",
+        "raw_identifier": "HLA-B*15:01"
+      },
+      {
+        "count": 349,
+        "p05_text": "0",
+        "p95_text": "5.7",
+        "publication_identifier": "HLA-B*15:02",
+        "raw_identifier": "HLA-B*15:02"
+      },
+      {
+        "count": 363,
+        "p05_text": "0",
+        "p95_text": "7.7",
+        "publication_identifier": "HLA-B*15:10",
+        "raw_identifier": "HLA-B*15:10"
+      },
+      {
+        "count": 362,
+        "p05_text": "0",
+        "p95_text": "6.3",
+        "publication_identifier": "HLA-B*15:17",
+        "raw_identifier": "HLA-B*15:17"
+      },
+      {
+        "count": 359,
+        "p05_text": "0",
+        "p95_text": "8",
+        "publication_identifier": "HLA-B*18:01",
+        "raw_identifier": "HLA-B*18:01"
+      },
+      {
+        "count": 359,
+        "p05_text": "0",
+        "p95_text": "34.9",
+        "publication_identifier": "HLA-B*27:02",
+        "raw_identifier": "HLA-B*27:02"
+      },
+      {
+        "count": 368,
+        "p05_text": "0",
+        "p95_text": "25.1",
+        "publication_identifier": "HLA-B*27:03",
+        "raw_identifier": "HLA-B*27:03"
+      },
+      {
+        "count": 366,
+        "p05_text": "0",
+        "p95_text": "25.3",
+        "publication_identifier": "HLA-B*27:05",
+        "raw_identifier": "HLA-B*27:05"
+      },
+      {
+        "count": 368,
+        "p05_text": "0",
+        "p95_text": "8.3",
+        "publication_identifier": "HLA-B*27:20",
+        "raw_identifier": "HLA-B*27:20"
+      },
+      {
+        "count": 650,
+        "p05_text": "0",
+        "p95_text": "7.4",
+        "publication_identifier": "HLA-B*35:01",
+        "raw_identifier": "HLA-B*35:01"
+      },
+      {
+        "count": 376,
+        "p05_text": "0.2",
+        "p95_text": "7",
+        "publication_identifier": "HLA-B*35:03",
+        "raw_identifier": "HLA-B*35:03"
+      },
+      {
+        "count": 27,
+        "p05_text": "0",
+        "p95_text": "8.7",
+        "publication_identifier": "HLA-B*35:08",
+        "raw_identifier": "HLA-B*35:08"
+      },
+      {
+        "count": 680,
+        "p05_text": "0",
+        "p95_text": "9.3",
+        "publication_identifier": "HLA-B*39:01",
+        "raw_identifier": "HLA-B*39:01"
+      },
+      {
+        "count": 375,
+        "p05_text": "0",
+        "p95_text": "14.9",
+        "publication_identifier": "HLA-B*39:02",
+        "raw_identifier": "HLA-B*39:02"
+      },
+      {
+        "count": 379,
+        "p05_text": "0",
+        "p95_text": "0.5",
+        "publication_identifier": "HLA-B*39:06 (C67S)",
+        "raw_identifier": "HLA-B*39:06(C67S)"
+      },
+      {
+        "count": 376,
+        "p05_text": "0",
+        "p95_text": "32.5",
+        "publication_identifier": "HLA-B*39:10",
+        "raw_identifier": "HLA-B*39:10"
+      },
+      {
+        "count": 302,
+        "p05_text": "0",
+        "p95_text": "2.3",
+        "publication_identifier": "HLA-B*40:01",
+        "raw_identifier": "HLA-B*40:01"
+      },
+      {
+        "count": 19,
+        "p05_text": "0.5",
+        "p95_text": "24.4",
+        "publication_identifier": "HLA-B*40:02",
+        "raw_identifier": "HLA-B*40:02"
+      },
+      {
+        "count": 368,
+        "p05_text": "0",
+        "p95_text": "3.5",
+        "publication_identifier": "HLA-B*41:01",
+        "raw_identifier": "HLA-B*41:01"
+      },
+      {
+        "count": 350,
+        "p05_text": "0.4",
+        "p95_text": "34.1",
+        "publication_identifier": "HLA-B*42:01",
+        "raw_identifier": "HLA-B*42:01"
+      },
+      {
+        "count": 376,
+        "p05_text": "0",
+        "p95_text": "13",
+        "publication_identifier": "HLA-B*42:02",
+        "raw_identifier": "HLA-B*42:02"
+      },
+      {
+        "count": 352,
+        "p05_text": "0",
+        "p95_text": "12.1",
+        "publication_identifier": "HLA-B*44:05",
+        "raw_identifier": "HLA-B*44:05"
+      },
+      {
+        "count": 368,
+        "p05_text": "0",
+        "p95_text": "5.33",
+        "publication_identifier": "HLA-B*45:01",
+        "raw_identifier": "HLA-B*45:01"
+      },
+      {
+        "count": 361,
+        "p05_text": "0",
+        "p95_text": "5.3",
+        "publication_identifier": "HLA-B*46:01",
+        "raw_identifier": "HLA-B*46:01"
+      },
+      {
+        "count": 353,
+        "p05_text": "0",
+        "p95_text": "15",
+        "publication_identifier": "HLA-B*51:01",
+        "raw_identifier": "HLA-B*51:01"
+      },
+      {
+        "count": 357,
+        "p05_text": "0",
+        "p95_text": "10.8",
+        "publication_identifier": "HLA-B*54:01",
+        "raw_identifier": "HLA-B*54:01"
+      },
+      {
+        "count": 378,
+        "p05_text": "0",
+        "p95_text": "9.7",
+        "publication_identifier": "HLA-B*55:01",
+        "raw_identifier": "HLA-B*55:01"
+      },
+      {
+        "count": 368,
+        "p05_text": "0",
+        "p95_text": "7.8",
+        "publication_identifier": "HLA-B*56:01",
+        "raw_identifier": "HLA-B*56:01"
+      },
+      {
+        "count": 349,
+        "p05_text": "0",
+        "p95_text": "12.4",
+        "publication_identifier": "HLA-B*57:01",
+        "raw_identifier": "HLA-B*57:01"
+      },
+      {
+        "count": 363,
+        "p05_text": "0",
+        "p95_text": "7.2",
+        "publication_identifier": "HLA-B*57:02",
+        "raw_identifier": "HLA-B*57:02"
+      },
+      {
+        "count": 369,
+        "p05_text": "0.6",
+        "p95_text": "7.8",
+        "publication_identifier": "HLA-B*57:03",
+        "raw_identifier": "HLA-B*57:03"
+      },
+      {
+        "count": 379,
+        "p05_text": "0",
+        "p95_text": "21.3",
+        "publication_identifier": "HLA-B*58:01",
+        "raw_identifier": "HLA-B*58:01"
+      },
+      {
+        "count": 367,
+        "p05_text": "0",
+        "p95_text": "2.7",
+        "publication_identifier": "HLA-B*81:01",
+        "raw_identifier": "HLA-B*81:01"
+      }
+    ],
+    "extraction": "Standard-library HTMLParser: T2 section, paired five-column blocks. All 75 unambiguous entries. C67S publication spacing bridged explicitly, no wild-type mapping.",
+    "location": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4976001/#T2"
+  },
+  "verified_at_utc": "2026-10-14T01:22:31.290428Z"
+}

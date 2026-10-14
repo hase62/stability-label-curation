@@ -10,6 +10,7 @@ from .paths import check_storage, initialize_storage, resolve_paths
 from .data_sources import load_manifest
 from . import run_manifest
 from . import netmhcstabpan_2016 as dtu2016
+from . import dtu2016_source_audit as source_audit
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -28,6 +29,12 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     inspect_parser.add_argument("--input", help="Local input override; never downloads")
     inspect_parser.add_argument("--json", action="store_true")
     inspect_parser.add_argument("--report", help="Explicit JSON report destination under project runs")
+    audit_parser = dtu_commands.add_parser("audit", help="Offline checksum-gated source evidence and zero-value audit")
+    audit_parser.add_argument("--json", action="store_true", help="Print complete JSON audit reports (row flags available through reports directory)")
+    audit_parser.add_argument("--input", help="Explicit local input override; never downloads")
+    audit_parser.add_argument("--expected-sha256", help="Explicit local-input identity; requires --input; default is pinned Task 1.1 hash")
+    audit_parser.add_argument("--evidence", help="Offline evidence-register JSON override")
+    audit_parser.add_argument("--reports-dir", help="Write complete reports and row flags to an existing project run reports directory")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -59,6 +66,16 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     try:
         paths = resolve_paths(env)
         if args.command == "dtu2016":
+            if args.dtu_command == "audit":
+                if args.expected_sha256 and not args.input:
+                    raise ValueError("--expected-sha256 requires an explicit --input")
+                evidence = source_audit.load_evidence(args.evidence, paths=paths)
+                result = source_audit.audit(args.input, paths=paths, evidence=evidence,
+                    expected_sha256=args.expected_sha256 or source_audit.TASK11_LOCAL_SHA256)
+                if args.reports_dir:
+                    source_audit.write_audit(result, args.reports_dir, paths=paths)
+                print(dtu2016.json_report(result.reports if args.json else result.summary()), end="")
+                return 0
             if args.dtu_command == "fetch":
                 document = dtu2016.fetch(paths=paths, timeout=args.timeout)
                 destination = args.receipt

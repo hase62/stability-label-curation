@@ -362,6 +362,11 @@ def fetch(*, paths: StoragePaths | None = None, timeout: float = 30) -> dict[str
 
 def write_report(path: str | Path, document: dict[str, Any], *, paths: StoragePaths | None = None) -> None:
     """Explicit non-overwriting report publication beneath project runs only."""
+    write_text_report(path, json_report(document), paths=paths)
+
+
+def write_text_report(path: str | Path, text: str, *, paths: StoragePaths | None = None) -> None:
+    """Publish explicit UTF-8 report text with the existing no-overwrite safeguards."""
     storage = resolve_paths() if paths is None else paths
     storage.validate()
     root = storage.runs_root / PROJECT_NAME
@@ -376,7 +381,7 @@ def write_report(path: str | Path, document: dict[str, Any], *, paths: StoragePa
         descriptor = os.open(partial, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=parent)
         try:
             with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
-                stream.write(json_report(document))
+                stream.write(text)
                 stream.flush()
                 os.fsync(stream.fileno())
             os.link(partial, target.name, src_dir_fd=parent, dst_dir_fd=parent, follow_symlinks=False)

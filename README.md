@@ -80,3 +80,17 @@ PYTHONPATH=src python3 -B -m stability_label_curation dtu2016 inspect --input /p
 Preserve the acquisition JSON receipt. Published counts and numerical zeros do
 not establish individual rows' experimental or synthetic origin; Task 1.2
 provenance questions remain open.
+
+Task 1.2 adds [source evidence, zero-value semantics, and C67S context](docs/NETMHCSTABPAN_2016_SOURCE_EVIDENCE.md).
+The audit verifies the pinned Task 1.1 checksum and runs entirely offline:
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation dtu2016 audit
+PYTHONPATH=src python3 -B -m stability_label_curation dtu2016 audit --json
+```
+
+Use `--reports-dir /absolute/project/run/reports` to explicitly write complete
+audit reports and lossless row flags into an existing run with the raw artifact
+recorded as an input. All row origins remain unverified; the audit does not
+approve training labels or filtering. `--evidence` supports offline reuse of a
+captured evidence register.
