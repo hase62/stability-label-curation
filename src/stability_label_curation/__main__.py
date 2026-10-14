@@ -1,6 +1,7 @@
 """Standard-library storage CLI."""
 
 import argparse
+import csv
 from http.client import HTTPException
 from collections.abc import Mapping, Sequence
 import json
@@ -11,6 +12,7 @@ from .data_sources import load_manifest
 from . import run_manifest
 from . import netmhcstabpan_2016 as dtu2016
 from . import dtu2016_source_audit as source_audit
+from . import spearmint_overlap_audit as spearmint
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -35,6 +37,19 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     audit_parser.add_argument("--expected-sha256", help="Explicit local-input identity; requires --input; default is pinned Task 1.1 hash")
     audit_parser.add_argument("--evidence", help="Offline evidence-register JSON override")
     audit_parser.add_argument("--reports-dir", help="Write complete reports and row flags to an existing project run reports directory")
+    spearmint_parser = commands.add_parser("spearmint", help="Offline pinned Stage 2/DTU provenance and overlap audit")
+    spearmint_commands = spearmint_parser.add_subparsers(dest="spearmint_command", required=True)
+    overlap_parser = spearmint_commands.add_parser("audit")
+    overlap_parser.add_argument("--json", action="store_true")
+    overlap_parser.add_argument("--checkout", help="Read-only pinned external checkout override")
+    for split in ("train", "val", "test"):
+        overlap_parser.add_argument("--" + split, help="Explicit pinned split CSV path")
+    overlap_parser.add_argument("--mapping", help="Explicit pinned allele/sequence reference CSV")
+    overlap_parser.add_argument("--lock", help="External repository lockfile override for offline fixtures")
+    overlap_parser.add_argument("--evidence", help="Stage 2 evidence JSON override")
+    overlap_parser.add_argument("--dtu", help="Local DTU-format input override")
+    overlap_parser.add_argument("--expected-dtu-sha256", help="Requires --dtu; independently pinned local fixture identity")
+    overlap_parser.add_argument("--reports-dir", help="Explicit existing project run reports directory")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -65,6 +80,19 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "spearmint":
+            if args.expected_dtu_sha256 and not args.dtu:
+                raise ValueError("--expected-dtu-sha256 requires explicit --dtu")
+            result = spearmint.audit(paths=paths, checkout=args.checkout,
+                files={s: getattr(args, s) for s in spearmint.SPLITS if getattr(args, s)},
+                mapping=args.mapping, dtu_path=args.dtu,
+                expected_dtu_sha256=args.expected_dtu_sha256 or source_audit.TASK11_LOCAL_SHA256,
+                lock_path=args.lock, evidence_path=args.evidence)
+            if args.reports_dir:
+                spearmint.write_reports(result, args.reports_dir, paths=paths)
+            document = result.reports if args.json else {k: v for k, v in result.summary().items() if k != "per_allele"}
+            print(dtu2016.json_report(document), end="")
+            return 0
         if args.command == "dtu2016":
             if args.dtu_command == "audit":
                 if args.expected_sha256 and not args.input:
@@ -149,7 +177,7 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             if not findings:
                 print("OK: configured directories exist and storage is accessible.")
             return int(any(severity == "ERROR" for severity, _ in findings))
-    except (ValueError, OSError, RuntimeError, HTTPException) as error:
+    except (ValueError, OSError, RuntimeError, HTTPException, csv.Error) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     return 0

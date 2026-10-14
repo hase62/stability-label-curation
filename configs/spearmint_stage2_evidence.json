@@ -1,0 +1,80 @@
+{
+  "columns": {
+    "allele": "allele",
+    "label": "label",
+    "peptide": "peptide_sequence",
+    "sequence": "mhc_sequence"
+  },
+  "commit_sha": "d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5",
+  "items": [
+    {
+      "lines": "22-32,97-99,105-115",
+      "path": "README.md",
+      "scope": "documentation",
+      "statement": "Stages distinguish affinity, stability and assay conditioning; Stage 2 output is log1p(hours), with full MHC sequences. Output transformation alone does not identify CSV encoding."
+    },
+    {
+      "lines": "8,20-21,28",
+      "path": "configs/s2_stability_args.json",
+      "scope": "configuration",
+      "statement": "Stage 2 uses data/binding_stability; log_transform=true, stability_score=false, val_subsample=0."
+    },
+    {
+      "lines": "321-323,409-425,438-445",
+      "path": "src/mint_stability/train_stability.py",
+      "scope": "loader_and_target_transform",
+      "statement": "Reads train/val/test CSVs and applies log1p once before constructing datasets. A different CLI override could change this configuration."
+    },
+    {
+      "lines": "125-145,155-170",
+      "path": "src/mint_stability/train_binding.py",
+      "scope": "dataset_and_tokenization",
+      "statement": "Shared dataset returns peptide, full MHC sequence and label without another target transform. Collation casts labels to float32 and replaces sequence J with L during tokenization; audit joins preserve original strings."
+    },
+    {
+      "lines": "25-49,81-86",
+      "path": "src/README.md",
+      "scope": "input_schema",
+      "statement": "Documents raw Stage 2 CSV half-life inputs and full alpha-chain sequences. Actual released rows additionally carry allele, assay and temperature fields."
+    },
+    {
+      "lines": "header and exact reference rows",
+      "path": "refs/2field_hla_consensus_seqs.csv",
+      "scope": "receptor_reference",
+      "statement": "Pinned Allele/Full Sequence table supports exact reference lookup. It does not establish construction version, experimental material equivalence, or mutant-to-wild-type identity."
+    }
+  ],
+  "label_evidence": "src/README.md:35-38,85; train_stability.py:410-425: CSV labels are inputs to log1p, not pre-transformed labels. Released values independently compared to DTU hours in this audit.",
+  "label_interpretation_verified": true,
+  "label_representation": "hours",
+  "limitations": [
+    "No data-preparation, normalization, sequence-reference construction or split-construction script was found in the pinned tracked tree. Upstream reference release and preparation history remain unspecified.",
+    "Exact row/value overlap demonstrates reuse of the DTU representation, not independent experiments or independently confirmed row-level measurement origin.",
+    "No Stage 1/3 data or predictions were examined, and the preprint's 80% similarity and cross-task leakage claims are not verified by this exact-overlap audit.",
+    "No synthetic or censoring label is inferred from numerical zeros. C67S identifiers are never mapped automatically to wild-type.",
+    "Some released/reference MHC strings have 181 residues despite full-chain documentation. Exact named-reference agreement is not a full-chain completeness or experimental-material verification; no sequence completion is applied."
+  ],
+  "mapping_path": "refs/2field_hla_consensus_seqs.csv",
+  "preprint": {
+    "claimed_alleles": 72,
+    "claimed_rows": 27034,
+    "claimed_split_rows": {
+      "test": 2700,
+      "train": 21626,
+      "val": 2705
+    },
+    "doi": "10.64898/2026.06.28.735023",
+    "evidence_status": "primary_page_index_accessible_direct_http_403",
+    "limitations": "Confirmed from primary-page search-index text; direct retrieval returned 403 and no byte-exact article snapshot is available. These are preprint claims, not proof of released preprocessing execution. Data availability names pirl-unc/spearmint; this task pins the requested dhuvik/spearmint checkout.",
+    "location": "Section 2.2, Binding stability data; Discussion limitations; Data and Code Availability",
+    "statement": "The preprint attributes stability data to NetMHCstabpan and reports allele normalization/full-sequence mapping, log1p modeling, and peptide-cluster splits at 80% identity. It reports 27034 overall but split counts sum to 27031.",
+    "url": "https://www.biorxiv.org/content/10.64898/2026.06.28.735023v1.full"
+  },
+  "schema_version": 1,
+  "source_id": "spearmint_stability_audit",
+  "splits": {
+    "test": "data/binding_stability/test.csv",
+    "train": "data/binding_stability/train.csv",
+    "val": "data/binding_stability/val.csv"
+  }
+}

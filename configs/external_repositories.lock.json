@@ -1,0 +1,77 @@
+{
+  "repositories": [
+    {
+      "accessed_at_utc": "2026-10-14T02:17:10.070563Z",
+      "branch_at_acquisition": "main",
+      "checkout_relative_path": "spearmint",
+      "clone_strategy": "Shallow sparse blob-filtered HTTPS clone; GIT_LFS_SKIP_SMUDGE=1; source/config/refs and binding_stability only. Read-only after acquisition.",
+      "commit_sha": "d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5",
+      "files": [
+        {
+          "byte_size": 10620,
+          "git_blob_sha": "c734e33fc32f7edf825ac1a40d841efc07d914a1",
+          "path": "README.md",
+          "sha256": "9d736d1392352b295d3e7487a910039987b6f07229093e73dd140282a3a146d8"
+        },
+        {
+          "byte_size": 4953,
+          "git_blob_sha": "b3fd4385012bb7a45168f0d0b6a9f2550a01b85c",
+          "path": "src/README.md",
+          "sha256": "a1402d867b5aaa873c7fca1bac785ec66ce27fc0b14cbb723e991c38cdf02700"
+        },
+        {
+          "byte_size": 1022,
+          "git_blob_sha": "c981d4fa57e03b432e83eca10543bbe4e7cff5a6",
+          "path": "configs/s2_stability_args.json",
+          "sha256": "2cbb1b956938ff7815f52c489579a109a80486c428f91ee91bb863b8279658c7"
+        },
+        {
+          "byte_size": 20707,
+          "git_blob_sha": "457a99ad6238c24b8b350895a7a8cfd34a66b553",
+          "path": "src/mint_stability/train_stability.py",
+          "sha256": "b39842a881667e398681580562f5967d1ca84e49d1cd5064e4d7c47203843e91"
+        },
+        {
+          "byte_size": 26620,
+          "git_blob_sha": "68402e5cc062cac5cae8b1c0e6a05dbbdafb25b9",
+          "path": "src/mint_stability/train_binding.py",
+          "sha256": "1993d0ea314dd9a342b39f03d110994a24f8b68a4fa5c5860c103b213d1ae17c"
+        },
+        {
+          "byte_size": 6876,
+          "git_blob_sha": "f66668b85f281eba7861e33def4540467690f02a",
+          "path": "src/mint_stability/tokenizer.py",
+          "sha256": "dcda10da87f43e3268921d615a268340a355731a868f455704f49302aeba9974"
+        },
+        {
+          "byte_size": 3876460,
+          "git_blob_sha": "67efa9a8d6035a15f3244c5055fb2e90b83c3bf6",
+          "path": "refs/2field_hla_consensus_seqs.csv",
+          "sha256": "8969927707689d83656eef7c0f1b59b295e80ee7b202d55ee9904aaa9d947eae"
+        },
+        {
+          "byte_size": 8483129,
+          "git_blob_sha": "3c50678c7aae5d7c0fbdd2523bb17c0b08add4d4",
+          "path": "data/binding_stability/train.csv",
+          "sha256": "3ad79db3286688972b47ea96ba96129704367c1f016947a2ecc39c4872520793"
+        },
+        {
+          "byte_size": 1059966,
+          "git_blob_sha": "7ba309f000fd14e02b75bc4205604c15af541f41",
+          "path": "data/binding_stability/val.csv",
+          "sha256": "49217866a5d084ecd74150609bd5f0cfb8f6a78ac772ded6f26e1ff427a79dd8"
+        },
+        {
+          "byte_size": 1058281,
+          "git_blob_sha": "f1813b5c65e257c546f2af5acf123f35a148dd9c",
+          "path": "data/binding_stability/test.csv",
+          "sha256": "61d8ab1ae07e75fcf69b8175617ccf1bb43255498f0a8f37882568b2075c953f"
+        }
+      ],
+      "repository_name": "spearmint",
+      "source_id": "spearmint_stability_audit",
+      "url": "https://github.com/dhuvik/spearmint.git"
+    }
+  ],
+  "schema_version": 1
+}

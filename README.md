@@ -94,3 +94,14 @@ audit reports and lossless row flags into an existing run with the raw artifact
 recorded as an input. All row origins remain unverified; the audit does not
 approve training labels or filtering. `--evidence` supports offline reuse of a
 captured evidence register.
+
+Task 1.3 provides a [pinned SPEARMINT Stage 2 / DTU overlap audit](docs/SPEARMINT_STAGE2_DTU_OVERLAP.md):
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation spearmint audit --json
+```
+
+Inspection is offline and read-only. `--reports-dir` explicitly writes audit
+reports into an existing project run with every input recorded. The external
+lockfile pins source bytes; matching SPEARMINT rows are never added as independent
+measurements. No external code, dependencies, or weights are loaded.
