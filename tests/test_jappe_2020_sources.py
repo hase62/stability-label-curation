@@ -230,6 +230,32 @@ class JappeSourcesTests(unittest.TestCase):
         self.assertTrue(sheet['multiple_block_indications']['separated_row_ranges'])
         self.assertIsNone(sheet['scientific_row_count'])
 
+    def test_table_metadata_does_not_expand_into_observation_rows(self):
+        payload=workbook(extra='<tableParts><tablePart xmlns:r="'+jappe.DOCREL+'" r:id="table1"/></tableParts>')
+        with zipfile.ZipFile(io.BytesIO(payload)) as z:parts={name:z.read(name) for name in z.namelist()}
+        parts['xl/worksheets/_rels/sheet1.xml.rels']='<Relationships xmlns="'+jappe.REL+'"><Relationship Id="table1" Type="'+jappe.DOCREL+'/table" Target="../tables/table1.xml"/></Relationships>'
+        parts['xl/tables/table1.xml']='<table xmlns="'+jappe.MAIN+'" name="FixtureTable" ref="A1:C1048576"><tableColumns><tableColumn id="1" name="Peptide"/></tableColumns></table>'
+        self.xlsx.write_bytes(zip_payload(parts));sheet=jappe.workbook_inventory(self.xlsx)['sheets'][0]
+        self.assertEqual(sheet['physical_row_elements'],4)
+        self.assertEqual(sheet['table_definitions'][0]['attributes']['ref'],'A1:C1048576')
+        self.assertIn('table_range_extends_beyond_populated_row_references',[x['issue'] for x in sheet['anomalies']])
+        self.assertIsNone(sheet['scientific_row_count'])
+
+    def test_whitespace_string_cells_preserved_and_flagged(self):
+        with zipfile.ZipFile(io.BytesIO(self.payload)) as z:parts={name:z.read(name) for name in z.namelist()}
+        parts['xl/sharedStrings.xml']=parts['xl/sharedStrings.xml'].replace(b' Peptide ',b' ')
+        self.xlsx.write_bytes(zip_payload(parts))
+        sheet=jappe.workbook_inventory(self.xlsx)['sheets'][0]
+        self.assertEqual(sheet['whitespace_only_string_cell_references'],['A1'])
+        self.assertEqual(sheet['candidate_header_text_rows'][0]['text_cells'][0]['resolved_shared_string_text'],' ')
+
+    def test_zero_width_format_cell_is_not_silently_normalized(self):
+        with zipfile.ZipFile(io.BytesIO(self.payload)) as z:parts={name:z.read(name) for name in z.namelist()}
+        parts['xl/sharedStrings.xml']=parts['xl/sharedStrings.xml'].replace(b' Peptide ',chr(0x200B).encode())
+        self.xlsx.write_bytes(zip_payload(parts));sheet=jappe.workbook_inventory(self.xlsx)['sheets'][0]
+        self.assertEqual(sheet['format_character_only_string_cells'],[{'cell_reference':'A1','text':chr(0x200B),'unicode_codepoints':['U+200B']}])
+        self.assertEqual(sheet['whitespace_only_string_cell_references'],[])
+
     def test_no_shared_strings_and_unknown_xml_reported(self):
         self.xlsx.write_bytes(workbook(shared=False,extra='<mystery xmlns="urn:unsupported"/><autoFilter ref="A1:C2"/>'))
         report=jappe.workbook_inventory(self.xlsx);self.assertFalse(report['shared_strings']['present'])

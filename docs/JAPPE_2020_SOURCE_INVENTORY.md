@@ -50,7 +50,10 @@ Download hyperlinks:
 - [Supplementary Data 5](https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM8_ESM.xlsx)
 - [Descriptions PDF](https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM3_ESM.pdf)
 
-Role descriptions will be checked against the acquired official descriptions PDF.
+Role descriptions were verified from the acquired official descriptions PDF, page 1,
+using local macOS PDFKit text extraction. This one-time evidence inspection adds
+no dependency to the Python workflow. The web PDF reader could not access the
+file, although the allowlisted HTTPS acquisition succeeded.
 Supplementary Data 1–2 concern spectral-library ligands; Data 6 concerns evaluation
 and is excluded. No Source Data workbook, extra supplementary PDF, raw-MS archive,
 external repository, checkpoint, or prior Git object cache is required.
@@ -132,6 +135,68 @@ required for tests. Run all checks with:
 ```sh
 PYTHONPATH=src python3 -B -m unittest discover -s tests -v
 ```
+
+## Actual acquisition and structural observations (2026-10-14 UTC)
+
+All four files were newly downloaded with HTTP 200. Final URLs equal the original
+allowlisted hyperlinks above; no redirect occurred. Total artifact bytes:
+**233,354**, below both caps. All three ZIP archives passed CRC checks; the PDF
+passed the signature/end-marker check and its one-page text was inspected.
+Publisher SHA256 values remain unavailable; the following are local exact-byte hashes.
+
+| Original filename | Bytes | Local SHA256 |
+|---|---:|---|
+| 41467_2020_20166_MOESM6_ESM.xlsx | 59,092 | `c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa` |
+| 41467_2020_20166_MOESM7_ESM.xlsx | 68,951 | `0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de` |
+| 41467_2020_20166_MOESM8_ESM.xlsx | 14,722 | `1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35` |
+| 41467_2020_20166_MOESM3_ESM.pdf | 90,589 | `cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a` |
+
+The server reported matching Content-Length for each XLSX, none for the PDF,
+and ETag/Last-Modified for all four. Last-Modified dates are December 2023;
+these server metadata do not independently establish a scientific revision or
+byte identity with a 2020 release. The captured receipts retain exact values.
+No unintended artifact was acquired in Task 1.5.
+
+| Supplement | Visible sheet | Worksheet part | Declared dimension | Physical/populated rows | Physical/populated cells | Numeric/string storage cells |
+|---|---|---|---|---:|---:|---:|
+| Data 3 | A0201 | xl/worksheets/sheet1.xml | A1:I1095 | 1,095 / 1,095 | 4,381 / 4,381 | 3,282 / 1,099 |
+| Data 4 | B0702 | xl/worksheets/sheet1.xml | A1:E1356 | 1,356 / 1,356 | 5,421 / 5,421 | 4,062 / 1,359 |
+| Data 5 | C0401 | xl/worksheets/sheet1.xml | A1:C137 | 137 / 137 | 411 / 411 | 272 / 139 |
+
+Each workbook has one sheet, a shared-string table, and zero formula cells.
+No hidden sheets, embedded/macro parts, or external workbook relationships were
+observed. Populated here means stored cell payload, including auxiliary invisible
+text; it does not mean a visible or measured biological record.
+
+Data 3 and 4 have header fields Ligand, Tm, Transformed Tm, and Predicted binding
+affinity (NetMHCpan-4.0). The prediction column is explicitly distinct from thermal
+measurements. Data 5 has Ligand, Tm (A0201 data), and Tm (B0702 data), showing two
+assay contexts. These headers and the PDF establish column context, not every
+row's measured/derived/synthetic status.
+
+Structural anomalies requiring care:
+
+- Data 3 table metadata declares `A1:D1048402`, while worksheet payload ends at
+  row 1095. Cell `I2` contains a literal space and causes a separate populated
+  column range. Neither metadata range nor auxiliary string expands the data.
+- Data 4 table metadata declares `A1:D1355`; the extra physical row 1356 contains
+  a U+200B zero-width character at `E1356`, outside that table. It is retained and
+  flagged, not dropped or converted into a scientific observation.
+- Data 5 table metadata declares `A1:C1047188`, while worksheet payload ends at
+  row 137. Expanding this declaration would invent rows; the inspector does not.
+- Office revision/compatibility/extension metadata, page margins, and table
+  semantics remain uninterpreted. Table definitions and columns are recorded
+  as metadata, without formula or training-block interpretation.
+
+The A sheet has 1,094 physical rows after the header; the B table's declared
+bounded range is compatible with 1,354 rows after its header, plus the auxiliary
+cell outside it. These structural observations agree with the published A/B
+reference sizes but do not verify individual curves. The C sheet has 136 physical
+rows after its header with two context columns, versus the paper's 359-peptide
+reference. A paired-context subset is a hypothesis requiring Task 1.6 evidence,
+not a complete reconciliation. No scientific observation count is certified.
+No explicit synthetic-negative sheet/block label was observed; this does not
+establish absence of synthetic rows or approve any training inclusion.
 
 ## Canonical execution and remaining questions
 

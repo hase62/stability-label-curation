@@ -29,7 +29,7 @@
       "publisher_label": "Supplementary Data 3",
       "publisher_sha256": null,
       "role": "HLA-A*02:01 ligands, Tm and transformed Tm values",
-      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "role_basis": "Verified from the acquired publisher Descriptions of Additional Supplementary Files PDF, page 1, Supplementary Data 3 section",
       "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM6_ESM.xlsx"
     },
     {
@@ -39,7 +39,7 @@
       "publisher_label": "Supplementary Data 4",
       "publisher_sha256": null,
       "role": "HLA-B*07:02 ligands, Tm and transformed Tm values",
-      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "role_basis": "Verified from the acquired publisher Descriptions of Additional Supplementary Files PDF, page 1, Supplementary Data 4 section",
       "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM7_ESM.xlsx"
     },
     {
@@ -49,7 +49,7 @@
       "publisher_label": "Supplementary Data 5",
       "publisher_sha256": null,
       "role": "HLA-C*04:01 ligands and Tm values",
-      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "role_basis": "Verified from the acquired publisher Descriptions of Additional Supplementary Files PDF, page 1, Supplementary Data 5 section",
       "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM8_ESM.xlsx"
     },
     {
@@ -59,10 +59,20 @@
       "publisher_label": "Descriptions of Additional Supplementary Files",
       "publisher_sha256": null,
       "role": "Publisher descriptions of Supplementary Data 1\u20136; documentary evidence only",
-      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "role_basis": "Actual official article hyperlink and acquired PDF title/page 1",
       "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM3_ESM.pdf"
     }
   ],
+  "descriptions_verification": {
+    "checksum_basis": "locally verified exact bytes; no publisher SHA256 established",
+    "data_1_2_role": "Spectral-library ligand lists, not direct measured-Tm labels",
+    "data_6_role": "Immunogenicity evaluation datasets; not downloaded",
+    "filename": "41467_2020_20166_MOESM3_ESM.pdf",
+    "local_document_sha256": "cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a",
+    "method": "Local macOS PDFKit text extraction for source-role verification; not required by the Python acquisition/inventory workflow",
+    "page_count": 1,
+    "verified_at_utc": "2026-10-14T04:56:03.470131Z"
+  },
   "link_evidence_location": "Official article Supplementary information section; links extracted directly from bounded publisher HTML on 2026-10-14",
   "links_verified_at_utc": "2026-10-14T04:41:38.583322Z",
   "official_article_url": "https://www.nature.com/articles/s41467-020-20166-4",

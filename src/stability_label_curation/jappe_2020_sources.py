@@ -12,6 +12,7 @@ import re
 import secrets
 import ssl
 import stat
+import unicodedata
 from typing import Any
 from urllib.parse import unquote, urlsplit
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, Request, build_opener
@@ -273,13 +274,31 @@ def _ranges(indices: list[int]) -> list[list[int]]:
     return result
 
 
+def _tables(archive: zipfile.ZipFile, worksheet: str, root: ET.Element) -> list[dict[str, Any]]:
+    """Table definitions are declared metadata, never expanded into worksheet rows."""
+    nodes = root.find('{'+MAIN+'}tableParts')
+    if nodes is None:return []
+    relationships = _relationships(archive,_rels_part(worksheet))
+    tables = []
+    for node in nodes:
+        rid = node.get('{'+DOCREL+'}id');rel = relationships.get(rid)
+        if not rel or rel.get('TargetMode')=='External' or rel['Type']!=DOCREL+'/table':
+            tables.append({'relationship_id':rid,'status':'unresolved_table_relationship'});continue
+        part = _part(worksheet,rel['Target']);table = _xml(archive,part)
+        if table.tag!='{'+MAIN+'}table':
+            tables.append({'relationship_id':rid,'table_part':part,'status':'unsupported_table_root'});continue
+        tables.append({'relationship_id':rid,'table_part':part,'status':'metadata_inspected',
+            'attributes':dict(table.attrib),'columns':[dict(c.attrib) for c in table.iter('{'+MAIN+'}tableColumn')]})
+    return tables
+
+
 def _sheet(archive: zipfile.ZipFile, part: str, strings: list[str]) -> dict[str, Any]:
     root = _xml(archive,part)
     if root.tag != '{'+MAIN+'}worksheet':
         return {'status':'unsupported_worksheet_root','root_tag':root.tag,'scientific_row_count':None}
     data = root.find('{'+MAIN+'}sheetData');rows = [] if data is None else list(data)
     types: Counter[str] = Counter();populated_rows = [];columns = [];cells_count = populated = formulas = 0
-    headers = [];relevant = [];formula_samples = [];anomalies = [];unknown = set();raw_row_count = populated_row_count = 0
+    headers = [];relevant = [];formula_samples = [];whitespace_cells = [];format_cells = [];anomalies = [];unknown = set();raw_row_count = populated_row_count = 0
     for row in rows:
         if row.tag != '{'+MAIN+'}row':unknown.add(row.tag);continue
         raw_row_count += 1;row_content = False;sample = [];row_ref = row.get('r')
@@ -312,6 +331,9 @@ def _sheet(archive: zipfile.ZipFile, part: str, strings: list[str]) -> dict[str,
             if f is not None and len(formula_samples)<10:formula_samples.append(observation)
             if kind in {'s','inlineStr','str'}:sample.append(observation)
             label=resolved if resolved is not None else inline_text if inline_text is not None else value or ''
+            if kind in {'s','inlineStr','str'} and not label.strip():whitespace_cells.append(ref)
+            if kind in {'s','inlineStr','str'} and label and all(unicodedata.category(c)=='Cf' for c in label):
+                format_cells.append({'cell_reference':ref,'text':label,'unicode_codepoints':['U+%04X'%ord(c) for c in label]})
             if kind in {'s','inlineStr','str'} and re.search(r'\bTm\b|peptide|ligand|transfor|negative|predict|temperature',label,re.I):
                 if len(relevant)<100:relevant.append(observation)
         if row_content:
@@ -323,12 +345,21 @@ def _sheet(archive: zipfile.ZipFile, part: str, strings: list[str]) -> dict[str,
     unsupported = sorted({child.tag for child in root if child.tag not in {'{'+MAIN+'}'+x for x in known}} | unknown)
     dimension = root.find('{'+MAIN+'}dimension')
     merges = root.find('{'+MAIN+'}mergeCells')
+    tables = _tables(archive,part,root)
+    for table in tables:
+        ref = table.get('attributes',{}).get('ref','')
+        match = re.fullmatch('[A-Z]+[0-9]+:[A-Z]+([0-9]+)',ref)
+        if match and populated_rows and int(match[1])>max(populated_rows):
+            anomalies.append({'issue':'table_range_extends_beyond_populated_row_references',
+                'table_part':table['table_part'],'declared_table_range':ref,'maximum_populated_row_reference':max(populated_rows)})
     return {'status':'structurally_inspected','declared_dimension':None if dimension is None else dimension.get('ref'),
         'physical_row_elements':raw_row_count,'populated_row_elements':populated_row_count,
         'populated_rows_with_valid_references':len(populated_rows),
         'physical_cell_elements':cells_count,'populated_cell_elements':populated,'storage_type_counts':dict(sorted(types.items())),
         'formula_cell_count':formulas,'formula_cell_samples':formula_samples,
         'candidate_header_text_rows':headers,'relevant_text_cells':relevant,
+        'whitespace_only_string_cell_references':whitespace_cells,
+        'format_character_only_string_cells':format_cells,'table_definitions':tables,
         'populated_row_ranges':_ranges(populated_rows),'populated_column_ranges':_ranges(columns),
         'multiple_block_indications':{'separated_row_ranges':len(_ranges(populated_rows))>1,'separated_column_ranges':len(_ranges(columns))>1},
         'merged_ranges':[] if merges is None else [x.get('ref') for x in merges],
