@@ -118,3 +118,15 @@ PYTHONPATH=src python3 -B -m stability_label_curation historical audit --json
 Inspection is offline and read-only. `--evidence`, `--dtu`, and `--secondary`
 support explicit local inputs; `--reports-dir` explicitly publishes evidence-only
 reports into an existing run with matching hashed inputs. No training table is created.
+
+Task 1.5 adds [Jappe publisher-supplement acquisition and workbook inventory](docs/JAPPE_2020_SOURCE_INVENTORY.md):
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation jappe2020 fetch
+PYTHONPATH=src python3 -B -m stability_label_curation jappe2020 inventory --json
+```
+
+Only four verified publisher links are allowlisted. Inventory is offline and
+read-only; `--file ARTIFACT_ID=PATH` provides local overrides and `--reports-dir`
+explicitly writes into a run with matching hashed inputs. Workbook rows and
+transformed targets are not automatically measured-Tm observations.

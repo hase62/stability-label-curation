@@ -6,6 +6,7 @@ from http.client import HTTPException
 from collections.abc import Mapping, Sequence
 import json
 import sys
+import zipfile
 
 from .paths import check_storage, initialize_storage, resolve_paths
 from .data_sources import load_manifest
@@ -14,6 +15,7 @@ from . import netmhcstabpan_2016 as dtu2016
 from . import dtu2016_source_audit as source_audit
 from . import spearmint_overlap_audit as spearmint
 from . import netmhcstab_historical_evidence as historical
+from . import jappe_2020_sources as jappe
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -60,6 +62,16 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     historical_audit.add_argument("--expected-dtu-sha256", help="Requires --dtu; pinned fixture identity")
     historical_audit.add_argument("--secondary", help="Explicit pinned TLStab secondary score CSV override")
     historical_audit.add_argument("--reports-dir", help="Write reports into an existing project run")
+    jappe_parser = commands.add_parser("jappe2020", help="Allowlisted publisher acquisition and offline workbook inventory")
+    jappe_commands = jappe_parser.add_subparsers(dest="jappe_command", required=True)
+    jappe_fetch = jappe_commands.add_parser("fetch")
+    jappe_fetch.add_argument("--artifact", action="append", choices=jappe.ARTIFACT_IDS, help="Select authorized artifacts; defaults to all four")
+    jappe_fetch.add_argument("--timeout", type=float, default=30)
+    jappe_fetch.add_argument("--receipt", help="Explicit receipt JSON destination under project runs")
+    jappe_inventory = jappe_commands.add_parser("inventory")
+    jappe_inventory.add_argument("--json", action="store_true")
+    jappe_inventory.add_argument("--file", action="append", default=[], metavar="ARTIFACT_ID=PATH", help="Explicit local artifact override, repeatable")
+    jappe_inventory.add_argument("--reports-dir", help="Explicit existing project run reports directory")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -90,6 +102,23 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "jappe2020":
+            if args.jappe_command == "fetch":
+                document = jappe.fetch(paths=paths, artifacts=args.artifact, timeout=args.timeout)
+                if args.receipt:
+                    dtu2016.write_report(args.receipt, document, paths=paths)
+            else:
+                files = {}
+                for item in args.file:
+                    identifier, separator, value = item.partition("=")
+                    if not separator or not value or identifier in files:
+                        raise ValueError("--file requires a unique ARTIFACT_ID=PATH")
+                    files[identifier] = value
+                document = jappe.inventory(paths=paths, files=files)
+                if args.reports_dir:
+                    jappe.write_inventory(document, args.reports_dir, paths=paths)
+            print(dtu2016.json_report(document), end="")
+            return int(bool(document.get('errors')))
         if args.command == "historical":
             if args.expected_dtu_sha256 and not args.dtu:
                 raise ValueError("--expected-dtu-sha256 requires --dtu")
@@ -197,7 +226,7 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             if not findings:
                 print("OK: configured directories exist and storage is accessible.")
             return int(any(severity == "ERROR" for severity, _ in findings))
-    except (ValueError, OSError, RuntimeError, HTTPException, csv.Error) as error:
+    except (ValueError, OSError, RuntimeError, HTTPException, csv.Error, zipfile.BadZipFile) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
     return 0

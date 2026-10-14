@@ -1,0 +1,83 @@
+{
+  "article_evidence": [
+    {
+      "location": "Methods: DIA data analysis; Generating thermostability curves; Fig. 2",
+      "statement": "8\u201311-mer DIA analysis and sigmoid fits; published HLA-A/B/C counts 1094/1354/359; Celsius Tm."
+    },
+    {
+      "location": "Methods: preprocessing and curve generation",
+      "statement": "iRT normalization, dotP quality controls, R\u00b2 >0.85 fits, and motif outlier processing are described."
+    },
+    {
+      "location": "Methods: Data transformation and artificial neural network training, (i) and (ii)",
+      "statement": "Distinct transformed targets are described; Stability Predictor uses randomly sampled human UniProt-Swissprot negatives, length balanced at ten times each length group and assigned target zero."
+    },
+    {
+      "location": "Results: Revealing inter-allelic and intra-allelic differences; Fig. 2c",
+      "statement": "HLA-C*04:01 peptides occur in both C1R assay contexts; their Tm values are compared for robustness."
+    },
+    {
+      "location": "Rights and permissions",
+      "statement": "Article states CC BY 4.0 with exceptions for third-party materials carrying separate credit notices; no artifact-specific override verified yet."
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "supplementary_data_3",
+      "filename": "41467_2020_20166_MOESM6_ESM.xlsx",
+      "format": "xlsx",
+      "publisher_label": "Supplementary Data 3",
+      "publisher_sha256": null,
+      "role": "HLA-A*02:01 ligands, Tm and transformed Tm values",
+      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM6_ESM.xlsx"
+    },
+    {
+      "artifact_id": "supplementary_data_4",
+      "filename": "41467_2020_20166_MOESM7_ESM.xlsx",
+      "format": "xlsx",
+      "publisher_label": "Supplementary Data 4",
+      "publisher_sha256": null,
+      "role": "HLA-B*07:02 ligands, Tm and transformed Tm values",
+      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM7_ESM.xlsx"
+    },
+    {
+      "artifact_id": "supplementary_data_5",
+      "filename": "41467_2020_20166_MOESM8_ESM.xlsx",
+      "format": "xlsx",
+      "publisher_label": "Supplementary Data 5",
+      "publisher_sha256": null,
+      "role": "HLA-C*04:01 ligands and Tm values",
+      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM8_ESM.xlsx"
+    },
+    {
+      "artifact_id": "descriptions",
+      "filename": "41467_2020_20166_MOESM3_ESM.pdf",
+      "format": "pdf",
+      "publisher_label": "Descriptions of Additional Supplementary Files",
+      "publisher_sha256": null,
+      "role": "Publisher descriptions of Supplementary Data 1\u20136; documentary evidence only",
+      "role_basis": "Requested publisher description; verify against the acquired descriptions PDF",
+      "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM3_ESM.pdf"
+    }
+  ],
+  "link_evidence_location": "Official article Supplementary information section; links extracted directly from bounded publisher HTML on 2026-10-14",
+  "links_verified_at_utc": "2026-10-14T04:41:38.583322Z",
+  "official_article_url": "https://www.nature.com/articles/s41467-020-20166-4",
+  "publication_doi": "10.1038/s41467-020-20166-4",
+  "published_expectations": {
+    "HLA-A*02:01": 1094,
+    "HLA-B*07:02": 1354,
+    "HLA-C*04:01": 359,
+    "count_basis": "published_expectation"
+  },
+  "schema_version": 1,
+  "scientific_limits": [
+    "Workbook rows are not automatically measured thermal observations.",
+    "Tm in degrees Celsius remains separate from kinetic half-life in hours.",
+    "Transformed targets, synthetic negatives, predictions, and unknown blocks require Task 1.6 classification."
+  ],
+  "source_id": "jappe_2020"
+}

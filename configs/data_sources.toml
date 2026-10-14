@@ -54,10 +54,10 @@ provenance_status = "row_audit_required"
 publication_doi = "10.1038/s41467-020-20166-4"
 landing_url = "https://www.nature.com/articles/s41467-020-20166-4"
 measurement_unit = "degrees_Celsius"
-license = "not_yet_verified"
+license = "CC BY 4.0 article-level statement; third-party credit exceptions; check artifact notices"
 assay_conditions = "not_yet_verified"
 evidence_urls = ["https://www.nature.com/articles/s41467-020-20166-4", "https://pmc.ncbi.nlm.nih.gov/articles/PMC7726561/"]
-verification_notes = "2026-10-11: Nature search-index publication content confirms DOI, Tm, and supplementary data availability; direct page retrieval failed and alternative PMC returned a challenge. Exact supplementary artifact mapping, direct URLs, licenses, checksums, and assay metadata remain unverified."
+verification_notes = "2026-10-14 Task 1.5: official Nature article inspected; actual four authorized supplementary hyperlinks recorded in configs/jappe_2020_artifacts.json. Article reports Celsius Tm, 1094/1354/359 reference counts, transformed ANN targets, and artificial negatives. Local artifact identity and structural inventory are captured separately in acquisition/run receipts; individual workbook row provenance remains unverified. Article states CC BY 4.0 with third-party exceptions."
 notes = "Supplementary peptide-level data are available through the publication. Keep measured thermal melting temperature (Tm) separate from kinetic half-life. Supplementary materials may include measured values, synthetic negatives, and model predictions; future parsing and provenance validation must separate these. Do not assume every row is an observed Tm."
 
 [[sources]]

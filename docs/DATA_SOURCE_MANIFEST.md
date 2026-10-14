@@ -186,3 +186,10 @@ retain future row or artifact provenance work.
 
 Metadata registration never authorizes downloads, parsing, training, evaluation,
 or scientific inclusion. Those require a subsequent authorized task.
+
+Task 1.5 records Jappe's four publisher supplements in
+[`jappe_2020_artifacts.json`](../configs/jappe_2020_artifacts.json), subordinate to
+the existing registry identity/DOI/article URL. The multi-artifact manifest keeps
+verified links and roles separate from acquisition receipts and locally observed
+workbook structure. Published counts and worksheet dimensions do not establish
+experimental row counts. See [the Jappe source inventory](JAPPE_2020_SOURCE_INVENTORY.md).
