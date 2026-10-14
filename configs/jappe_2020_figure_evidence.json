@@ -1,0 +1,82 @@
+{
+  "accessed_at_utc": "2026-10-14T07:28:04.776677Z",
+  "approved_task16": {
+    "commit_sha": "6c7c5b497a47ac44e2e84330b270393270f00885",
+    "hlac_report_sha256": "a5db00618dfa6b82781b4db6e1583c0b0933b31cb3489d34620df99da6e90c3f",
+    "ledger_sha256": "a919be9050ed39643fcf251342a03295c3034e50ea17d20a4afe79dc0cdbd4d9",
+    "run_id": "task-1_6-jappe2020-row-audit"
+  },
+  "evidence": [
+    {
+      "does_not_establish": "Completeness for every main or supplementary figure.",
+      "id": "source_data_link",
+      "location": "Source data section, Source Data (download XLSX) hyperlink",
+      "scope": "artifact_authentication",
+      "statement": "The official article links the authorized MOESM11 workbook as Source Data.",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "The full Figure 2e population or independence of context estimates.",
+      "id": "paired_c",
+      "location": "Revealing inter-allelic and intra-allelic differences; Figure 2c legend",
+      "scope": "published_population",
+      "statement": "The both-context HLA-C comparison uses Supplementary Data 5; reported PCC is 0.78, or 0.87 after described outlier removal.",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "A recoverable peptide-to-context mapping or the full 359 values.",
+      "id": "fig2_distribution",
+      "location": "Figure 2d/e legend and Revealing inter-allelic and intra-allelic differences",
+      "scope": "published_expectation",
+      "statement": "Figure 2e reports 1094 A, 1354 B, and 359 C peptides; text reports medians 57.8, 59.9, and 53.5 Celsius.",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Assay context for all 359 C peptides or independently validated fitted curves.",
+      "id": "peak_areas",
+      "location": "Workflow and Generating thermostability curves; direct Source Data Suppl Fig 3a/b/c headers",
+      "scope": "field_semantics",
+      "statement": "Peak-area arrays by temperature and replicate are inputs to thermal curve fitting, not Tm estimates. Suppl Fig 3c header identifies C1R-A*02:01 context.",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Historical rounding implementation or new independent observations.",
+      "id": "supp5",
+      "location": "Extracting a thermostability measure from pHLA-specific melt curves; Source Data Suppl Fig 5a/b headers",
+      "scope": "figure_semantics",
+      "statement": "Supplementary Figure 5 compares Tm with median peak area at 37 Celsius for A/B ligands.",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Any numerical conversion between Tm and half-life or independent source measurements.",
+      "id": "kinetic_comparison",
+      "location": "The kinetic stability of pHLA is closely linked to thermostability; Source Data Suppl Fig 4 header",
+      "scope": "field_semantics",
+      "statement": "The authors separately determine kinetic half-life using time-dependent decay and compare it with thermal Tm in Supplementary Figure 4.",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    }
+  ],
+  "filename": "41467_2020_20166_MOESM11_ESM.xlsx",
+  "link_verification": {
+    "anchor_labels": [
+      "Source Data (download XLSX )"
+    ],
+    "official_article_url": "https://www.nature.com/articles/s41467-020-20166-4",
+    "resolved_article_url": "https://www.nature.com/articles/s41467-020-20166-4?error=cookies_not_supported",
+    "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM11_ESM.xlsx",
+    "verification": "exact authorized link and Source Data anchor in official article HTML"
+  },
+  "local_source_data_sha256": "fae10a4fcdb681cd1e925104406b6973861f5777e83b7dcbd42a79e0013c07a4",
+  "official_article_url": "https://www.nature.com/articles/s41467-020-20166-4",
+  "publication_doi": "10.1038/s41467-020-20166-4",
+  "publisher_sha256": null,
+  "schema_version": 1,
+  "scientific_limits": [
+    "No Figure 2 population is assumed from another plot table.",
+    "No synthetic status inferred from zero peak areas.",
+    "Tm Celsius and t1/2 remain separate fields.",
+    "No curve fitting, source-row curation, training, averaging, or independent measurement inference."
+  ],
+  "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM11_ESM.xlsx",
+  "source_id": "jappe_2020"
+}

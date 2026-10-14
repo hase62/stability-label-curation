@@ -17,6 +17,7 @@ from . import spearmint_overlap_audit as spearmint
 from . import netmhcstab_historical_evidence as historical
 from . import jappe_2020_sources as jappe
 from . import jappe_2020_row_audit as jappe_rows
+from . import jappe_2020_figure_audit as jappe_figures
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -79,6 +80,17 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     jappe_audit.add_argument("--expected-sha256", action="append", default=[], metavar="ARTIFACT_ID=SHA256", help="Explicit fixture identity; requires matching --file")
     jappe_audit.add_argument("--evidence", help="Captured offline row evidence register")
     jappe_audit.add_argument("--reports-dir", help="Explicit existing project run reports directory")
+    figure_fetch = jappe_commands.add_parser("figure-fetch", help="Acquire only the 5 MiB-capped official Source Data workbook")
+    figure_fetch.add_argument("--timeout", type=float, default=30)
+    figure_fetch.add_argument("--receipt", help="Explicit acquisition receipt destination under project runs")
+    figure_audit = jappe_commands.add_parser("figure-audit", help="Offline Source Data population audit using approved Task 1.6 evidence")
+    figure_audit.add_argument("--json", action="store_true")
+    figure_audit.add_argument("--source-data", help="Explicit local Source Data workbook")
+    figure_audit.add_argument("--approved-ledger", help="Approved Task 1.6 ledger override")
+    figure_audit.add_argument("--approved-context-report", help="Approved Task 1.6 context report override")
+    figure_audit.add_argument("--expected-sha256", action="append", default=[], metavar="INPUT_ID=SHA256")
+    figure_audit.add_argument("--evidence", help="Offline source evidence register")
+    figure_audit.add_argument("--reports-dir", help="Explicit existing project run reports directory")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -110,6 +122,26 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     try:
         paths = resolve_paths(env)
         if args.command == "jappe2020":
+            if args.jappe_command == "figure-fetch":
+                document = jappe_figures.fetch(paths=paths, timeout=args.timeout)
+                if args.receipt:
+                    dtu2016.write_report(args.receipt, document, paths=paths)
+                print(dtu2016.json_report(document), end="")
+                return 0
+            if args.jappe_command == "figure-audit":
+                hashes = {}
+                for item in args.expected_sha256:
+                    key, separator, value = item.partition("=")
+                    if not separator or not value or key in hashes:
+                        raise ValueError("--expected-sha256 requires a unique INPUT_ID=SHA256")
+                    hashes[key] = value
+                result = jappe_figures.audit(paths=paths, source_path=args.source_data,
+                    ledger_path=args.approved_ledger, context_report_path=args.approved_context_report,
+                    expected_sha256=hashes, evidence_path=args.evidence)
+                if args.reports_dir:
+                    jappe_figures.write_reports(result, args.reports_dir, paths=paths)
+                print(dtu2016.json_report(result.reports if args.json else result.reports['jappe_figure_population_reconciliation.json']), end="")
+                return 0
             if args.jappe_command == "fetch":
                 document = jappe.fetch(paths=paths, artifacts=args.artifact, timeout=args.timeout)
                 if args.receipt:

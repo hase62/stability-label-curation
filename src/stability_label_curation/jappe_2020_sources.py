@@ -173,7 +173,10 @@ class _Redirects(HTTPRedirectHandler):
 
 
 def _fetch_one(entry: dict[str, Any], document: dict[str, Any], storage: StoragePaths,
-               timeout: float, budget: list[int]) -> dict[str, Any]:
+               timeout: float, budget: list[int], *, max_artifact_bytes: int | None = None) -> dict[str, Any]:
+    max_artifact_bytes = MAX_ARTIFACT_BYTES if max_artifact_bytes is None else max_artifact_bytes
+    if not 0 < max_artifact_bytes <= MAX_ARTIFACT_BYTES:
+        raise ValueError('Invalid artifact byte limit')
     target = storage.project_data_dir/SOURCE_ID/entry['filename']
     # Use unresolved root construction to detect source-directory symlink escapes.
     if (storage.project_data_dir != storage.data_root/'stability-label-curation'
@@ -191,6 +194,8 @@ def _fetch_one(entry: dict[str, Any], document: dict[str, Any], storage: Storage
         if existing is not None:
             if not stat.S_ISREG(existing.st_mode):
                 raise ValueError('Existing artifact must be a regular non-symlink file')
+            if existing.st_size > max_artifact_bytes:
+                raise ValueError('Existing artifact exceeds selected byte limit')
             receipt['acquisition'] = 'existing_artifact_reused'
             receipt['limitations'].append('Reused bytes were not compared with current publisher content; prior HTTP metadata is unavailable in this receipt.')
         else:
@@ -206,20 +211,20 @@ def _fetch_one(entry: dict[str, Any], document: dict[str, Any], storage: Storage
                         if response.status != 200 or response.headers.get('Content-Encoding','identity').lower() != 'identity':
                             raise ValueError('Expected complete HTTP 200 identity-encoded response')
                         length = response.headers.get('Content-Length')
-                        if length is not None and (not re.fullmatch('[0-9]+',length) or int(length)>min(MAX_ARTIFACT_BYTES,MAX_TASK_BYTES-budget[0])):
+                        if length is not None and (not re.fullmatch('[0-9]+',length) or int(length)>min(max_artifact_bytes,MAX_TASK_BYTES-budget[0])):
                             raise ValueError('Server Content-Length invalid or exceeds download limit')
                         if 'html' in response.headers.get('Content-Type','').lower():
                             raise ValueError('Publisher returned HTML instead of the requested artifact')
                         size = 0
                         while True:
-                            allowance = min(MAX_ARTIFACT_BYTES-size,MAX_TASK_BYTES-budget[0])
+                            allowance = min(max_artifact_bytes-size,MAX_TASK_BYTES-budget[0])
                             if allowance <= 0:
                                 if length is not None and size == int(length):break
                                 raise ValueError('Download byte limit reached before EOF could be verified')
                             block = response.read(min(65536,allowance))
                             if not block:break
                             size += len(block);budget[0] += len(block)
-                            if size>MAX_ARTIFACT_BYTES or budget[0]>MAX_TASK_BYTES:
+                            if size>max_artifact_bytes or budget[0]>MAX_TASK_BYTES:
                                 raise ValueError('Streaming download exceeds artifact/task byte limit')
                             output.write(block)
                         if length is not None and int(length) != size:

@@ -141,3 +141,15 @@ It verifies all four pinned input hashes and runs offline. `--reports-dir`
 explicitly writes complete reports and a lossless audit ledger into an existing
 run with matching hashed inputs. Tm, transformed values, predictions, auxiliary
 cells, and paired C assay contexts remain distinct; training eligibility is not assigned.
+
+Task 1.7 adds the [Jappe Figure Source Data audit](docs/JAPPE_2020_FIGURE_SOURCE_DATA.md):
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation jappe2020 figure-fetch
+PYTHONPATH=src python3 -B -m stability_label_curation jappe2020 figure-audit --json
+```
+
+Acquisition permits only the official Source Data XLSX with a 5 MiB cap. Audit
+is offline and read-only, reusing approved Task 1.6 evidence. The recovered workbook
+covers Supplementary Figures 3–5; the complete Figure 2e HLA-C population remains
+unavailable. Explicit `--reports-dir` publishes reports into a hashed-input run.
