@@ -130,3 +130,14 @@ Only four verified publisher links are allowlisted. Inventory is offline and
 read-only; `--file ARTIFACT_ID=PATH` provides local overrides and `--reports-dir`
 explicitly writes into a run with matching hashed inputs. Workbook rows and
 transformed targets are not automatically measured-Tm observations.
+
+Task 1.6 provides the [Jappe row-level field and assay-context audit](docs/JAPPE_2020_ROW_PROVENANCE.md):
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation jappe2020 audit --json
+```
+
+It verifies all four pinned input hashes and runs offline. `--reports-dir`
+explicitly writes complete reports and a lossless audit ledger into an existing
+run with matching hashed inputs. Tm, transformed values, predictions, auxiliary
+cells, and paired C assay contexts remain distinct; training eligibility is not assigned.

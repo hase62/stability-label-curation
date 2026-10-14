@@ -16,6 +16,7 @@ from . import dtu2016_source_audit as source_audit
 from . import spearmint_overlap_audit as spearmint
 from . import netmhcstab_historical_evidence as historical
 from . import jappe_2020_sources as jappe
+from . import jappe_2020_row_audit as jappe_rows
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -72,6 +73,12 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     jappe_inventory.add_argument("--json", action="store_true")
     jappe_inventory.add_argument("--file", action="append", default=[], metavar="ARTIFACT_ID=PATH", help="Explicit local artifact override, repeatable")
     jappe_inventory.add_argument("--reports-dir", help="Explicit existing project run reports directory")
+    jappe_audit = jappe_commands.add_parser("audit", help="Offline checksum-gated field semantics and paired-context audit")
+    jappe_audit.add_argument("--json", action="store_true")
+    jappe_audit.add_argument("--file", action="append", default=[], metavar="ARTIFACT_ID=PATH")
+    jappe_audit.add_argument("--expected-sha256", action="append", default=[], metavar="ARTIFACT_ID=SHA256", help="Explicit fixture identity; requires matching --file")
+    jappe_audit.add_argument("--evidence", help="Captured offline row evidence register")
+    jappe_audit.add_argument("--reports-dir", help="Explicit existing project run reports directory")
     sources_parser = commands.add_parser("sources", help="Read-only source metadata registry")
     sources_parser.add_argument("--manifest", help="Override the repository TOML manifest")
     source_commands = sources_parser.add_subparsers(dest="source_command", required=True)
@@ -114,9 +121,21 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
                     if not separator or not value or identifier in files:
                         raise ValueError("--file requires a unique ARTIFACT_ID=PATH")
                     files[identifier] = value
-                document = jappe.inventory(paths=paths, files=files)
-                if args.reports_dir:
-                    jappe.write_inventory(document, args.reports_dir, paths=paths)
+                if args.jappe_command == "audit":
+                    hashes = {}
+                    for item in args.expected_sha256:
+                        identifier, separator, value = item.partition("=")
+                        if not separator or not value or identifier in hashes:
+                            raise ValueError("--expected-sha256 requires a unique ARTIFACT_ID=SHA256")
+                        hashes[identifier] = value
+                    result = jappe_rows.audit(paths=paths,files=files,expected_sha256=hashes,evidence_path=args.evidence)
+                    if args.reports_dir:
+                        jappe_rows.write_reports(result,args.reports_dir,paths=paths)
+                    document = result.reports if args.json else result.reports['jappe_measurement_inventory.json']
+                else:
+                    document = jappe.inventory(paths=paths, files=files)
+                    if args.reports_dir:
+                        jappe.write_inventory(document, args.reports_dir, paths=paths)
             print(dtu2016.json_report(document), end="")
             return int(bool(document.get('errors')))
         if args.command == "historical":

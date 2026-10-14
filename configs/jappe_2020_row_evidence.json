@@ -1,0 +1,110 @@
+{
+  "checksum_basis": "Local exact-byte reference, not publisher checksum",
+  "evidence": [
+    {
+      "does_not_establish": "Individual MS/curve traceability.",
+      "evidence_id": "tm_definition",
+      "location": "Fig. 1; Extracting a thermostability measure; Methods equation (2)",
+      "scope": "assay",
+      "statement": "Tm is the fitted sigmoid transition midpoint, in Celsius.",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Independent replicate status or C-peptide restriction to A/B.",
+      "evidence_id": "cell_contexts",
+      "location": "MS-based assay workflow; Fig. 1; Revealing inter-allelic differences",
+      "scope": "assay",
+      "statement": "Distinct C1R-A*02:01 and C1R-B*07:02 contexts also express endogenous HLA-C*04:01.",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "A complete 359-peptide population or an authorized exclusion rule.",
+      "evidence_id": "paired_c",
+      "location": "Revealing inter-allelic differences; Fig. 2c; Supplementary Data 5 reference",
+      "scope": "dataset",
+      "statement": "Data 5 supports the C-peptide comparison across both contexts; PCC 0.78, or 0.87 after described outlier removal.",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Missing source rows or independent measurements.",
+      "evidence_id": "counts",
+      "location": "Generating thermostability curves; Fig. 2e",
+      "scope": "dataset",
+      "statement": "Reported A/B/C peptide counts: 1094/1354/359.",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Historical workbook generation or rounding.",
+      "evidence_id": "motif_equations",
+      "location": "Data transformation and ANN training (i); equations (3),(4)",
+      "scope": "transformation",
+      "statement": "Motif analysis min-max normalizes then applies u+3(u-median(u)), clipped to [0,1].",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "The exact Tm_all population or rounding procedure.",
+      "evidence_id": "predictor_equation",
+      "location": "Data transformation and ANN training (ii); equation (5); Fig. 3",
+      "scope": "transformation",
+      "statement": "Stability Predictor rescales Tm to [0.5,1].",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Specific synthetic rows in these XLSX files.",
+      "evidence_id": "synthetic_strategy",
+      "location": "Data transformation and ANN training (ii)",
+      "scope": "model_training",
+      "statement": "Separately sampled length-balanced human proteome negatives receive target zero.",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Row-specific QC values in the released tables.",
+      "evidence_id": "qc",
+      "location": "DIA processing; Generating thermostability curves",
+      "scope": "assay",
+      "statement": "The paper describes 8\u201311-mer analysis and fit/QC filtering.",
+      "status": "confirmed_publication_statement",
+      "url": "https://www.nature.com/articles/s41467-020-20166-4"
+    },
+    {
+      "does_not_establish": "Every numeric field as an experimental observation or the full C distribution.",
+      "evidence_id": "publisher_descriptions",
+      "location": "Page 1, Supplementary Data 3\u20135 descriptions; Task 1.5 local PDF verification",
+      "scope": "artifact",
+      "statement": "Data 3/4 describe A/B ligands, Tm and transformed Tm; Data 5 describes C ligands and Tm.",
+      "status": "confirmed_publication_statement",
+      "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM3_ESM.pdf"
+    }
+  ],
+  "later_artifact_candidate": {
+    "link_verification": "Actual official article HTML hyperlink inspected during Task 1.6; target not requested or downloaded.",
+    "official_article_section": "Source data",
+    "original_filename": "41467_2020_20166_MOESM11_ESM.xlsx",
+    "publisher_label": "Source Data",
+    "purpose": "Investigate Fig. 2e source population and C-context selection; exact file membership unverified.",
+    "retrieval_status": "not downloaded; subsequent narrowly authorized task only",
+    "source_hyperlink_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM11_ESM.xlsx"
+  },
+  "limits": [
+    "Source-level Tm classification does not verify each underlying assay or approve training inclusion.",
+    "No exact historical transformed-column generation or rounding procedure is independently captured.",
+    "Available C pairs cannot reconstruct all Fig. 2e peptides."
+  ],
+  "local_task15_reference_sha256": {
+    "descriptions": "cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a",
+    "supplementary_data_3": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa",
+    "supplementary_data_4": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de",
+    "supplementary_data_5": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35"
+  },
+  "publication_doi": "10.1038/s41467-020-20166-4",
+  "schema_version": 1,
+  "source_id": "jappe_2020",
+  "verified_at_utc": "2026-10-14T06:16:01.684352Z"
+}

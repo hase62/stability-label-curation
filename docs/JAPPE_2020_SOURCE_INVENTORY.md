@@ -209,8 +209,9 @@ logs, and report hashes belong under that run. The manifest schema is unchanged.
 
 Task 1.4's approved history was safely pushed to HTTPS origin/main at
 `0d5ba08abf428079d39ddb004d1749b5e1eb557d` before Task 1.5 changes. The Task 1.5
-branch remains local, unmerged and unpushed. Prior artifacts and the TL-MHC object
-cache are untouched.
+branch was local, unmerged and unpushed at Task 1.5 completion. Task 1.6 later
+fast-forwarded local main through Task 1.5 as authorized; no further remote push
+was performed. Prior artifacts and the TL-MHC object cache are untouched.
 
 Task 1.6 must identify each block's headers, units, transformations, quality-control
 context, and row origins; reconcile publication counts with appropriate workbook
@@ -218,3 +219,9 @@ blocks; and examine repeated HLA-C peptide contexts without aggregating them
 prematurely. Synthetic versus measured membership requires explicit evidence.
 No inclusion/filtering, zero semantics, immunogenicity labels, or Tm-to-kinetic
 mapping decision is made here.
+
+Task 1.6 adds a [physical-row and field-semantics audit](JAPPE_2020_ROW_PROVENANCE.md)
+using these unchanged artifacts. It reconciles A/B peptide and numeric-field
+counts, retains auxiliary cells, compares C contexts and candidate transformations,
+and leaves the full 359-C-peptide distribution unresolved. Task 1.5's structural
+counts and original receipts are retained as historical evidence.
