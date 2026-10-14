@@ -1,0 +1,220 @@
+{
+  "artifacts": [
+    {
+      "input_id": "dtu",
+      "relative_path": "netmhcstabpan_2016/Stability.txt",
+      "role": "primary_kinetic_observations",
+      "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "spearmint_train",
+      "relative_path": "spearmint_stage2/data/binding_stability/train.csv",
+      "role": "derived_aliases",
+      "sha256": "3ad79db3286688972b47ea96ba96129704367c1f016947a2ecc39c4872520793",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "spearmint_val",
+      "relative_path": "spearmint_stage2/data/binding_stability/val.csv",
+      "role": "derived_aliases",
+      "sha256": "49217866a5d084ecd74150609bd5f0cfb8f6a78ac772ded6f26e1ff427a79dd8",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "spearmint_test",
+      "relative_path": "spearmint_stage2/data/binding_stability/test.csv",
+      "role": "derived_aliases",
+      "sha256": "61d8ab1ae07e75fcf69b8175617ccf1bb43255498f0a8f37882568b2075c953f",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "spearmint_mapping",
+      "relative_path": "spearmint_stage2/refs/2field_hla_consensus_seqs.csv",
+      "role": "pinned_receptor_mapping",
+      "sha256": "8969927707689d83656eef7c0f1b59b295e80ee7b202d55ee9904aaa9d947eae",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "jappe_data_3",
+      "relative_path": "jappe_2020/41467_2020_20166_MOESM6_ESM.xlsx",
+      "role": "primary_thermal_candidates",
+      "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "jappe_data_4",
+      "relative_path": "jappe_2020/41467_2020_20166_MOESM7_ESM.xlsx",
+      "role": "primary_thermal_candidates",
+      "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "jappe_data_5",
+      "relative_path": "jappe_2020/41467_2020_20166_MOESM8_ESM.xlsx",
+      "role": "primary_thermal_candidates",
+      "sha256": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35",
+      "storage_area": "data"
+    },
+    {
+      "input_id": "jappe_ledger",
+      "relative_path": "task-1_6-jappe2020-row-audit/reports/jappe_rows.jsonl",
+      "role": "approved_field_provenance_ledger",
+      "sha256": "a919be9050ed39643fcf251342a03295c3034e50ea17d20a4afe79dc0cdbd4d9",
+      "storage_area": "runs"
+    }
+  ],
+  "checksum_basis": "locally verified immutable bytes; not publisher checksum verification",
+  "evidence_files": [
+    {
+      "relative_path": "configs/data_sources.toml",
+      "sha256": "86f195cbd61a64a4e53740d4f59ebc84c976dfca65b06666e29855f15a545e80"
+    },
+    {
+      "relative_path": "configs/external_repositories.lock.json",
+      "sha256": "841e78de6aa7147094277dfe72f1c4e996e62c29e65b6556a5c62e0df015d8d9"
+    },
+    {
+      "relative_path": "configs/netmhcstabpan_2016_evidence.json",
+      "sha256": "6ee7a05db18770877a00ed1610507899e28fe9062845357832f84998515f2b2a"
+    },
+    {
+      "relative_path": "configs/spearmint_stage2_evidence.json",
+      "sha256": "e2fd85097908b8520b3f9e823e208b84a66a2d7ec1c9299ee2d99350845c7a3e"
+    },
+    {
+      "relative_path": "configs/jappe_2020_row_evidence.json",
+      "sha256": "9703adac8231751fa612c9f2408a71383e7c6d219ab53f514781ec9c7505bb49"
+    },
+    {
+      "relative_path": "configs/jappe_2020_figure_evidence.json",
+      "sha256": "8a5434b52905475b6004cf30276711c6d96d121b06fd5e345d474d58afa8d7d5"
+    },
+    {
+      "relative_path": "configs/netmhcstab_2013_evidence.json",
+      "sha256": "d67878c79af0ad43257e3e5719ff91f21f8ef9ef19eccf5c7dfc6fa01e9261b3"
+    }
+  ],
+  "expectations": {
+    "aliases_by_split": {
+      "test": 2700,
+      "train": 21626,
+      "validation": 2705
+    },
+    "dtu_alleles": 75,
+    "dtu_c67s_observations": 1135,
+    "dtu_observations": 28166,
+    "dtu_ordinary_observations": 27031,
+    "dtu_zero_values": 5679,
+    "jappe_C_unique_peptides": 136,
+    "jappe_by_allele": {
+      "HLA-A*02:01": 1094,
+      "HLA-B*07:02": 1354,
+      "HLA-C*04:01": 272
+    },
+    "jappe_observations": 2720,
+    "total_aliases": 27031,
+    "total_observations": 30886
+  },
+  "external_repository_commits": {
+    "TL-MHC": "ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb",
+    "spearmint": "d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5"
+  },
+  "observation_schema_version": 1,
+  "schema_version": 1,
+  "scientific_policy": "Registry measurement-value records and lineage aliases; no independence or training-eligibility decision.",
+  "source_lineage": [
+    {
+      "evidence_refs": [
+        "docs/NETMHCSTABPAN_2016_SOURCE_EVIDENCE.md",
+        "configs/netmhcstabpan_2016_evidence.json"
+      ],
+      "measurement_type": "kinetic_half_life",
+      "measurement_unit": "hours",
+      "published_provenance": "dataset_level_experimental_kinetic_stability",
+      "registry_source_id": "netmhcstabpan_2016",
+      "representation": "DTU raw table",
+      "role": "contributes_kinetic_observations",
+      "uncertainties": [
+        "individual_measurement_trace_unverified",
+        "zero_semantics_unresolved",
+        "C67S_construct_handling_undecided"
+      ]
+    },
+    {
+      "evidence_refs": [
+        "docs/SPEARMINT_STAGE2_DTU_OVERLAP.md",
+        "configs/spearmint_stage2_evidence.json"
+      ],
+      "independent_source_status": "not_an_independent_experimental_source",
+      "measurement_type": "kinetic_half_life",
+      "measurement_unit": "hours",
+      "parent_registry_source_id": "netmhcstabpan_2016",
+      "registry_source_id": "spearmint_stability_audit",
+      "representation": "SPEARMINT Stage 2",
+      "role": "derived_exact_DTU_ordinary_subset_aliases_only",
+      "uncertainties": [
+        "upstream_reference_version_unresolved",
+        "181_residue_reference_entries_preserved",
+        "released_splits_not_independent_evaluation_cohorts",
+        "preprint_27034_aggregate_vs_27031_released_rows_unresolved"
+      ]
+    },
+    {
+      "evidence_refs": [
+        "docs/JAPPE_2020_ROW_PROVENANCE.md",
+        "configs/jappe_2020_row_evidence.json"
+      ],
+      "measurement_type": "thermal_melting_temperature",
+      "measurement_unit": "degC",
+      "published_provenance": "publication_described_thermal_measurement_candidates",
+      "registry_source_id": "jappe_2020",
+      "representation": "Supplementary Data 3\u20135 raw Tm fields",
+      "role": "contributes_context_specific_thermal_candidates",
+      "uncertainties": [
+        "underlying_MS_traces_not_individually_verified",
+        "HLA_C_context_independence_unestablished",
+        "transformation_history_unresolved"
+      ]
+    },
+    {
+      "evidence_refs": [
+        "docs/NETMHCSTAB_2013_HISTORICAL_PROVENANCE.md"
+      ],
+      "registry_source_id": "netmhcstab_2013",
+      "representation": "historical 5509 published measurements",
+      "role": "documentary_evidence_only_original_table_unavailable",
+      "row_overlap_status": "unavailable_not_zero",
+      "uncertainties": [
+        "historical_row_overlap_and_independence_unestablished"
+      ]
+    },
+    {
+      "evidence_refs": [
+        "docs/NETMHCSTAB_2013_HISTORICAL_PROVENANCE.md"
+      ],
+      "registry_source_id": "tlstab_reference",
+      "representation": "TLStab secondary transformed scores",
+      "role": "secondary_derived_material_not_canonical_measurements",
+      "row_overlap_status": "historical_lineage_unresolved",
+      "uncertainties": [
+        "secondary_scores_not_original_physical_measurements",
+        "6298_published_vs_6297_released_vs_5509_historical_unresolved"
+      ]
+    },
+    {
+      "evidence_refs": [
+        "docs/JAPPE_2020_FIGURE_SOURCE_DATA.md",
+        "configs/jappe_2020_figure_evidence.json"
+      ],
+      "registry_source_id": "jappe_2020",
+      "representation": "Figure 2e C359; Source Data and non-Tm workbook fields",
+      "role": "documentary_evidence_no_additional_Tm_observations",
+      "row_overlap_status": "full_C359_population_unrecovered",
+      "uncertainties": [
+        "359_peptide_identities_contexts_and_population_selection_unresolved",
+        "peak_areas_predictions_and_transformed_values_are_not_additional_Tm"
+      ]
+    }
+  ]
+}

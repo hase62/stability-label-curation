@@ -153,3 +153,15 @@ Acquisition permits only the official Source Data XLSX with a 5 MiB cap. Audit
 is offline and read-only, reusing approved Task 1.6 evidence. The recovered workbook
 covers Supplementary Figures 3–5; the complete Figure 2e HLA-C population remains
 unavailable. Explicit `--reports-dir` publishes reports into a hashed-input run.
+
+Task 1.8 provides the [canonical stability observation registry](docs/CANONICAL_STABILITY_OBSERVATION_REGISTRY.md):
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation registry validate --json
+PYTHONPATH=src python3 -B -m stability_label_curation registry build --output-dir /absolute/project/run/reports
+```
+
+Validation is read-only and offline. Build requires an explicit hashed-input run.
+The registry preserves 28,166 kinetic and 2,720 thermal measurement-value records;
+27,031 SPEARMINT rows become lineage aliases, not additional observations.
+Training eligibility and experimental independence remain unassessed.

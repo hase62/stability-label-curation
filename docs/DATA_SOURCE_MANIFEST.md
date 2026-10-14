@@ -193,3 +193,9 @@ the existing registry identity/DOI/article URL. The multi-artifact manifest keep
 verified links and roles separate from acquisition receipts and locally observed
 workbook structure. Published counts and worksheet dimensions do not establish
 experimental row counts. See [the Jappe source inventory](JAPPE_2020_SOURCE_INVENTORY.md).
+
+Task 1.8's [observation registry](CANONICAL_STABILITY_OBSERVATION_REGISTRY.md)
+uses the existing seven source IDs. Its portable `observation_registry.lock.json`
+pins audited artifacts, evidence and lineage roles without changing this schema
+or making training-inclusion decisions. SPEARMINT is represented as DTU aliases;
+kinetic hours and thermal Celsius remain separate physical measurement types.

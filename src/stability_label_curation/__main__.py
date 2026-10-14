@@ -18,6 +18,7 @@ from . import netmhcstab_historical_evidence as historical
 from . import jappe_2020_sources as jappe
 from . import jappe_2020_row_audit as jappe_rows
 from . import jappe_2020_figure_audit as jappe_figures
+from . import observation_registry as observations
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -102,6 +103,15 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             subparser.add_argument("--json", action="store_true")
         if command == "show":
             subparser.add_argument("source_id")
+    registry_parser = commands.add_parser("registry", help="Offline canonical observation and derived-lineage registry")
+    registry_commands = registry_parser.add_subparsers(dest="registry_command", required=True)
+    for name in ("validate", "build"):
+        registry_command = registry_commands.add_parser(name)
+        registry_command.add_argument("--json", action="store_true")
+        registry_command.add_argument("--lock", help="Portable pinned registry configuration; explicit fixture expectations")
+        registry_command.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
+        if name == "build":
+            registry_command.add_argument("--output-dir", required=True, help="Explicit existing project run reports directory")
     runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
     run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
     create_parser = run_commands.add_parser("create", help="Create one run from committed code")
@@ -121,6 +131,19 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "registry":
+            files = {}
+            for item in args.input:
+                key, separator, value = item.partition("=")
+                if not separator or not value or key in files:
+                    raise ValueError("--input requires a unique INPUT_ID=PATH")
+                files[key] = value
+            result = observations.build(paths=paths, files=files, lock_path=args.lock)
+            if args.registry_command == "build":
+                observations.write_registry(result, args.output_dir, paths=paths)
+            document = result.reports if args.json else result.reports['registry_validation_summary.json']
+            print(dtu2016.json_report(document), end="")
+            return 0
         if args.command == "jappe2020":
             if args.jappe_command == "figure-fetch":
                 document = jappe_figures.fetch(paths=paths, timeout=args.timeout)
