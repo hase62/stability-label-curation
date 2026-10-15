@@ -1,0 +1,657 @@
+{
+  "allele_adapter": [
+    "Preserve raw HLA string and peptide separately from BigMHC UID",
+    "Require explicit validated human HLA-I mapping to an authenticated receptor reference; reject/flag unsupported and ambiguous names",
+    "Check __contains__-equivalent exact sanitized membership without using nearest fallback; retain full original identity and expose resolved encoding ID",
+    "Detect UID collisions and many-to-one mappings; do not truncate fields or map mutants automatically",
+    "Do not assume all 72 ordinary DTU alleles are covered; reference CSV is not acquired in this task"
+  ],
+  "commit": "199e890fa69a63646730bcecea0a520e08ca4f02",
+  "commit_resolution": {
+    "access_date": "2026-10-15",
+    "advertised_ref": "refs/heads/master",
+    "method": "git ls-remote --symref HTTPS HEAD; no object transfer"
+  },
+  "expected_functions": {
+    "src/bigmhc.py": [
+      "AttentionLSTMCell.forward",
+      "BigMHC.AnchorBlock.buildInput",
+      "BigMHC.AnchorBlock.forward",
+      "BigMHC.Condenser.forward",
+      "BigMHC.PMHCLSTM.buildInput",
+      "BigMHC.PMHCLSTM.forward",
+      "BigMHC.accelerate",
+      "BigMHC.decelerate",
+      "BigMHC.forward",
+      "BigMHC.load",
+      "BigMHC.save",
+      "BigMHC.tllayers",
+      "Dense.forward",
+      "DenseBlock.forward"
+    ],
+    "src/cli.py": [
+      "_loadData",
+      "_loadModels",
+      "_parseAllele",
+      "_parseDevices",
+      "_parseHdrcnt",
+      "_parseJobs",
+      "_parseMaxbat",
+      "_parseModel",
+      "_parseOut",
+      "_parsePepcol",
+      "_parsePrefetch",
+      "_parseTgtcol",
+      "_parseTransferLearn",
+      "_rootdir",
+      "parseArgs"
+    ],
+    "src/dataset.py": [
+      "Batch.extend",
+      "Dataset.getbat",
+      "Dataset.makebats",
+      "Dataset.readPMHCs"
+    ],
+    "src/encseq.py": [
+      "dummy"
+    ],
+    "src/mhcenc.py": [
+      "MHCEncoder.items",
+      "MHCEncoder.keys",
+      "MHCEncoder.nearestMHC",
+      "MHCEncoder.read",
+      "MHCEncoder.values"
+    ],
+    "src/mhcuid.py": [
+      "mhcuid"
+    ],
+    "src/predict.py": [
+      "main",
+      "predict"
+    ],
+    "src/train.py": [
+      "main",
+      "train"
+    ]
+  },
+  "fair_comparison_controls": [
+    "Preserve original EL labels and immutable row IDs; keep future pseudolabel ledger separate",
+    "Log source and label-version hashes, per-length class counts and all selection/omission counts",
+    "Log realized batches and row multiplicities per epoch, optimizer steps, positive/negative loss contributions and all-negative IM skip counts",
+    "Track Python/NumPy/Torch/CUDA RNG states, worker seeds, ordering and dependency/start-method configuration",
+    "Equal epochs do not imply equal row exposure, class balance, updates or random-number consumption",
+    "Compare source-native label-dependent sampling and an exposure-controlled alternative only after review; do not choose either here",
+    "Keep architecture, loss, initialization, selection rules, budget and paired seeds comparable; log unavoidable intervention consequences",
+    "Record actual worker-consumed immutable row IDs, not only parent planned batches; preserve row locators before BigMHC resets its DataFrame index"
+  ],
+  "licenses": {
+    "dataset_metadata": {
+      "name": "CC BY 4.0",
+      "scope": "Publisher-listed dataset terms; separate from software/weights license; upstream and actual artifact questions remain.",
+      "source": "Mendeley version 4 landing page"
+    },
+    "software": {
+      "locally_verified": true,
+      "name": "BigMHC Academic License",
+      "scope": "Noncommercial uses described in section 1; commercial use requires contacting licensor; distribution/modification conditions in sections 3-5. No legal determination made.",
+      "source": "LICENSE at pinned commit"
+    }
+  },
+  "metadata_files": [
+    {
+      "byte_size": 87929,
+      "path": "repository_tree.json",
+      "sha256": "32648a0a1c82e045786c6f8a4431794880b3e0fdb140dc976ff86a202fbadc56"
+    },
+    {
+      "byte_size": 9082,
+      "path": "source_acquisition_receipt.json",
+      "sha256": "55dddcb0154e9d53e8c3fb8e84dc0fb9c6da3f0114d0d0805695faa7d92e2be8"
+    }
+  ],
+  "minimum_lineage_metadata": [
+    "EL initialization identity and complete parent-chain hashes",
+    "EL input, split and label-version hashes",
+    "EL final full parameter hashes and code/dependency configuration",
+    "IM input and split hashes with unchanged experimental labels",
+    "IM optimizer configuration/state and exact updated parameter list",
+    "Epoch/update counts, emitted/consumed rows and skipped batches",
+    "Seeds and RNG/worker states for continuation",
+    "Explicit EL parent checkpoint and any transfer overlay hashes",
+    "Final reconstructable full model identity plus ensemble member identities",
+    "Hyperparameter-selection provenance and evaluation-exposure audit"
+  ],
+  "publication_evidence": {
+    "doi": "10.1038/s42256-023-00694-6",
+    "limitation": "Code and filenames do not certify historical execution, individual negative labels, or checkpoint cohort identity.",
+    "locations": [
+      "Abstract: seven EL networks, IM transfer on antigen-specific assays",
+      "Data availability: Mendeley and upstream sources",
+      "Code availability: GitHub source and final models"
+    ],
+    "status": "publisher_described_not_reproduced",
+    "url": "https://www.nature.com/articles/s42256-023-00694-6"
+  },
+  "published_data": {
+    "access_date": "2026-10-15",
+    "columns": {
+      "gene": "MANAFEST mutated gene",
+      "mhc": "MHC-I allele",
+      "other": "publisher describes other columns as model predictions",
+      "pep": "peptide or mutated neoepitope sequence",
+      "pseudoseqs": "allele plus aligned position/amino-acid one-hot columns",
+      "tgt": "1/0; presentation for EL, immunogenicity for IM; meanings not interchangeable",
+      "wtp": "MANAFEST wild-type peptide"
+    },
+    "datasets_zip_published_members": [
+      {
+        "local_row_origin_verified": false,
+        "path": "el_train.csv",
+        "role": "EL training MS presentation positives and constructed decoys"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "el_val.csv",
+        "role": "EL validation; model/hyperparameter selection exposure"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "el_test.csv",
+        "role": "EL evaluation with published model predictions"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "im_train.csv",
+        "role": "IM transfer training; experimental-label definitions require row audit"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "im_val.csv",
+        "role": "IM transfer validation and selection exposure"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "im_test.csv",
+        "role": "IM evaluation plus predictor outputs; candidate test exposure"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "iedb.csv",
+        "role": "Infectious-disease IM evaluation plus predictions"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "summary.csv",
+        "role": "Class counts by allele/dataset; metadata, not extra observations"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "manafest.csv",
+        "role": "Assay-described neoepitope IM evaluation; wild-type/gene metadata"
+      },
+      {
+        "local_row_origin_verified": false,
+        "path": "pseudoseqs.csv",
+        "role": "Allele-to-one-hot receptor reference, not experimental labels"
+      }
+    ],
+    "doi": "10.17632/dvmz6pkzvb.4",
+    "future_acquisition_candidates_not_authorization": [
+      "datasets.zip only after separate approval, with exact version/hash, size bounds and safe member allowlist",
+      "Do not acquire model archives or el.csv.zip for observation ingestion",
+      "Keep benchmark outcomes isolated from development; select/freeze evaluation governance before inspection"
+    ],
+    "license_reported": "CC BY 4.0",
+    "lineage_limit": "Metadata does not establish exact row-level assay origin, donor independence, full duplicate removal, negative validity or checkpoint exposure.",
+    "other_payload_roles": {
+      "el.csv.zip": "Production and comparator predictions on all EL train/val/test; not an independent cohort",
+      "eltrainval_models.zip": "EL models used for reported EL test; distinct from production models in GitHub"
+    },
+    "published_checksums": [
+      {
+        "artifact": "datasets.zip",
+        "downloaded": false,
+        "local_sha256": null,
+        "publisher_reported_sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa",
+        "verification": "unverified_publisher_listing_claim_not_local_bytes"
+      },
+      {
+        "artifact": "el.csv.zip",
+        "downloaded": false,
+        "local_sha256": null,
+        "publisher_reported_sha256": "cb94b42406b96a3b13d941cf87dd43f4f53e9ebfbc3d1619f0e43327f1fb6395",
+        "verification": "unverified_publisher_listing_claim_not_local_bytes"
+      },
+      {
+        "artifact": "eltrainval_models.zip",
+        "downloaded": false,
+        "local_sha256": null,
+        "publisher_reported_sha256": "e8500173cb2afbe5f8e8c0ebc60785c0de6d91aab622f8b83fff3b4e65b43223",
+        "verification": "unverified_publisher_listing_claim_not_local_bytes"
+      },
+      {
+        "artifact": "manafest.csv",
+        "downloaded": false,
+        "local_sha256": null,
+        "publisher_reported_sha256": "accf19b8bb797ec842c3ee1b1ce1966feb35035df746f7a56b2994403ba1ad99",
+        "verification": "unverified_publisher_listing_claim_not_local_bytes"
+      },
+      {
+        "artifact": "pseudoseqs.csv",
+        "downloaded": false,
+        "local_sha256": null,
+        "publisher_reported_sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a",
+        "verification": "unverified_publisher_listing_claim_not_local_bytes"
+      }
+    ],
+    "published_date": "2023-04-14",
+    "status": "publisher_metadata_only_payloads_not_acquired",
+    "url": "https://data.mendeley.com/datasets/dvmz6pkzvb/4",
+    "version": 4,
+    "version_comparison": [
+      {
+        "date": "2022-08-30",
+        "observation": "Separate EL/IM/IFN-gamma/MANAFEST and large neg.csv archive listed; grouping differs from later splits.",
+        "url": "https://data.mendeley.com/datasets/dvmz6pkzvb/1",
+        "version": 1
+      },
+      {
+        "datasets_zip_published_sha256": "33a51710aa55ff1af99944ee617fc9f5e2a5224f4dfd2df85dd36d6fe7f44c5d",
+        "date": "2023-01-19",
+        "observation": "Train/val/test package; different published archive hash than v3/v4; row-level difference unverified.",
+        "url": "https://data.mendeley.com/datasets/dvmz6pkzvb/2",
+        "version": 2
+      },
+      {
+        "datasets_zip_published_sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa",
+        "date": "2023-01-20",
+        "observation": "MANAFEST and pseudosequence descriptions; same published archive checksum as v4.",
+        "url": "https://data.mendeley.com/datasets/dvmz6pkzvb/3",
+        "version": 3
+      },
+      {
+        "date": "2023-04-14",
+        "observation": "Adds el.csv.zip all-EL production/comparator predictions listing; datasets.zip reference hash unchanged from v3.",
+        "url": "https://data.mendeley.com/datasets/dvmz6pkzvb/4",
+        "version": 4
+      }
+    ]
+  },
+  "repository_url": "https://github.com/KarchinLab/bigmhc",
+  "reviewed_findings": [
+    {
+      "category": "training",
+      "claim": "Within each peptide length: label==1 positives and label==0 negatives; q=ceil(group/maxbat), p=ceil(P/q), n=int(min(ceil(N/q),p/(1-.99)-p)); emit slices while positives remain. Positives each referenced once, negatives at most once; excess negatives or all-negative length groups can be omitted. No replacement. Empty overall emitted list fails on first-batch indexing. The requested maxbat can be exceeded by class-wise rounding.",
+      "id": "EL_batch_sampling",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "b24dd0c1a44bfef793065c3ab4382eece38809522c9bf2de8ef95a74305aff2d",
+          "function": "Dataset.makebats",
+          "path": "src/dataset.py",
+          "source_sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+        },
+        {
+          "ast_sha256": "52476f0210b5aef590f4dd8ce09fa56aee54b019801c5dae3695da09c1706ab5",
+          "function": "train",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        }
+      ]
+    },
+    {
+      "category": "training",
+      "claim": "BCEWithLogitsLoss, AdamW with args.lr; EL optimizer receives all model parameters. Defaults: lr=5e-5, epochs=50, maxbat=32; other AdamW settings come from dependency defaults. CLI supplies no validation-set or early-stopping procedure; each requested epoch is saved.",
+      "id": "loss_and_optimizer",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "52476f0210b5aef590f4dd8ce09fa56aee54b019801c5dae3695da09c1706ab5",
+          "function": "train",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        },
+        {
+          "ast_sha256": "db8cfa4089c8ed24f0d771eb6c3a44805f52c9144e24a76dab2ca9dfc9be156b",
+          "function": "parseArgs",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        }
+      ]
+    },
+    {
+      "category": "training",
+      "claim": "Pandas positional-column CSV input, skip header count (CLI default 1), peptide strings uppercased, original MHC string retained; uid uses punctuation-stripped uppercase MHC plus peptide. Targets cast float32; lengths int8; no explicit finite/binary or length-range validation. EL grouping selects only exact 0/1; IM passes float targets into BCE.",
+      "id": "CSV_and_target_semantics",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "63d449ae715ed0bad9d04a5fefe211cfd9f06f24661f3857044a56574482d53e",
+          "function": "Dataset.readPMHCs",
+          "path": "src/dataset.py",
+          "source_sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+        },
+        {
+          "ast_sha256": "b7446d3e1fd50e687e8ce539e016d96a0b16369e5a4261f1f03a17e461b907ff",
+          "function": "_parseTgtcol",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "db8cfa4089c8ed24f0d771eb6c3a44805f52c9144e24a76dab2ca9dfc9be156b",
+          "function": "parseArgs",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "2ce625763900ca3f9e055a9e5b29f7c389444f1d2368535e1bd770d1d0f4b827",
+          "function": "dummy",
+          "path": "src/encseq.py",
+          "source_sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+        }
+      ]
+    },
+    {
+      "category": "training",
+      "claim": "No models argument creates a default BigMHC. Providing any model when training activates transfer mode before model aliases are expanded; custom path can select one model. Training refuses multiple models, so the seven-model el/im alias cannot directly train an ensemble.",
+      "id": "scratch_versus_loaded",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "3eb4c83554ed846eb89621a35bcef0f9d0db23023973995f3a6705d1e1572a66",
+          "function": "_parseTransferLearn",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "c858fbe62f1455fd6e1644325c322c4f59fe6ad780fb12d35a1d1eeb2626e374",
+          "function": "_parseModel",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "a47082fe5d6375a497b0c55d9b3d4bc17cf5e55562826a0c60c974b803f6308a",
+          "function": "_loadModels",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "e0aebe9dc92e8f8b7ba9dcc07e59a763adcb5bb2dfb1c391e2fd95803566e440",
+          "function": "main",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        }
+      ]
+    },
+    {
+      "category": "training",
+      "claim": "CLI hardcodes seed=1 for Python, NumPy, Torch and CUDA and sets cuDNN deterministic flags. Dataframe and DataLoader shuffle are separate. Batches are rebuilt each epoch. DataLoader uses persistent workers; source does not explicitly synchronize subsequent parent Dataset.df/bats mutations into worker copies.",
+      "id": "randomness_and_workers",
+      "limitations": "Static settings verified; exact worker-visible rows across epochs and cross-version/GPU determinism remain unresolved.",
+      "scopes": [
+        {
+          "ast_sha256": "db8cfa4089c8ed24f0d771eb6c3a44805f52c9144e24a76dab2ca9dfc9be156b",
+          "function": "parseArgs",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "fdd471efa1d28518a050f22d6de863e70c6338cfe086844a5666de0d1a7b01ec",
+          "function": "_loadData",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "b24dd0c1a44bfef793065c3ab4382eece38809522c9bf2de8ef95a74305aff2d",
+          "function": "Dataset.makebats",
+          "path": "src/dataset.py",
+          "source_sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+        },
+        {
+          "ast_sha256": "52476f0210b5aef590f4dd8ce09fa56aee54b019801c5dae3695da09c1706ab5",
+          "function": "train",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        }
+      ]
+    },
+    {
+      "category": "transfer",
+      "claim": "Transfer optimizer selects exactly condenser.att.weight, condenser.att.bias, condenser.out.weight, condenser.out.bias: four tensors in two Linear modules of the same BigMHC architecture. Other weights are outside the optimizer, but source does not set their requires_grad=False or put the encoder into eval mode; whole model train() leaves dropout active.",
+      "id": "IM_updated_parameters",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "653241cfced47a747cd7a6742e123e6522d94a453c9a5f676da2b4efb9ccde2f",
+          "function": "BigMHC.tllayers",
+          "path": "src/bigmhc.py",
+          "source_sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+        },
+        {
+          "ast_sha256": "9192e5af046442e1c2d0275d9c0c2d7a1c51f9835f9a300bedef6ffbe192f712",
+          "function": "BigMHC.__init__",
+          "path": "src/bigmhc.py",
+          "source_sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+        },
+        {
+          "ast_sha256": "06124773b4f29fa4501f1683df61ab6bfb52702e6b491288bfd72b06f47f185d",
+          "function": "Dense.forward",
+          "path": "src/bigmhc.py",
+          "source_sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+        },
+        {
+          "ast_sha256": "52476f0210b5aef590f4dd8ce09fa56aee54b019801c5dae3695da09c1706ab5",
+          "function": "train",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        }
+      ]
+    },
+    {
+      "category": "transfer",
+      "claim": "Per-epoch transfer batching uses negfrac=None with default evendist=False, grouped by peptide length and sliced at maxbat. The initial loader uses evendist=True for transfer, but train() rebuilds it. Transfer batches with target sum zero are skipped before forward/loss/step; for valid binary labels these are all-negative batches. Remaining mixed batches retain their negatives.",
+      "id": "IM_batch_skipping",
+      "limitations": "Does not establish which rows or skip counts were used in the published experiments; missing/invalid labels are not validated upstream.",
+      "scopes": [
+        {
+          "ast_sha256": "52476f0210b5aef590f4dd8ce09fa56aee54b019801c5dae3695da09c1706ab5",
+          "function": "train",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        },
+        {
+          "ast_sha256": "b24dd0c1a44bfef793065c3ab4382eece38809522c9bf2de8ef95a74305aff2d",
+          "function": "Dataset.makebats",
+          "path": "src/dataset.py",
+          "source_sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+        },
+        {
+          "ast_sha256": "fdd471efa1d28518a050f22d6de863e70c6338cfe086844a5666de0d1a7b01ec",
+          "function": "_loadData",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        }
+      ]
+    },
+    {
+      "category": "transfer",
+      "claim": "EL save writes all state_dict tensors; transfer save writes only the four selected tensors, into out/epN. Loading exactly four .lyr files triggers parent-directory base lookup and filename substitution, then constructs default BigMHC and loads combined state. A transfer subdirectory alone is incomplete. No dataset hashes, parent-content hashes, optimizer state, RNG state or explicit lineage manifest are written by this path.",
+      "id": "checkpoint_save_and_inheritance",
+      "limitations": "Parent lookup is established code behavior, not verified published weight ancestry; custom output layouts need explicit base preservation.",
+      "scopes": [
+        {
+          "ast_sha256": "1eb6d6cbd8e9b61c645218f5b1aed873d1073249754eedd6abd0fc5f828ed1f9",
+          "function": "BigMHC.save",
+          "path": "src/bigmhc.py",
+          "source_sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+        },
+        {
+          "ast_sha256": "f0d591fd28af410bad83f836c855906f9a9d1c37c310249c41d63aa070d59bab",
+          "function": "BigMHC.load",
+          "path": "src/bigmhc.py",
+          "source_sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+        },
+        {
+          "ast_sha256": "52476f0210b5aef590f4dd8ce09fa56aee54b019801c5dae3695da09c1706ab5",
+          "function": "train",
+          "path": "src/train.py",
+          "source_sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+        },
+        {
+          "ast_sha256": "785eaae8924ef73aeca1b4065f96c6cd8045cdfce1391e16890045250ee46b11",
+          "function": "_parseOut",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        }
+      ]
+    },
+    {
+      "category": "inference",
+      "claim": "EL alias names seven models/bat{2**x}, x=9..15; IM selects each /im child. Inference uses eval and no_grad, averages sigmoid probabilities across models (not sigmoid of averaged logits), averages attention, and writes original input MHC strings rather than resolved encoder identities. Only el/im short aliases are expanded by _parseModel; README long aliases are not branches in this pinned implementation.",
+      "id": "ensemble_inference",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "c858fbe62f1455fd6e1644325c322c4f59fe6ad780fb12d35a1d1eeb2626e374",
+          "function": "_parseModel",
+          "path": "src/cli.py",
+          "source_sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+        },
+        {
+          "ast_sha256": "c12b0ef1b6dcb6873388fd62be2826f756e8a794f48009ebab41bdb5aab90e59",
+          "function": "predict",
+          "path": "src/predict.py",
+          "source_sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+        },
+        {
+          "ast_sha256": "17afbfa48fb2f243bd579b747a5510851a62c4fd058aade5bc10f24a73032078",
+          "function": "main",
+          "path": "src/predict.py",
+          "source_sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+        }
+      ]
+    },
+    {
+      "category": "allele",
+      "claim": "mhcuid uppercases and removes nonalphanumerics, without biological allele validation. Encoder __getitem__ uses nearestMHC: exact sanitized key, substitution cache, optional HLA prefix for one-letter-plus-numbers, progressively shortened prefix, then Levenshtein nearest key with first-encounter tie handling. Unsupported strings may map to a known allele; empty strings can index-error. Contains checks exact sanitized membership, unlike getitem. Many-to-one mappings possible.",
+      "id": "allele_UID_and_fuzzy_fallback",
+      "limitations": "Static source path at pinned commit; no external execution or historical run verification.",
+      "scopes": [
+        {
+          "ast_sha256": "c3b5b5fa89e0a97878ab4eae1f0cb04f3d9c751c551b6aa0e42c65ff3bf2d64d",
+          "function": "mhcuid",
+          "path": "src/mhcuid.py",
+          "source_sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+        },
+        {
+          "ast_sha256": "98bd65e65764b6b48351d8547c8c4fcfbef3b4f43d9fb7412a58f906479bec33",
+          "function": "MHCEncoder.nearestMHC",
+          "path": "src/mhcenc.py",
+          "source_sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+        },
+        {
+          "ast_sha256": "8fe256bd62326559498af89df3b05ac2374cab8b4483d7d80c5545fad175bafa",
+          "function": "MHCEncoder.__getitem__",
+          "path": "src/mhcenc.py",
+          "source_sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+        },
+        {
+          "ast_sha256": "1471ad062425f884d477311c895317876b9959fc238eaeccb60be5cf4b1015f5",
+          "function": "MHCEncoder.__contains__",
+          "path": "src/mhcenc.py",
+          "source_sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+        },
+        {
+          "ast_sha256": "2c0bcb20c1022ebd5db8f7efc8f7455c5866b747c3e820de093e5cd0f7db02a7",
+          "function": "MHCEncoder.read",
+          "path": "src/mhcenc.py",
+          "source_sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+        }
+      ]
+    }
+  ],
+  "runtime_uncertainties": [
+    {
+      "finding": "Persistent worker Dataset copies may retain first-epoch batch/dataframe state while main-process makebats mutates parent state. Code has no explicit synchronization. Actual consumption across epochs cannot be certified statically.",
+      "status": "scientific_inference_runtime_verification_pending",
+      "support": "Pinned cli.py _loadData and train.py train; https://docs.pytorch.org/docs/2.14/data.html (multi-process loading and persistent_workers). Current docs support the concern; historical 1.13 docs/runtime were not verified."
+    },
+    {
+      "finding": "Loss normalization divides accumulated non-skipped errors by len(data), including skipped IM batches; printed epoch loss is not automatically a row-weighted or updated-batch mean.",
+      "status": "unresolved"
+    }
+  ],
+  "schema_version": 1,
+  "source_files": [
+    {
+      "byte_size": 6794,
+      "path": "README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/README.md"
+    },
+    {
+      "byte_size": 8706,
+      "path": "LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE"
+    },
+    {
+      "byte_size": 2332,
+      "path": "src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py"
+    },
+    {
+      "byte_size": 2217,
+      "path": "src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py"
+    },
+    {
+      "byte_size": 11393,
+      "path": "src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py"
+    },
+    {
+      "byte_size": 8525,
+      "path": "src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py"
+    },
+    {
+      "byte_size": 8584,
+      "path": "src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py"
+    },
+    {
+      "byte_size": 5863,
+      "path": "src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py"
+    },
+    {
+      "byte_size": 581,
+      "path": "src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py"
+    },
+    {
+      "byte_size": 1577,
+      "path": "src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d",
+      "source_url": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py"
+    }
+  ],
+  "unresolved_exposure": [
+    "No scientific CSV rows, pseudosequences or weights were acquired",
+    "Published checkpoints have no verified per-file byte hashes or independently established exact cohort ancestry here",
+    "Filename layout and loader inheritance are not evidence of experimental independence or clean test exposure",
+    "Current source commit is not proven identical to code used for the 2023 paper",
+    "Published target labels and decoy construction require actual data and upstream-source audits",
+    "Exact 72-allele coverage, sequence overlaps, donors, assay definitions and benchmark exposures remain unmeasured",
+    "Sampling/exposure control, hard splits, correction thresholds, confidence, multi-allelic handling and initialization require review",
+    "Providing any model path automatically selects partial-parameter transfer mode; a future warm-start full-EL experiment needs an explicitly reviewed mode rather than assuming the stock CLI does full fine-tuning."
+  ]
+}

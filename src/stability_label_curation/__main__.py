@@ -21,6 +21,7 @@ from . import jappe_2020_figure_audit as jappe_figures
 from . import observation_registry as observations
 from . import scientific_gate0_preflight as gate0
 from . import sequence_leakage_audit as leakage
+from . import bigmhc_source_audit as bigmhc_source
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -131,6 +132,13 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     leakage_inspect.add_argument("--config", help="Versioned protocol or explicit synthetic-fixture configuration")
     leakage_inspect.add_argument("--max-mismatches", type=int, choices=(0, 1, 2), help="Diagnostic rule only; does not approve a split threshold")
     leakage_inspect.add_argument("--reports-dir", help="Explicit existing authorized project run reports directory")
+    bigmhc_parser = commands.add_parser("bigmhc", help="Pinned offline source-only provenance audit")
+    bigmhc_commands = bigmhc_parser.add_subparsers(dest="bigmhc_command", required=True)
+    bigmhc_audit = bigmhc_commands.add_parser("source-audit")
+    bigmhc_audit.add_argument("--json", action="store_true")
+    bigmhc_audit.add_argument("--snapshot", help="Explicit pinned source-snapshot directory; no execution or acquisition")
+    bigmhc_audit.add_argument("--evidence", help="Source identities and reviewed AST evidence, or synthetic-fixture override")
+    bigmhc_audit.add_argument("--reports-dir", help="Explicit existing project run reports directory")
     runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
     run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
     create_parser = run_commands.add_parser("create", help="Create one run from committed code")
@@ -150,6 +158,13 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "bigmhc":
+            result = bigmhc_source.inspect(paths=paths, snapshot=args.snapshot, evidence_path=args.evidence)
+            if args.reports_dir:
+                bigmhc_source.write_reports(result, args.reports_dir, paths=paths)
+            document = result.reports if args.json else result.reports['bigmhc_training_semantics.json']
+            print(dtu2016.json_report(document), end="")
+            return 0
         if args.command == "leakage":
             result = leakage.inspect(paths=paths, registry_path=args.registry, config_path=args.config,
                                      max_mismatches=args.max_mismatches)

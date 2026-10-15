@@ -192,3 +192,16 @@ PYTHONPATH=src python3 -B -m stability_label_curation leakage inspect --json
 
 This command is offline and read-only. Explicit `--registry`/`--config` overrides
 remain checksum-gated; `--reports-dir` writes only to an existing authorized run.
+
+## BigMHC static source provenance
+
+The [Task 2.1 audit](docs/BIGMHC_SOURCE_AND_CHECKPOINT_PROVENANCE.md) traces
+commit-pinned EL sampling, IM transfer, HLA fallback and checkpoint inheritance.
+Source snapshots stay outside Git; no data or weights are acquired by inspection.
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation bigmhc source-audit --json
+```
+
+The command is offline and read-only; explicit snapshot/evidence overrides remain
+checksum-gated. Report output requires an existing authorized project run.
