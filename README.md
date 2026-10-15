@@ -223,3 +223,21 @@ This is offline and read-only; explicit `--reports-dir` requires an existing run
 with every input recorded. `bigmhc fetch-data` and `bigmhc fetch-data --artifact
 pseudoseqs.csv` are the two bounded, checksum-gated acquisition options. Inputs
 remain outside Git; existing different bytes are never replaced.
+
+## First kinetic Stability Teacher
+
+[Teacher v0](docs/STABILITY_TEACHER_V0.md) is a per-allele Ridge pilot on ordinary
+DTU HLA-A/B nine-mers, retaining reported zeros and fitting log1p half-life hours.
+Its provisional internal split groups exact and one-mismatch peptides globally.
+Training uses the small pinned CPU environment in
+`configs/requirements-teacher-v0.txt`; other commands and JSON inference retain
+standard-library-only operation.
+
+```sh
+PYTHONPATH=src python -B -m stability_label_curation teacher train --config configs/stability_teacher_v0.json --out <existing-run-directory>
+```
+
+The run must record configuration, seed and registry/evidence input hashes; see
+the guide for creation, evaluation and inference. Model weights and split/metric
+reports stay outside Git. Unsupported inputs get explicit null predictions.
+Task 2.3 implements no EL/IM corrections or BigMHC training.

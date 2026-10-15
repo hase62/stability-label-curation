@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "teacher_version": "stability_teacher_v0",
+  "seed": 42,
+  "ridge_alpha": 10.0,
+  "ridge_solver": "cholesky",
+  "minimum_training_rows": 20,
+  "minimum_validation_rows_descriptive": 10,
+  "validation_fraction": 0.2,
+  "max_hamming_distance": 1,
+  "target_transform": "log1p_hours",
+  "parent_registry_run_id": "task-1_8-canonical-observation-registry",
+  "registry_relative_path": "reports/canonical_observations.jsonl",
+  "registry_sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee",
+  "dtu_artifact_sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67",
+  "parent_evidence": [
+    {"relative_path": "manifest.json", "sha256": "13ecca0a28aefd6418ef28bb1fbeec28e72b7fa3caae54eaa9a047eed4204270"},
+    {"relative_path": "reports/source_evidence_manifest.json", "sha256": "26be9e7f5f6611a642b1b0d2d6f68369d34fa0adfca48964c3582cf4a82c7fa1"}
+  ],
+  "expected_population": {"observations": 27031, "alleles": 72, "zeros": 4711},
+  "scope": "Task 2.3 pilot only; provisional component split, not final D4 approval; no EL/IM corrections or BigMHC training"
+}

@@ -1,4 +1,4 @@
-"""Standard-library storage CLI."""
+"""Project CLI; CPU Teacher training dependencies are loaded only on request."""
 
 import argparse
 import csv
@@ -23,6 +23,7 @@ from . import scientific_gate0_preflight as gate0
 from . import sequence_leakage_audit as leakage
 from . import bigmhc_source_audit as bigmhc_source
 from . import bigmhc_v4_audit as bigmhc_data
+from . import stability_teacher as teacher
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -153,6 +154,21 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     bigmhc_inventory.add_argument("--expected-dtu-sha256")
     bigmhc_inventory.add_argument("--expected-reference-sha256")
     bigmhc_inventory.add_argument("--reports-dir")
+    teacher_parser = commands.add_parser("teacher", help="Pilot kinetic Teacher; explicit training, evaluation or inference")
+    teacher_commands = teacher_parser.add_subparsers(dest="teacher_command", required=True)
+    teacher_train = teacher_commands.add_parser("train")
+    teacher_train.add_argument("--config", default=teacher.CONFIG)
+    teacher_train.add_argument("--out", required=True, help="Existing project run with hashed inputs, configuration and seed")
+    teacher_train.add_argument("--registry", help="Explicit registry override; configuration checksum still required")
+    teacher_evaluate = teacher_commands.add_parser("evaluate")
+    teacher_evaluate.add_argument("--model", required=True)
+    teacher_evaluate.add_argument("--out", required=True, help="Existing evaluation run recording model, split and registry inputs")
+    teacher_evaluate.add_argument("--registry")
+    teacher_evaluate.add_argument("--partition")
+    teacher_predict = teacher_commands.add_parser("predict")
+    teacher_predict.add_argument("--model", required=True)
+    teacher_predict.add_argument("--input", required=True, help="Small peptide,hla CSV without labels")
+    teacher_predict.add_argument("--out", required=True, help="File in an existing hashed-input run predictions directory")
     runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
     run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
     create_parser = run_commands.add_parser("create", help="Create one run from committed code")
@@ -172,6 +188,16 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "teacher":
+            if args.teacher_command == "train":
+                result = teacher.train_run(out=args.out, config_path=args.config, registry_path=args.registry, paths=paths)
+            elif args.teacher_command == "evaluate":
+                result = teacher.evaluate_run(model_path=args.model, out=args.out, registry_path=args.registry,
+                    partition_path=args.partition, paths=paths)
+            else:
+                result = teacher.predict_csv(model_path=args.model, input_path=args.input, out=args.out, paths=paths)
+            print(dtu2016.json_report(result), end="")
+            return 0
         if args.command == "bigmhc":
             if args.bigmhc_command == "fetch-data":
                 document = bigmhc_data.fetch(paths=paths, artifact=args.artifact, timeout=args.timeout)
