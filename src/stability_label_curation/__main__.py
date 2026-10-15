@@ -20,6 +20,7 @@ from . import jappe_2020_row_audit as jappe_rows
 from . import jappe_2020_figure_audit as jappe_figures
 from . import observation_registry as observations
 from . import scientific_gate0_preflight as gate0
+from . import sequence_leakage_audit as leakage
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -122,6 +123,14 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     gate0_inspect.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH", help="Other parent report/manifest overrides")
     gate0_inspect.add_argument("--config", help="Pinned preflight configuration or synthetic-fixture configuration")
     gate0_inspect.add_argument("--reports-dir", help="Explicit existing project run reports directory")
+    leakage_parser = commands.add_parser("leakage", help="Offline sequence and provenance diagnostics; no split creation")
+    leakage_commands = leakage_parser.add_subparsers(dest="leakage_command", required=True)
+    leakage_inspect = leakage_commands.add_parser("inspect")
+    leakage_inspect.add_argument("--json", action="store_true")
+    leakage_inspect.add_argument("--registry", help="Explicit canonical registry path; pinned checksum still required")
+    leakage_inspect.add_argument("--config", help="Versioned protocol or explicit synthetic-fixture configuration")
+    leakage_inspect.add_argument("--max-mismatches", type=int, choices=(0, 1, 2), help="Diagnostic rule only; does not approve a split threshold")
+    leakage_inspect.add_argument("--reports-dir", help="Explicit existing authorized project run reports directory")
     runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
     run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
     create_parser = run_commands.add_parser("create", help="Create one run from committed code")
@@ -141,6 +150,14 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "leakage":
+            result = leakage.inspect(paths=paths, registry_path=args.registry, config_path=args.config,
+                                     max_mismatches=args.max_mismatches)
+            if args.reports_dir:
+                leakage.write_reports(result, args.reports_dir, paths=paths)
+            document = result.reports if args.json else result.reports['stability_sequence_neighborhood_summary.json']
+            print(dtu2016.json_report(document), end="")
+            return 0
         if args.command == "gate0":
             files = {}
             if args.registry:

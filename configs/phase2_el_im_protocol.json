@@ -1,0 +1,128 @@
+{
+  "decisions": [
+    {
+      "alternatives": "Z2/Z3 conceptual only; not scheduled for implementation or testing",
+      "design": "Z1 reported-zero-inclusive regression on ordinary DTU HLA-A/B nine-mers",
+      "id": "D1",
+      "status": "adopted",
+      "uncertainty": "Zero-generation mechanism unresolved; no physical-zero, synthetic or censoring designation"
+    },
+    {
+      "design": "Exclude all 1135 C67S records from Teacher training and primary evaluation; preserve registry unchanged; no wild-type mapping",
+      "id": "D2",
+      "status": "adopted"
+    },
+    {
+      "design": "No Jappe Tm in current Teacher or EL correction; retain registry; never convert to hours",
+      "id": "D3",
+      "status": "adopted"
+    },
+    {
+      "design": "Audit candidate similarity and grouping rules; final algorithm and thresholds await evidence and support review",
+      "id": "D4",
+      "status": "methodology_pending"
+    },
+    {
+      "checkpoint_rule": "No already IM-trained BigMHC checkpoint as principal common initialization; no separate existing-IM adaptation experiment required",
+      "design": "Identical initial EL models, original versus corrected EL, identical IM transfer, same independent assayed tests; comparable architecture/loss/representation/initialization/hyperparameter rules/budget/seeds",
+      "id": "D5",
+      "status": "adopted_conceptual_design"
+    },
+    {
+      "conditions": {
+        "A": "EL=1 sufficiently low predicted kinetic stability -> proposed pseudolabel 0",
+        "B": "A plus EL=0 sufficiently high predicted stability -> proposed pseudolabel 1",
+        "baseline": "Original EL labels"
+      },
+      "controls": [
+        "Matched random-label perturbation",
+        "Affinity-only correction"
+      ],
+      "future_ledger": [
+        "original_label",
+        "proposed_label",
+        "reason",
+        "teacher_identity",
+        "confidence",
+        "provenance"
+      ],
+      "id": "D6",
+      "interpretation": "Pseudolabel disagreement never erases MS-observed EL provenance or proves experimental presentation of decoys",
+      "optional_future_ablation": "EL=0-to-1 only",
+      "status": "adopted_directions_thresholds_pending"
+    },
+    {
+      "audits": [
+        "peptide",
+        "HLA",
+        "assay and label definition",
+        "study/subject/donor/antigen",
+        "EL and IM exposure",
+        "near sequence",
+        "checkpoint exposure",
+        "constructed negatives"
+      ],
+      "design": "Independent assayed T-cell positive and justified negative IM evaluation; proposed primary AUPRC conditional on valid experimental labels",
+      "id": "D7",
+      "status": "adopted_principle"
+    },
+    {
+      "design": "Preserve provenance; verify relevant terms before raw-data/weight redistribution; no extensive legal determination",
+      "id": "D8",
+      "status": "adopted_basic_compliance"
+    }
+  ],
+  "expected_reference_counts": {
+    "ordinary_DTU_alleles": 72,
+    "ordinary_DTU_records": 27031,
+    "ordinary_DTU_zeros": 4711
+  },
+  "feasibility_rule": {
+    "alphabet": "exact uppercase peptide strings; no substitution weighting or alignment",
+    "max_hamming_distance": 1,
+    "status": "diagnostic_candidate_not_approved_split_rule",
+    "window_length": 9
+  },
+  "inputs": {
+    "evidence": {
+      "parent_relative_path": "reports/source_evidence_manifest.json",
+      "sha256": "26be9e7f5f6611a642b1b0d2d6f68369d34fa0adfca48964c3582cf4a82c7fa1"
+    },
+    "observations": {
+      "parent_relative_path": "reports/canonical_observations.jsonl",
+      "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+    },
+    "parent_manifest": {
+      "parent_relative_path": "manifest.json",
+      "sha256": "13ecca0a28aefd6418ef28bb1fbeec28e72b7fa3caae54eaa9a047eed4204270"
+    }
+  },
+  "objective": "Test whether independent kinetic-stability-informed EL pseudolabel correction improves assayed T-cell IM prediction after matched EL-to-IM transfer.",
+  "parent_registry_commit": "b3b7d060e83d76dbaa2c55b3aa4bbc72187135ad",
+  "parent_registry_run_id": "task-1_8-canonical-observation-registry",
+  "pending_decisions": [
+    "Hard-split algorithm and numerical thresholds",
+    "Final external IM cohort selection and freeze",
+    "Stability-based EL correction thresholds",
+    "Multi-allelic EL assignment",
+    "Correction confidence and uncertainty",
+    "Matched control construction",
+    "Checkpoint training-history audit"
+  ],
+  "performance_interpretation": [
+    "A hard-split performance drop can reflect optimistic conventional evaluation or genuine out-of-distribution difficulty.",
+    "No performance drop does not prove data leakage.",
+    "A drop does not establish that all leakage has been removed.",
+    "Negative generation, prevalence, allele coverage, size and quality also affect performance; report composition and leakage diagnostics alongside metrics."
+  ],
+  "prohibitions": [
+    "No actual split assignments",
+    "No actual label modifications or correction masks",
+    "IM experimental labels unchanged",
+    "No training or predictive evaluation",
+    "No new scientific datasets except the explicitly permitted T-SCAPE supplement"
+  ],
+  "protocol_version": "2.0.0",
+  "schema_version": 1,
+  "supersedes": "Task 1.9 provisional downstream intervention; historical dossier remains unchanged"
+}

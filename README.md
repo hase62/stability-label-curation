@@ -176,3 +176,19 @@ Inspection is offline and read-only from pinned Task 1.8 outputs. It quantifies
 zero/construct alternatives and leakage evidence while every eligibility decision
 remains pending. Explicit `--reports-dir` writes aggregate reports into an existing
 hashed-input run; it creates no training tables, inclusion masks or split assignments.
+
+## Phase 2: EL-to-IM protocol and leakage preflight
+
+The [versioned EL-to-IM protocol](docs/PHASE2_EL_TO_IM_RESEARCH_PROTOCOL.md)
+places the planned pseudolabel intervention on **EL training data**; experimental
+IM labels remain unchanged. The earlier Gate 0 dossier remains historical.
+[Hard-split evidence and threats](docs/HARD_SPLIT_METHODS_AND_LEAKAGE_THREATS.md)
+distinguish publication descriptions, unresolved implementation details and
+candidate diagnostics. No split, correction threshold or training is implemented.
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation leakage inspect --json
+```
+
+This command is offline and read-only. Explicit `--registry`/`--config` overrides
+remain checksum-gated; `--reports-dir` writes only to an existing authorized run.

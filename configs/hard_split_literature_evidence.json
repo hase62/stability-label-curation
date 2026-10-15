@@ -1,0 +1,426 @@
+{
+  "T_SCAPE_supplement": {
+    "doi": "10.1126/sciadv.adz8759",
+    "download_limit_bytes": 12582912,
+    "download_outcome": "ValueError: Response is not PDF",
+    "filename": "sciadv.adz8759_sm.pdf",
+    "link_verified_from_official_article": "https://pmc.ncbi.nlm.nih.gov/articles/instance/12680054/bin/sciadv.adz8759_sm.pdf",
+    "local_verification": "unavailable_response_not_pdf",
+    "reference_sha256": "fb3baced357e8317e40fb8203d197318d9369244a42dcd00ae8c5ecf73153e26",
+    "statements": [
+      {
+        "finding": "Benchmark 9-mer overlap filtering; before/after composition; subsequent 90/10 division; cross-dataset 9-mer matrix.",
+        "limitation": "Exact overlap matrix is not near-sequence, donor or checkpoint clearance.",
+        "location": "Supplementary Text p2; Fig S1/S1C",
+        "status": "user_reviewed_secondary_task_evidence"
+      },
+      {
+        "finding": "IEDB binding benchmark filtering excludes 9-mer fragments with fewer than two mismatches; post-2020 MHC-I and post-2021 MHC-II cohorts reported.",
+        "limitation": "Temporal collection does not certify sequence novelty or prospective evaluation.",
+        "location": "Supplementary Text pp3-4",
+        "status": "user_reviewed_secondary_task_evidence"
+      },
+      {
+        "finding": "TCR negative-construction change: AUROC 0.630 to 0.511; PR-AUC 0.709 to 0.624.",
+        "limitation": "TCR task, not direct EL/IM leakage evidence or a hard-split contrast.",
+        "location": "Supplementary Text p6",
+        "status": "user_reviewed_secondary_task_evidence"
+      },
+      {
+        "finding": "IEDB EL/affinity pretraining; PRIME IM fine-tuning sources and class counts.",
+        "limitation": "Source listings do not establish full pairwise exposure exclusion.",
+        "location": "Tables S2-S4 pp19-20",
+        "status": "user_reviewed_secondary_task_evidence"
+      }
+    ]
+  },
+  "additional_resources": [
+    {
+      "inspection": "README only; no Git objects fetched",
+      "url": "https://github.com/KarchinLab/bigmhc"
+    },
+    {
+      "inspection": "Referenced published data version; no data downloaded",
+      "publication_date": "2023-04-14",
+      "reported_license": "CC BY 4.0",
+      "url": "https://data.mendeley.com/datasets/dvmz6pkzvb/4",
+      "verification_scope": "Landing-page metadata only; no data archive or model bytes retrieved",
+      "version": 4
+    }
+  ],
+  "limitations": [
+    "Primary article HTML was read; supplement bytes unavailable; no claimed local PDF checksum.",
+    "External splitting implementations not pinned/verified; undocumented controls remain unresolved, not proven absent.",
+    "No new datasets, weights or external repository clones obtained."
+  ],
+  "methods": [
+    {
+      "access_date": "2026-10-15",
+      "fields": {
+        "code_verification": {
+          "finding": "Source implementation not pinned or inspected; CD-HIT greedy clusters are not certified exhaustive Hamming neighborhoods.",
+          "status": "unresolved"
+        },
+        "conventional_vs_hard_performance": {
+          "finding": "No matched conventional-versus-hard performance contrast verified; supplement TCR negative-construction contrast is a different intervention.",
+          "status": "unresolved"
+        },
+        "identical_peptides_across_HLA": {
+          "finding": "Peptide fragment controls are allele-independent in stated procedure.",
+          "status": "publication_claim_only"
+        },
+        "longer_fragments": {
+          "finding": "Sliding windows; shorter sequences retained whole; class-I >=8 fragment alignment check claimed.",
+          "status": "directly_verified_method"
+        },
+        "near_sequences": {
+          "finding": "Sliding 9-residue fragments; described <2 mismatches; CD-HIT -c 0.8 -n 2.",
+          "status": "directly_verified_method"
+        },
+        "negative_label_origin": {
+          "finding": "Task-dependent experimental and constructed negatives; not interchangeable.",
+          "status": "directly_verified_method"
+        },
+        "preprocessing_and_augmentation_order": {
+          "finding": "Benchmark filtering precedes subdivision; task text also describes frequency-ordered validation.",
+          "status": "directly_verified_method"
+        },
+        "pretrained_exposure": {
+          "finding": "Multidomain exposure is analyzed; exact label-concordance analysis differs from near-fragment filtering.",
+          "status": "directly_verified_method"
+        },
+        "remaining_pathways": {
+          "finding": "Class-I/class-II filtering intentionally separate; task-specific validation implementation and short-fragment handling require code audit.",
+          "status": "unresolved"
+        },
+        "separation_unit": {
+          "finding": "Benchmark-directed fragment filtering; subsequent 9:1 train/validation claims.",
+          "status": "directly_verified_method"
+        },
+        "study_donor": {
+          "finding": "No complete donor/study exclusion established here.",
+          "status": "unresolved"
+        },
+        "suitability": {
+          "finding": "Use its stated fragment predicate as a diagnostic candidate; do not adopt threshold or certify leakage elimination.",
+          "status": "publication_claim_only"
+        },
+        "task": {
+          "finding": "Multidomain pretraining to IM; distinct MHC binding and TCR tasks.",
+          "status": "directly_verified_method"
+        }
+      },
+      "id": "T_SCAPE_2025",
+      "location": "Results: A scrupulous data curation and leakage control strategy; Methods: Sequence identity filtering using CD-HIT; task-specific data preparation",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12680054/"
+    },
+    {
+      "access_date": "2026-10-15",
+      "fields": {
+        "code_verification": {
+          "finding": "README inspected only; training/data-preparation implementation not verified; no repository cloned.",
+          "status": "unresolved"
+        },
+        "conventional_vs_hard_performance": {
+          "finding": "EL test AUROC 0.9733/AUPRC 0.8779; not a conventional/hard split comparison.",
+          "status": "publication_claim_only"
+        },
+        "identical_peptides_across_HLA": {
+          "finding": "Pair removal does not establish global peptide-disjointness across HLA.",
+          "status": "unresolved"
+        },
+        "longer_fragments": {
+          "finding": "Model 8-residue windows are architecture, not a demonstrated fragment exclusion rule.",
+          "status": "unresolved"
+        },
+        "near_sequences": {
+          "finding": "No complete close-sequence exclusion established in inspected methods.",
+          "status": "unresolved"
+        },
+        "negative_label_origin": {
+          "finding": "EL MS positives with decoys; IM transfer excludes random PRIME supplements.",
+          "status": "directly_verified_method"
+        },
+        "preprocessing_and_augmentation_order": {
+          "finding": "Source compilation and pair removal described; decoy-generation/splitting ordering not fully established.",
+          "status": "unresolved"
+        },
+        "pretrained_exposure": {
+          "finding": "EL-to-IM transfer is explicit; public IM weights already have IM exposure.",
+          "status": "directly_verified_method"
+        },
+        "remaining_pathways": {
+          "finding": "Near sequences, donors, shared studies and comparator checkpoint exposure need independent audits.",
+          "status": "unresolved"
+        },
+        "separation_unit": {
+          "finding": "9:1 training/validation; duplicated pMHC in EL train/test removed from training; evaluation intersections removed.",
+          "status": "directly_verified_method"
+        },
+        "study_donor": {
+          "finding": "MANAFEST patient data described; complete donor-disjointness not verified.",
+          "status": "unresolved"
+        },
+        "suitability": {
+          "finding": "Conceptual EL-to-IM precedent; published pair filtering alone is insufficient for proposed hard separation.",
+          "status": "publication_claim_only"
+        },
+        "task": {
+          "finding": "EL pretraining then assayed IM transfer.",
+          "status": "directly_verified_method"
+        }
+      },
+      "id": "BigMHC_2023",
+      "location": "Methods: MHC epitope presentation training/evaluation; Immunogenicity training; infectious disease and neoepitope evaluation; Extended Data Fig. 5",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10569228/"
+    },
+    {
+      "access_date": "2026-10-15",
+      "fields": {
+        "code_verification": {
+          "finding": "Publication methods only; implementation not inspected.",
+          "status": "unresolved"
+        },
+        "conventional_vs_hard_performance": {
+          "finding": "BM1 ensemble AP 78.7%; numerical conventional/peptide-disjoint contrast unavailable without figure audit; negative switching benefit is not a hard-split delta.",
+          "status": "publication_claim_only"
+        },
+        "identical_peptides_across_HLA": {
+          "finding": "Additional peptide-disjoint evaluation referenced in Supplementary Fig. 8; standard split is pair/label aware.",
+          "status": "directly_verified_method"
+        },
+        "longer_fragments": {
+          "finding": "Peptide flanks modeled; this is not a cross-partition fragment guarantee.",
+          "status": "unresolved"
+        },
+        "near_sequences": {
+          "finding": "No complete near-sequence exclusion established.",
+          "status": "unresolved"
+        },
+        "negative_label_origin": {
+          "finding": "Random proteome presumed negatives; experimental nonpresentation not established.",
+          "status": "directly_verified_method"
+        },
+        "preprocessing_and_augmentation_order": {
+          "finding": "Positive filtration then split, negative sets constructed, then intersection removal; negative sets switch per training epoch.",
+          "status": "directly_verified_method"
+        },
+        "pretrained_exposure": {
+          "finding": "Protein-language-model extensions need separate exposure audit.",
+          "status": "unresolved"
+        },
+        "remaining_pathways": {
+          "finding": "Label-conditioned pair intersection needs conflict audit; homologs and pretrained exposure unresolved.",
+          "status": "unresolved"
+        },
+        "separation_unit": {
+          "finding": "Per-genotype 90/10 positive tuples; post-generation intersection removes {el,peptide,pseudosequence} tuples.",
+          "status": "directly_verified_method"
+        },
+        "study_donor": {
+          "finding": "BM3 holds out specified study genotypes; donor independence not independently verified.",
+          "status": "directly_verified_method"
+        },
+        "suitability": {
+          "finding": "Useful post-augmentation overlap and study-holdout examples; no universal leakage certificate.",
+          "status": "publication_claim_only"
+        },
+        "task": {
+          "finding": "MHC-I presentation, including multi-allelic contexts.",
+          "status": "directly_verified_method"
+        }
+      },
+      "id": "HLApollo_2024",
+      "location": "Methods: Training and benchmark dataset construction; model training; Results negative-set switching; Supplementary Fig. 8 reference",
+      "url": "https://www.nature.com/articles/s41467-024-54887-7"
+    },
+    {
+      "access_date": "2026-10-15",
+      "fields": {
+        "code_verification": {
+          "finding": "Publication only; source implementation not inspected.",
+          "status": "unresolved"
+        },
+        "conventional_vs_hard_performance": {
+          "finding": "Figure 5 allele-wise Spearman comparisons, not matched random/hard contrast; IEDB16 B*38:01 has 172/176 test sequences in one high-similarity cluster.",
+          "status": "publication_claim_only"
+        },
+        "identical_peptides_across_HLA": {
+          "finding": "Global across-HLA application not established for allele-specific models.",
+          "status": "unresolved"
+        },
+        "longer_fragments": {
+          "finding": "Different-length shared fragments not established.",
+          "status": "unresolved"
+        },
+        "near_sequences": {
+          "finding": "Same-length >=80% rule, dataset-specific; not universal sliding windows.",
+          "status": "directly_verified_method"
+        },
+        "negative_label_origin": {
+          "finding": "Affinity measurements/qualitative nonbinders; not arbitrary IM decoys.",
+          "status": "directly_verified_method"
+        },
+        "preprocessing_and_augmentation_order": {
+          "finding": "Provided filtered partitions reused; full augmentation chronology not verified.",
+          "status": "unresolved"
+        },
+        "pretrained_exposure": {
+          "finding": "Optional language-model pretraining on unlabeled peptide corpus; exposure differs from scratch models.",
+          "status": "directly_verified_method"
+        },
+        "remaining_pathways": {
+          "finding": "Cross-length, across-HLA, pretraining and test-cluster dependence remain audit questions.",
+          "status": "unresolved"
+        },
+        "separation_unit": {
+          "finding": "Kim14 BD2009/Blind: same-length >=80% identity removed from Blind; cv_gs cross-validation.",
+          "status": "directly_verified_method"
+        },
+        "study_donor": {
+          "finding": "Study/donor separation not established.",
+          "status": "unresolved"
+        },
+        "suitability": {
+          "finding": "Useful identity-based reference; equal-length threshold needs length-aware interpretation and global exposure checks.",
+          "status": "publication_claim_only"
+        },
+        "task": {
+          "finding": "Allele-specific MHC binding-affinity regression; not EL-to-IM.",
+          "status": "directly_verified_method"
+        }
+      },
+      "id": "USMPep_2020",
+      "location": "Methods: MHC binding prediction datasets; Results Fig. 5 and IEDB16 analysis",
+      "url": "https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03631-1"
+    },
+    {
+      "access_date": "2026-10-15",
+      "fields": {
+        "code_verification": {
+          "finding": "Publication verified; package not installed or implementation audited.",
+          "status": "unresolved"
+        },
+        "conventional_vs_hard_performance": {
+          "finding": "Random versus similarity performance compared for other tasks; no EL/IM hard-split delta transferable here.",
+          "status": "publication_claim_only"
+        },
+        "identical_peptides_across_HLA": {
+          "finding": "Alleles require an explicit entity/metric design; not supplied as an MHC rule.",
+          "status": "not_applicable"
+        },
+        "longer_fragments": {
+          "finding": "Depends on chosen similarity; no built-in guarantee for short peptide windows established.",
+          "status": "unresolved"
+        },
+        "near_sequences": {
+          "finding": "Minimizes selected similarity-weighted total leakage; not a hard maximum-pair threshold guarantee.",
+          "status": "directly_verified_method"
+        },
+        "negative_label_origin": {
+          "finding": "Task-specific labels; no universal EL/IM negative-generation rule.",
+          "status": "not_applicable"
+        },
+        "preprocessing_and_augmentation_order": {
+          "finding": "Similarity clustering precedes assignment; two-dimensional conflicting interactions discarded in reported workflow.",
+          "status": "directly_verified_method"
+        },
+        "pretrained_exposure": {
+          "finding": "Checkpoint exposure outside split optimization.",
+          "status": "unresolved"
+        },
+        "remaining_pathways": {
+          "finding": "Heuristic NP-hard optimization; metric choice, data loss and residual edge leakage matter.",
+          "status": "directly_verified_method"
+        },
+        "separation_unit": {
+          "finding": "One/two entity similarities, clustering then constrained integer optimization.",
+          "status": "directly_verified_method"
+        },
+        "study_donor": {
+          "finding": "Only if supplied as constraints/entities; not a default guarantee.",
+          "status": "unresolved"
+        },
+        "suitability": {
+          "finding": "Optimization alternative to all-edge connected components, requiring residual-leakage and retention audits.",
+          "status": "publication_claim_only"
+        },
+        "task": {
+          "finding": "General biochemical property and interaction prediction.",
+          "status": "directly_verified_method"
+        }
+      },
+      "id": "DataSAIL_2025",
+      "location": "Results/Methods: DataSAIL workflow; (k,R,C) problem; Splitting biomolecular datasets",
+      "url": "https://www.nature.com/articles/s41467-025-58606-8"
+    },
+    {
+      "access_date": "2026-10-15",
+      "fields": {
+        "code_verification": {
+          "finding": "Addendum text verified; benchmark code/data not downloaded.",
+          "status": "unresolved"
+        },
+        "conventional_vs_hard_performance": {
+          "finding": "Leakage comparisons, not new EL/IM predictive evaluation; PINDER split leaks less than DataSAIL in reported comparison.",
+          "status": "directly_verified_method"
+        },
+        "identical_peptides_across_HLA": {
+          "finding": "Not an MHC-specific split rule.",
+          "status": "not_applicable"
+        },
+        "longer_fragments": {
+          "finding": "No new peptide-window rule.",
+          "status": "not_applicable"
+        },
+        "near_sequences": {
+          "finding": "Explicitly distinguishes maximum similarity bounds from total-leak minimization.",
+          "status": "directly_verified_method"
+        },
+        "negative_label_origin": {
+          "finding": "No EL/IM negative-source determination.",
+          "status": "not_applicable"
+        },
+        "preprocessing_and_augmentation_order": {
+          "finding": "Some two-entity interactions retained only when both endpoints share assignment.",
+          "status": "directly_verified_method"
+        },
+        "pretrained_exposure": {
+          "finding": "No checkpoint exposure certificate.",
+          "status": "unresolved"
+        },
+        "remaining_pathways": {
+          "finding": "Lower total leakage does not imply best maximum-edge bound or superiority on every dataset.",
+          "status": "directly_verified_method"
+        },
+        "separation_unit": {
+          "finding": "Original ratios re-used; total leakage score compared; DataSAIL v1.2.1.",
+          "status": "directly_verified_method"
+        },
+        "study_donor": {
+          "finding": "No MHC donor protocol supplied.",
+          "status": "unresolved"
+        },
+        "suitability": {
+          "finding": "Compare objectives and composition fairly; avoid universal hard-split superiority claims.",
+          "status": "publication_claim_only"
+        },
+        "task": {
+          "finding": "Comparison against author-provided benchmark partitions.",
+          "status": "directly_verified_method"
+        }
+      },
+      "id": "DataSAIL_addendum_2026",
+      "location": "Published 13 February 2026; LP-PDBBind, PINDER, Data availability",
+      "url": "https://www.nature.com/articles/s41467-025-67495-w"
+    }
+  ],
+  "schema_version": 1,
+  "verification_vocabulary": [
+    "directly_verified_method",
+    "publication_claim_only",
+    "implementation_verified",
+    "unresolved",
+    "not_applicable"
+  ]
+}
