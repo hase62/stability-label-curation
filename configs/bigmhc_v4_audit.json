@@ -1,0 +1,81 @@
+{
+  "artifacts": {
+    "archive": {
+      "identity_authority": "Existing source registry expected_sha256",
+      "target_relative_path": "bigmhc_v4/datasets.zip"
+    },
+    "reference": {
+      "publisher_metadata_url": "https://data.mendeley.com/public-api/datasets/dvmz6pkzvb/files?folder_id=root&version=4",
+      "publisher_reported_sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a",
+      "target_relative_path": "bigmhc_v4/pseudoseqs.csv"
+    }
+  },
+  "authorized_member_names": [
+    "el_train.csv",
+    "el_val.csv",
+    "im_train.csv",
+    "im_val.csv"
+  ],
+  "deferred_not_required_for_Task2_2": [
+    "Detailed sampler equalization",
+    "Optimizer-step matching",
+    "Multiple seeds",
+    "Sampling causal decomposition",
+    "Extensive controls",
+    "Final thresholds",
+    "Full hard splits",
+    "External IM outcomes"
+  ],
+  "limits": {
+    "SQLite_page_count": 786432,
+    "archive_bytes": 268435456,
+    "per_expanded_member_bytes": 1073741824,
+    "reference_bytes": 33554432,
+    "row_count": 25000000,
+    "total_declared_expansion_bytes": 2147483648
+  },
+  "publication_evidence": [
+    {
+      "id": "el_source",
+      "limitations": "No row-specific decoy generation or MS experiment trace in the three released columns.",
+      "location": "Methods / Datasets / Epitope presentation training; Figure 1 caption",
+      "statement": "EL training compiled from NetMHCpan-4.1 and MHCflurry-2.0 single-allelic sources; positives are MS detections and negatives decoys.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10569228/"
+    },
+    {
+      "id": "im_source",
+      "limitations": "Matching totals and rand flags do not independently establish each assay or negative definition.",
+      "location": "Methods / Datasets / Immunogenicity training",
+      "statement": "Transfer uses nonrandom PRIME-1.0/2.0 data: 1580 positives and 5293 negatives across train and validation.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10569228/"
+    }
+  ],
+  "schema_version": 1,
+  "scientific_objective_revision": {
+    "authority": "Latest Task 2.2 user instruction supersedes earlier conflicting scope",
+    "conditions": {
+      "A": "Original EL -> original IM",
+      "B": "Stability-corrected EL -> original IM",
+      "C": "Original EL -> stability-corrected IM",
+      "D": "Stability-corrected EL -> stability-corrected IM"
+    },
+    "preservation": "Original EL and experimental IM labels always retained; candidate training pseudolabels never replace source evidence; independent experimental test outcomes unchanged",
+    "status": "Documented only; no correction, training or evaluation implemented"
+  },
+  "scope": "Only four training/validation CSVs plus separately released receptor reference; no evaluation payload opening or model work",
+  "sealed_member_names": [
+    "el_test.csv",
+    "im_test.csv",
+    "iedb.csv",
+    "manafest.csv"
+  ],
+  "source_registry": "configs/data_sources.toml",
+  "source_registry_id": "bigmhc_v4",
+  "summary_policy": "Optional; not opened to avoid importing evaluation count summaries",
+  "verified_publisher_links": {
+    "archive": "https://data.mendeley.com/public-files/datasets/dvmz6pkzvb/files/1da0314f-692d-4c39-b81f-fa2a7dba86bf/file_downloaded?version=4",
+    "archive_resolved": "https://prod-dcd-datasets-public-files-eu-west-1.s3.eu-west-1.amazonaws.com/b7ef294a-1a96-45af-8a16-ab060251e131",
+    "reference": "https://data.mendeley.com/public-files/datasets/dvmz6pkzvb/files/6e3754c4-53dd-4e6c-8a8d-10e0ef2e61a2/file_downloaded?version=4",
+    "reference_resolved": "https://prod-dcd-datasets-public-files-eu-west-1.s3.eu-west-1.amazonaws.com/4257cd1f-d936-4e81-9227-8584d7f8b24c"
+  }
+}

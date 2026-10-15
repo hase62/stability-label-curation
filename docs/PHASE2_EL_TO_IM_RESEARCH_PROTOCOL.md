@@ -1,5 +1,12 @@
 # Phase 2 EL-to-IM research protocol, version 2.0.0
 
+**Historical scope notice (Task 2.2):** The final Task 2.2 instruction expands the
+future comparison to original/corrected EL × original/corrected IM training.
+[The Task 2.2 revision](BIGMHC_V4_TRAINING_DATA_AUDIT.md) and its configuration
+record this superseding direction. Original experimental labels remain preserved;
+independent experimental evaluation outcomes remain unchanged. The version 2.0.0
+text below records the earlier decision and is not rewritten retroactively.
+
 Task 2.0 records the user's updated scientific decisions. It authorizes protocol
 and leakage diagnostics, not training, actual splits, correction masks, or dataset
 acquisition. The [Task 1.9 dossier](GATE0_SCIENTIFIC_DECISION_DOSSIER.md) remains

@@ -179,9 +179,11 @@ hashed-input run; it creates no training tables, inclusion masks or split assign
 
 ## Phase 2: EL-to-IM protocol and leakage preflight
 
-The [versioned EL-to-IM protocol](docs/PHASE2_EL_TO_IM_RESEARCH_PROTOCOL.md)
-places the planned pseudolabel intervention on **EL training data**; experimental
-IM labels remain unchanged. The earlier Gate 0 dossier remains historical.
+The [Task 2.0 EL-to-IM protocol](docs/PHASE2_EL_TO_IM_RESEARCH_PROTOCOL.md)
+records the earlier EL-only intervention. The [Task 2.2 revision](docs/BIGMHC_V4_TRAINING_DATA_AUDIT.md)
+now documents four future original/corrected EL × original/corrected IM training
+conditions. Original experimental labels and independent test outcomes remain
+preserved. The earlier protocol and Gate 0 dossier remain historical evidence.
 [Hard-split evidence and threats](docs/HARD_SPLIT_METHODS_AND_LEAKAGE_THREATS.md)
 distinguish publication descriptions, unresolved implementation details and
 candidate diagnostics. No split, correction threshold or training is implemented.
@@ -205,3 +207,19 @@ PYTHONPATH=src python3 -B -m stability_label_curation bigmhc source-audit --json
 
 The command is offline and read-only; explicit snapshot/evidence overrides remain
 checksum-gated. Report output requires an existing authorized project run.
+
+## BigMHC Version 4 training/validation audit
+
+The [Task 2.2 data audit](docs/BIGMHC_V4_TRAINING_DATA_AUDIT.md) verifies the
+official archive and separate receptor reference, inventories only authorized
+train/validation files, and reports exact EL/IM/DTU overlap. Evaluation members
+stay sealed. No labels, splits or models are generated.
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation bigmhc data-audit --json
+```
+
+This is offline and read-only; explicit `--reports-dir` requires an existing run
+with every input recorded. `bigmhc fetch-data` and `bigmhc fetch-data --artifact
+pseudoseqs.csv` are the two bounded, checksum-gated acquisition options. Inputs
+remain outside Git; existing different bytes are never replaced.

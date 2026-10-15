@@ -22,6 +22,7 @@ from . import observation_registry as observations
 from . import scientific_gate0_preflight as gate0
 from . import sequence_leakage_audit as leakage
 from . import bigmhc_source_audit as bigmhc_source
+from . import bigmhc_v4_audit as bigmhc_data
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -132,13 +133,26 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     leakage_inspect.add_argument("--config", help="Versioned protocol or explicit synthetic-fixture configuration")
     leakage_inspect.add_argument("--max-mismatches", type=int, choices=(0, 1, 2), help="Diagnostic rule only; does not approve a split threshold")
     leakage_inspect.add_argument("--reports-dir", help="Explicit existing authorized project run reports directory")
-    bigmhc_parser = commands.add_parser("bigmhc", help="Pinned offline source-only provenance audit")
+    bigmhc_parser = commands.add_parser("bigmhc", help="BigMHC provenance and sealed-data audits")
     bigmhc_commands = bigmhc_parser.add_subparsers(dest="bigmhc_command", required=True)
     bigmhc_audit = bigmhc_commands.add_parser("source-audit")
     bigmhc_audit.add_argument("--json", action="store_true")
     bigmhc_audit.add_argument("--snapshot", help="Explicit pinned source-snapshot directory; no execution or acquisition")
     bigmhc_audit.add_argument("--evidence", help="Source identities and reviewed AST evidence, or synthetic-fixture override")
     bigmhc_audit.add_argument("--reports-dir", help="Explicit existing project run reports directory")
+    bigmhc_fetch = bigmhc_commands.add_parser("fetch-data", help="Acquire only Version 4 datasets.zip or its separate receptor reference")
+    bigmhc_fetch.add_argument("--artifact", choices=("datasets.zip", "pseudoseqs.csv"), default="datasets.zip")
+    bigmhc_fetch.add_argument("--receipt", help="Explicit non-overwriting receipt destination under project runs")
+    bigmhc_fetch.add_argument("--timeout", type=float, default=30)
+    bigmhc_inventory = bigmhc_commands.add_parser("data-audit", help="Offline aggregate audit; evaluation members stay sealed")
+    bigmhc_inventory.add_argument("--json", action="store_true")
+    bigmhc_inventory.add_argument("--archive")
+    bigmhc_inventory.add_argument("--dtu")
+    bigmhc_inventory.add_argument("--pseudoseqs")
+    bigmhc_inventory.add_argument("--expected-archive-sha256")
+    bigmhc_inventory.add_argument("--expected-dtu-sha256")
+    bigmhc_inventory.add_argument("--expected-reference-sha256")
+    bigmhc_inventory.add_argument("--reports-dir")
     runs_parser = commands.add_parser("runs", help="Run provenance and explicit creation")
     run_commands = runs_parser.add_subparsers(dest="run_command", required=True)
     create_parser = run_commands.add_parser("create", help="Create one run from committed code")
@@ -159,6 +173,20 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     try:
         paths = resolve_paths(env)
         if args.command == "bigmhc":
+            if args.bigmhc_command == "fetch-data":
+                document = bigmhc_data.fetch(paths=paths, artifact=args.artifact, timeout=args.timeout)
+                if args.receipt:
+                    dtu2016.write_report(args.receipt, document, paths=paths)
+                print(dtu2016.json_report(document), end="")
+                return 0
+            if args.bigmhc_command == "data-audit":
+                result = bigmhc_data.inspect(paths=paths, archive=args.archive, dtu_path=args.dtu,
+                    pseudoseqs_path=args.pseudoseqs, expected_archive_sha256=args.expected_archive_sha256,
+                    expected_dtu_sha256=args.expected_dtu_sha256, expected_reference_sha256=args.expected_reference_sha256)
+                if args.reports_dir:
+                    bigmhc_data.write_reports(result,args.reports_dir,paths=paths)
+                print(dtu2016.json_report(result.reports if args.json else result.reports['bigmhc_training_inventory.json']),end="")
+                return 0
             result = bigmhc_source.inspect(paths=paths, snapshot=args.snapshot, evidence_path=args.evidence)
             if args.reports_dir:
                 bigmhc_source.write_reports(result, args.reports_dir, paths=paths)
