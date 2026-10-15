@@ -241,3 +241,20 @@ The run must record configuration, seed and registry/evidence input hashes; see
 the guide for creation, evaluation and inference. Model weights and split/metric
 reports stay outside Git. Unsupported inputs get explicit null predictions.
 Task 2.3 implements no EL/IM corrections or BigMHC training.
+
+## Frozen-Teacher training pseudolabel candidates
+
+[Task 2.4](docs/PSEUDOLABEL_PILOT_V0.md) streams only EL and IM training members,
+scores supported nine-mers, and writes separate reversible candidate overrides.
+The exploratory rules are positive→pseudo-0 below 1 hour and negative→pseudo-1
+at or above 10 hours. Original labels stay unchanged; these are unvalidated
+modeling candidates, not experimentally verified corrections.
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation pseudolabel pilot --config configs/pseudolabel_pilot_v0.json --out <existing-run-directory>
+```
+
+See the guide for hashed-input run creation and read-only `--verify-existing`
+replay. No Teacher refit, validation/test inspection, final split or BigMHC
+training occurs. Future override application requires explicit training-row
+authorization under the subsequently established split protocol.

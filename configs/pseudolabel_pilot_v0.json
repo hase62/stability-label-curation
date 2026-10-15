@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "rule_version": "pseudolabel_pilot_v0",
+  "low_hours_exclusive": 1.0,
+  "high_hours_inclusive": 10.0,
+  "large_class_change_fraction_warning": 0.2,
+  "expected_trained_HLA_models": 67,
+  "teacher_commit_sha": "081d4f7087f451e08791392c45c375fb9ac0dd6b",
+  "inputs": {
+    "archive": {"area": "data", "relative_path": "bigmhc_v4/datasets.zip", "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa"},
+    "teacher": {"area": "runs", "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json", "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"},
+    "teacher_manifest": {"area": "runs", "relative_path": "task-2_3-first-stability-teacher/manifest.json", "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"},
+    "teacher_receipt": {"area": "runs", "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json", "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"},
+    "partition": {"area": "runs", "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json", "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"},
+    "registry": {"area": "runs", "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl", "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"},
+    "mapping": {"area": "runs", "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json", "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"}
+  },
+  "members": {
+    "el_train.csv": {"rows": 15324585, "sha256": "31a15f799947977c352f3a8302f31d28661386470171abb9f6becc24bfe551d5"},
+    "im_train.csv": {"rows": 6185, "sha256": "9c1cb91316b4a6a7f5f1a9c06bdfa0f70427d2cb8d570b53987dcbab544f55f7"}
+  },
+  "scope": "Fixed exploratory candidates only; no teacher refit, biological threshold validation, split selection or BigMHC training"
+}
