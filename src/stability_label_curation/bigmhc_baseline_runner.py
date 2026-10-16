@@ -26,6 +26,7 @@ from .paths import resolve_paths
 CONFIG = 'configs/bigmhc_baseline_smoke_v0.json'
 VERSION = 'bigmhc_baseline_smoke_v0'
 WORKER_VERSION = 'bigmhc_gpu_worker_v0'
+FULL_VERSION = 'bigmhc_gpu_full_eligible_v0'
 SOURCE_COMMIT = '199e890fa69a63646730bcecea0a520e08ca4f02'
 VIEWS = {'EL':'processed/el_train_original.csv', 'IM':'processed/im_train_original.csv', 'development':'processed/im_development.csv'}
 TRANSFER = ('condenser.att.weight','condenser.att.bias','condenser.out.weight','condenser.out.bias')
@@ -39,18 +40,25 @@ INPUTS = {'EL','IM','development','EL_provenance','IM_provenance','development_p
 def load_config(path):
     c=readers._json(path)
     c.setdefault('device','cpu')
-    worker_profile=c.get('version')==WORKER_VERSION
-    if (c.get('schema_version')!=1 or c.get('version') not in (VERSION,WORKER_VERSION) or c.get('condition')!='A'
+    full_profile=c.get('version')==FULL_VERSION
+    worker_profile=c.get('version') in (WORKER_VERSION,FULL_VERSION)
+    if full_profile and (c.get('device')!='cuda' or c.get('batch_size')!=16
+            or c.get('rows_per_class')!={'EL':None,'IM':None}
+            or c.get('expected_rows')!={'EL':1453578,'IM':3428}
+            or c.get('expected_class_counts')!={'EL':{'0':1383509,'1':70069},'IM':{'0':2473,'1':955}}):
+        raise ValueError('Full eligible Baseline A requires the complete frozen original populations and CUDA batch16')
+    if (c.get('schema_version')!=1 or c.get('version') not in (VERSION,WORKER_VERSION,FULL_VERSION) or c.get('condition')!='A'
             or c.get('label_policy')!='original' or c.get('source_commit')!=SOURCE_COMMIT
             or c.get('seed')!=42 or c.get('device') not in ('cpu','cuda') or c.get('num_workers')!=0
             or c.get('persistent_workers') is not False or c.get('epochs')!={'EL':1,'IM':1}
             or c.get('learning_rate')!=5e-5 or c.get('batch_size') not in (4,8,16)
             or set(c.get('inputs',{}))!=INPUTS
             or type(c.get('cpu_threads')) is not int or not 1<=c['cpu_threads']<=4
-            or type(c.get('wall_seconds')) is not int or not 60<=c['wall_seconds']<=(1800 if worker_profile else 600)
-            or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=(8 if worker_profile else 6)*1024**3):
+            or type(c.get('wall_seconds')) is not int or not 60<=c['wall_seconds']<=(7200 if full_profile else 1800 if worker_profile else 600)
+            or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=(32 if full_profile else 8 if worker_profile else 6)*1024**3):
         raise ValueError('Only bounded CPU/CUDA original-label condition A is authorized')
     for stage,limit in (('EL',100000 if worker_profile else 1000),('IM',1714 if worker_profile else 256)):
+        if full_profile:continue
         # Task 2.9: retain the complete original IM population, without balancing.
         if worker_profile and stage=='IM' and c['rows_per_class'][stage] is None:
             if c['expected_rows'][stage]!=3428:raise ValueError('All-original IM requires the frozen 3428-row population')
@@ -284,21 +292,33 @@ def train_epoch(torch,model,dataset,config,transfer,device='cpu'):
     optimizer=torch.optim.AdamW(parameters,lr=config['learning_rate']);lossf=torch.nn.BCEWithLogitsLoss()
     dataset.makebats(config['batch_size'],shuffle=True,negfrac=None if transfer else 0.99)
     loader=torch.utils.data.DataLoader(dataset,batch_size=None,shuffle=True,num_workers=0,persistent_workers=False)
-    steps=[];skipped=0;rows=0;weighted=0.0;epoch_error=0.0
+    steps=[];skipped_log=[];skipped=0;rows=0;weighted=0.0;epoch_error=0.0
     for index,batch in enumerate(loader,1):
         target=on_device(batch.tgt.float(),device)
-        if transfer and not target.sum():skipped+=1;continue
+        n=len(target);positives=int(target.sum())
+        if transfer and not positives:
+            skipped+=1;skipped_log.append({'batch':index,'rows':n,'positives':0,'reason':'native IM all-negative batch skip'})
+            continue
         optimizer.zero_grad()
         output,_=model(mhc=on_device(batch.mhc.float(),device),pep=on_device(batch.pep.float(),device))
         loss=lossf(output,target)
         if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
-        loss.backward();optimizer.step();value=float(loss.detach());n=len(target)
+        loss.backward();optimizer.step();value=float(loss.detach())
         rows+=n;weighted+=value*n;epoch_error+=value/len(loader)
-        steps.append({'batch':index,'rows':n,'positives':int(target.sum()),'BCE_loss':value})
+        steps.append({'batch':index,'rows':n,'positives':positives,'BCE_loss':value})
         print(('IM' if transfer else 'EL')+f' batch {index}/{len(loader)} loss {value:.6f}',flush=True)
     if not steps:raise ValueError('No genuine optimization steps executed')
+    positive_exposures=sum(step['positives'] for step in steps)
+    skipped_rows=sum(batch['rows'] for batch in skipped_log)
     return {'optimization_steps':len(steps),'batches':len(loader),'all_negative_batches_skipped':skipped,
         'consumed_rows':rows,'row_weighted_BCE_loss':weighted/rows,'source_style_epoch_loss':epoch_error,
+        'optimizer_class_exposures':{'1':positive_exposures,'0':rows-positive_exposures},
+        'optimizer_positive_fraction':positive_exposures/rows,
+        'sampled_batch_instances':rows+skipped_rows,
+        'sampled_class_exposures':{'1':positive_exposures,'0':rows-positive_exposures+skipped_rows},
+        'skipped_rows':skipped_rows,'skipped_batch_log':skipped_log,
+        'requested_batch_size':config['batch_size'],'maximum_optimized_batch_rows':max(step['rows'] for step in steps),
+        'sampling':'Pinned makebats(shuffle=True,negfrac='+('None' if transfer else '0.99')+'); no sampler changes',
         'step_log':steps,'optimizer_defaults':optimizer.defaults,'updated_parameters':[k for k,v in model.named_parameters() if not transfer or k in TRANSFER]}
 
 
@@ -375,12 +395,24 @@ def worker(*,config_path,out,paths=None,files=None):
         selected[stage],counts=select_subset(input_rows(resolved[stage],allowed),config['rows_per_class'][stage],42)
         if sum(counts.values())!=config['expected_rows'][stage] or counts!=inventory[member]['class_balances']['original']:
             raise ValueError('Original training population mismatch')
+        if 'expected_class_counts' in config and counts!=config['expected_class_counts'][stage]:
+            raise ValueError('Configured original class counts disagree with authenticated population')
         attach_provenance(selected[stage],resolved[stage+'_provenance'])
         raw.write_text_report(directory/f'processed/{stage.lower()}_original_smoke.csv',csv_text(selected[stage]),paths=paths)
         subset_info[stage]={'rows':selected[stage],'source_view_sha256':raw.sha256_file(resolved[stage]),'original_population_labels':counts,
+                            'selected_rows':len(selected[stage]),'selected_class_counts':dict(Counter(r['original_label'] for r in selected[stage])),
                             'selection':('All prepared original rows in source order; original prevalence; no resampling'
                                 if config['rows_per_class'][stage] is None else
                                 'Uniform within-original-label reservoir sampling seed42; sorted prepared-view row order; no scores/development outcomes')}
+        if config['version']==FULL_VERSION:
+            # Reuse the atomic streaming writer rather than building a multi-GB JSON string.
+            relative=f'processed/{stage.lower()}_original_row_manifest.csv.gz'
+            fields=['prepared_row_index','hla','peptide',*PROVENANCE_FIELDS]
+            with adapter.artifact_csv(directory/relative,fields,True) as (writer,sink):
+                for row in selected[stage]:
+                    writer.writerow({key:row[key] for key in ('prepared_row_index','hla','peptide')} | row['source_locator'])
+            subset_info[stage].pop('rows')
+            subset_info[stage]['row_manifest']={'relative_path':relative,'sha256':sink.digest.hexdigest(),'size_bytes':sink.size}
     development=list(input_rows(resolved['development'],allowed))
     if (len(development)!=383 or Counter(r['original_label'] for r in development)!={'1':120,'0':263}
             or len({r['hla'] for r in development})!=31):raise ValueError('Frozen development cohort mismatch')
@@ -407,6 +439,7 @@ def worker(*,config_path,out,paths=None,files=None):
             or reference_report['duplicate_identifier_count'] or reference_report['sanitized_UID_collision_groups']):
         raise ValueError('Invalid authentic receptor representation')
     needed={r['hla'] for rows in [*selected.values(),development] for r in rows}
+    del selected,subset_info
     if any(len(reference.get(h,()))!=1 for h in needed):raise ValueError('Unsupported/ambiguous exact HLA reference')
     encodings={}
     with raw._read_file(resolved['reference']) as stream,io.TextIOWrapper(stream,encoding='utf-8-sig',newline='') as text:
@@ -422,6 +455,7 @@ def worker(*,config_path,out,paths=None,files=None):
                       'constructor':'Pinned BigMHC() defaults: mhclen414,minpep8,enclen20,hidlen1024,layers2','source_commit':SOURCE_COMMIT}
         print('Authentic architecture:',architecture,flush=True)
         initial=state_hashes(model)
+        raw.write_report(directory/'reports/initial_el_state_identity.json',initial,paths=paths)
         start=time.monotonic();el_training=train_epoch(torch,model,dataset(directory/'processed/el_original_smoke.csv'),config,False,device)
         el_training['elapsed_seconds']=time.monotonic()-start
         el_state=state_hashes(model)

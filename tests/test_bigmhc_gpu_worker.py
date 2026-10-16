@@ -89,6 +89,16 @@ class GPUWorkerTests(unittest.TestCase):
         c=deepcopy(self.gpu);c['rows_per_class']['EL']=None
         with self.assertRaises(ValueError):runner.load_config(self.config_file(c))
 
+    def test_full_eligible_profile_retains_population_and_bounded_cuda(self):
+        c=runner.load_config(self.paths.repository_root/'configs/bigmhc_gpu_baseline_task2_10.json')
+        self.assertEqual(c['rows_per_class'],{'EL':None,'IM':None})
+        self.assertEqual(c['inputs'],self.gpu['inputs'])
+        for key,value in [('device','cpu'),('batch_size',8),('wall_seconds',7201),('memory_bytes',33*1024**3),
+                          ('rows_per_class',{'EL':4096,'IM':None}),('expected_rows',{'EL':1453577,'IM':3428}),
+                          ('expected_class_counts',{'EL':{'0':1383508,'1':70070},'IM':{'0':2473,'1':955}})]:
+            bad=deepcopy(c);bad[key]=value
+            with self.assertRaises(ValueError):runner.load_config(self.config_file(bad))
+
     def test_gpu_seed_and_deterministic_settings(self):
         torch=Mock();np=Mock()
         runner.seed_runtime(torch,np,self.gpu)
@@ -190,12 +200,20 @@ class GPUWorkerTests(unittest.TestCase):
             def detach(self):return .5
         loss_function=Mock(return_value=Loss());optimizer=Mock(defaults={'lr':5e-5})
         torch=Mock();torch.optim.AdamW.return_value=optimizer;torch.nn.BCEWithLogitsLoss.return_value=loss_function
-        torch.utils.data.DataLoader.return_value=[batch];torch.isfinite.return_value=True
+        negative_target=Mock();negative_target.float.return_value=negative_target
+        negative_target.to.return_value=negative_target;negative_target.sum.return_value=0
+        negative_target.__len__=lambda self:3
+        torch.utils.data.DataLoader.return_value=[batch,SimpleNamespace(tgt=negative_target)];torch.isfinite.return_value=True
         model=Mock(return_value=('logits',None));model.to.return_value=model;model.train.return_value=model
         model.named_parameters.return_value=[('base',1),*[(k,2) for k in runner.TRANSFER]]
         with redirect_stdout(io.StringIO()):report=runner.train_epoch(torch,model,Mock(),self.gpu,True,'cuda:0')
         self.assertEqual(report['optimization_steps'],1)
         self.assertEqual(report['updated_parameters'],list(runner.TRANSFER))
+        self.assertEqual(report['optimizer_class_exposures'],{'1':1,'0':1})
+        self.assertEqual(report['sampled_batch_instances'],5)
+        self.assertEqual(report['sampled_class_exposures'],{'1':1,'0':4})
+        self.assertEqual(report['skipped_rows'],3)
+        self.assertEqual(report['all_negative_batches_skipped'],1)
         for tensor in tensors:tensor.to.assert_called_with('cuda:0')
         torch.optim.AdamW.assert_called_once_with([2]*4,lr=5e-5);loss_function.assert_called_once_with('logits',target)
 

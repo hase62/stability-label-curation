@@ -73,7 +73,9 @@ def execute(*, run_id: str, config_path: str | Path | None = None,
         paths=paths, run_id=run_id, kind='bigmhc_gpu_baseline' if baseline else 'bigmhc_worker_smoke', seed=config['seed'],
         config=config_path, inputs=[item['path'] for item in inputs],
         argv=['bigmhc-worker', 'run', '--run-id', run_id, '--config', str(config_path)],
-        description=('Original-label condition A; EL subset to all original IM; preliminary development baseline'
+        description=('Original-label condition A; complete eligible EL to all original IM; one-epoch development baseline'
+                     if config['version']==runner.FULL_VERSION else
+                     'Original-label condition A; EL subset to all original IM; preliminary development baseline'
                      if baseline else 'Original-label condition A; one explicit CPU/CUDA device; engineering smoke only'),
     )
     raw.write_report(directory / 'reports/transfer_verification.json', verification, paths=paths)

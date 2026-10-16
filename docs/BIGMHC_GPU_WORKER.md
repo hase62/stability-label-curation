@@ -194,3 +194,44 @@ Configuration, step losses, training timings, memory peaks, checkpoints, reload
 checks, two 383-observation prediction files and preliminary metrics are saved
 under the run directory outside Git. `reports/training_configuration.json` saves
 the complete configuration; `reports/development_metrics.json` saves the metrics.
+
+## Task 2.10 full eligible Baseline A
+
+`configs/bigmhc_gpu_baseline_task2_10.json` selects all 1,453,578 eligible
+original EL rows (70,069 positive / 1,383,509 negative) and all 3,428 original IM
+rows (955 positive / 2,473 negative). These are eligible human HLA-I nine-mers,
+not the entire publication datasets. The full profile permits `null` selection
+for both stages, fixes CUDA/batch16 and those populations, and caps wall time at
+7,200 seconds and worker RSS at 32 GiB. Existing smoke/pilot limits are unchanged.
+The host had about 92 GiB RAM available and 948 GiB disk free before launch.
+
+The pinned `Dataset.makebats` groups by peptide length and shuffles the frame.
+For EL `negfrac=0.99`, it computes `numbats=ceil(N/maxbat)`,
+`steppos=ceil(P/numbats)` and
+`stepneg=int(min(ceil(negative/numbats), steppos/(1-negfrac)-steppos))`,
+then advances positive and negative slices without replacement until positives
+are exhausted. For these nine-mers, nominal `maxbat=16` yields `numbats=90,849`,
+`steppos=1` and `stepneg=16`: 70,069 native batches of **17 actual instances**.
+Expected EL exposure is 70,069 positives + 1,121,104 negatives (1,191,173 total;
+positive fraction 1/17). All 1,383,509 negatives are available in the shuffled
+population; 262,405 receive no optimizer exposure in this one epoch. Dataset
+membership is preserved. This native arithmetic is not changed to enforce a
+hard 16-instance limit or consume the remaining negatives.
+
+IM retains sequential slices of the shuffled population with `negfrac=None`;
+the native all-negative batch skip remains. Training reports record sampled and
+optimized class exposures, actual batch sizes, skipped rows/reasons, every step
+loss and source-style versus row-weighted mean loss. Full row identity manifests
+use the existing atomic compressed CSV writer to avoid a multi-GB JSON
+serialization peak. The small `reports/subset_manifest.json` references their
+hashes; eligible-row CSVs, full lineage and separation checks remain preserved.
+
+```bash
+PYTHONPATH=src CUDA_VISIBLE_DEVICES=0 ~/codex/.venvs/bigmhc-gpu/bin/python -B -m stability_label_curation bigmhc-worker run \
+  --config configs/bigmhc_gpu_baseline_task2_10.json --run-id task-2_10-full-eligible-baseline-a
+```
+
+Run once, seed 42, FP32, one epoch each, EL from scratch and IM from its new EL
+checkpoint. No corrected views, Teacher scoring, additional seeds or sealed test
+outcomes are authorized. Development comparisons with Task 2.9 are descriptive;
+there is no hyperparameter selection. Stop after this task for review.
