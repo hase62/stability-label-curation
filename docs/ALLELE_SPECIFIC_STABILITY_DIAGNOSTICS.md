@@ -6,7 +6,7 @@ BigMHC corrected-model training. Both LOW-only and LOW+HIGH views from Task 2.5
 remain immutable historical artifacts. This task changes their current scientific
 status; it does not rewrite their manifests, scores, overrides, labels or CSVs.
 The new checksum-linked `historical_correction_shift_summary.json` marks each of
-the six historical corrected views unapproved. No alternative is selected.
+the four historical corrected views unapproved. No alternative is selected.
 
 ## Scope, inputs and methods
 
@@ -177,3 +177,10 @@ The five aggregate reports and `execution_verification.json` are written under
 option; add `--verify-existing` for complete read-only replay. No row-level data,
 correction masks or training outputs are generated. Source payloads, scores,
 historical overrides, and corrected/original views remain unchanged.
+
+The canonical Task 2.6 run records implementation commit
+`9f480bad5be3dc497f67bb6e710917763d2575f1`. A subsequent documentation-only
+correction distinguishes four corrected CSVs from six total training CSVs
+(including two original-label views). The executed code and configuration are
+unchanged. Replaying an existing run requires the commit/branch recorded by its
+manifest, as enforced by the existing run infrastructure.
