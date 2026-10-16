@@ -27,6 +27,7 @@ from . import stability_teacher as teacher
 from . import pseudolabel_pilot as pseudolabel
 from . import bigmhc_pilot_adapter as pilot_adapter
 from . import allele_stability_diagnostics as allele_diagnostics
+from . import bigmhc_baseline_runner as baseline_runner
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -205,9 +206,27 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     diagnostic.add_argument("--out", help="Explicit existing hashed-input run; absence is read-only")
     diagnostic.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
     diagnostic.add_argument("--verify-existing", action="store_true")
+    smoke = commands.add_parser("bigmhc-smoke", help="Bounded original-label EL-to-IM CPU smoke; no corrected labels")
+    smoke.add_argument("--config", default=baseline_runner.CONFIG)
+    smoke.add_argument("--out", required=True, help="Existing committed hashed-input run with seed42")
+    smoke.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
+    smoke.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "bigmhc-smoke":
+            files = {}
+            for item in args.input:
+                if "=" not in item:
+                    raise ValueError("Input override must be INPUT_ID=PATH")
+                name, path = item.split("=", 1)
+                if name in files:
+                    raise ValueError("Duplicate input override")
+                files[name] = path
+            action = baseline_runner.worker if args.worker else baseline_runner.run
+            result = action(config_path=args.config, out=args.out, paths=paths, files=files)
+            print(dtu2016.json_report(result), end="")
+            return 0
         if args.command == "allele-diagnostics":
             files = {}
             for item in args.input:

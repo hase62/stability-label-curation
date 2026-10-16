@@ -287,3 +287,18 @@ PYTHONPATH=src python3 -B -m stability_label_curation allele-diagnostics
 
 Inspection is read-only. An explicit `--out <existing-hashed-input-run>` writes
 aggregate reports; `--verify-existing` performs read-only deterministic replay.
+
+## Original-label BigMHC runtime smoke
+
+[Task 2.7](docs/BIGMHC_BASELINE_RUNTIME.md) runs the pinned authentic BigMHC
+architecture on fixed small **original-label-only** EL and IM subsets, using a
+bounded isolated CPU worker. It saves/reloads the full EL checkpoint and IM
+overlay, then predicts the frozen development cohort. This is an engineering
+smoke, not scientific baseline performance; corrected views remain unapproved.
+
+```sh
+PYTHONPATH=src <isolated-runtime-python> -B -m stability_label_curation bigmhc-smoke --config configs/bigmhc_baseline_smoke_v0.json --out <existing-hashed-input-run>
+```
+
+See the guide for environment versions, seed42, run creation, checkpoint-parent
+layout and resource bounds. No published checkpoints or sealed tests are used.

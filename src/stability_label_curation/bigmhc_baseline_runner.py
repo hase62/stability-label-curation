@@ -1,0 +1,383 @@
+"""Bounded original-label BigMHC smoke runner; runtime dependencies are lazy."""
+from collections import Counter
+from contextlib import contextmanager
+import csv
+import hashlib
+import io
+import json
+import math
+import os
+from pathlib import Path
+import random
+import subprocess
+import sys
+import time
+import types
+from typing import Mapping
+
+from . import bigmhc_pilot_adapter as adapter
+from . import bigmhc_v4_audit as data
+from . import netmhcstabpan_2016 as raw
+from . import run_manifest as runs
+from . import scientific_gate0_preflight as readers
+from . import stability_teacher as teacher
+from .paths import resolve_paths
+
+CONFIG = 'configs/bigmhc_baseline_smoke_v0.json'
+VERSION = 'bigmhc_baseline_smoke_v0'
+SOURCE_COMMIT = '199e890fa69a63646730bcecea0a520e08ca4f02'
+VIEWS = {'EL':'processed/el_train_original.csv', 'IM':'processed/im_train_original.csv', 'development':'processed/im_development.csv'}
+TRANSFER = ('condenser.att.weight','condenser.att.bias','condenser.out.weight','condenser.out.bias')
+PROVENANCE_FIELDS = ('source_file','row_index','source_line_number','source_row_id','source_row_sha256',
+                     'original_peptide','original_hla','resolved_hla','original_label','derived_row_index')
+SOURCES = ('README','LICENSE','train','predict','cli','bigmhc','dataset','mhcenc','mhcuid','encseq')
+INPUTS = {'EL','IM','development','EL_provenance','IM_provenance','development_provenance',
+          'experiment','parent_receipt','parent_manifest','inventory','reference',*('source_'+n for n in SOURCES)}
+
+
+def load_config(path):
+    c=readers._json(path)
+    if (c.get('schema_version')!=1 or c.get('version')!=VERSION or c.get('condition')!='A'
+            or c.get('label_policy')!='original' or c.get('source_commit')!=SOURCE_COMMIT
+            or c.get('seed')!=42 or c.get('device')!='cpu' or c.get('num_workers')!=0
+            or c.get('persistent_workers') is not False or c.get('epochs')!={'EL':1,'IM':1}
+            or c.get('learning_rate')!=5e-5 or c.get('batch_size') not in (4,8,16)
+            or set(c.get('inputs',{}))!=INPUTS
+            or type(c.get('cpu_threads')) is not int or not 1<=c['cpu_threads']<=4
+            or type(c.get('wall_seconds')) is not int or not 60<=c['wall_seconds']<=600
+            or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=6*1024**3):
+        raise ValueError('Only bounded CPU original-label condition A is authorized')
+    for stage,limit in (('EL',1000),('IM',256)):
+        if type(c['rows_per_class'][stage]) is not int or not 1<=c['rows_per_class'][stage]<=limit:
+            raise ValueError('Subset smoke-size cap exceeded')
+    for name,item in c['inputs'].items():
+        adapter.pilot.registry._relative(item['relative_path'])
+        if item['area'] not in {'data','runs'} or not adapter.pilot._sha(item['sha256']):
+            raise ValueError('Invalid pinned runtime input')
+        if 'low_only' in item['relative_path'] or 'low_and_high' in item['relative_path'] or 'overrides' in item['relative_path']:
+            raise ValueError('Scientifically unapproved corrected input forbidden')
+    return c
+
+
+def resolve_inputs(config,paths,files:Mapping|None=None):
+    overrides=files or {}
+    if set(overrides)-set(config['inputs']):raise ValueError('Unknown runtime input override')
+    result={};identities=[]
+    for name,item in config['inputs'].items():
+        root=paths.project_data_dir if item['area']=='data' else paths.project_runs_dir
+        path=Path(overrides.get(name,root/item['relative_path'])).expanduser().absolute()
+        if any(word in path.name for word in ('low_only','low_and_high','overrides')):
+            raise ValueError('Corrected CSV/override input forbidden')
+        if raw.sha256_file(path)!=item['sha256']:raise ValueError('Runtime input SHA256 mismatch: '+name)
+        result[name]=path;identities.append({'path':str(path),'sha256':item['sha256']})
+    experiment=readers._json(result['experiment']);receipt=readers._json(result['parent_receipt'])
+    for stage,relative in VIEWS.items():
+        if raw.sha256_file(result[stage])!=experiment['artifacts'][relative]['sha256']:
+            raise ValueError('Original-view identity disagrees with authenticated parent manifest')
+        key=relative.replace('_original.csv','_provenance.csv.gz').replace('im_development.csv','im_development_provenance.csv.gz')
+        if raw.sha256_file(result[stage+'_provenance'])!=experiment['artifacts'][key]['sha256']:
+            raise ValueError('Original-row provenance identity mismatch')
+    if receipt['reports']['pilot_experiment_manifest.json']!=raw.sha256_file(result['experiment']):
+        raise ValueError('Parent experiment receipt mismatch')
+    parent=runs.validate_manifest(readers._json(result['parent_manifest']))
+    if (receipt['code_commit']!=parent['git']['commit_sha']
+            or receipt['reports']['pilot_training_inventory.json']!=raw.sha256_file(result['inventory'])):
+        raise ValueError('Parent inventory or committed provenance mismatch')
+    return result,identities
+
+
+def input_rows(path,allowed_hla):
+    with raw._read_file(path) as stream,io.TextIOWrapper(stream,encoding='utf-8',newline='') as text:
+        rows=csv.reader(text,strict=True)
+        if next(rows)!=['mhc','pep','tgt']:raise ValueError('Original training-view schema changed')
+        for index,fields in enumerate(rows,1):
+            if (len(fields)!=3 or fields[0] not in allowed_hla or fields[2] not in {'0','1'} or len(fields[1])!=9
+                    or any(a not in teacher.ALPHABET for a in fields[1])
+                    or data.canonical_hla(fields[0])!=fields[0] or not fields[0].startswith(('HLA-A*','HLA-B*'))):
+                raise ValueError('Unsupported or malformed original-label row')
+            yield {'prepared_row_index':index,'hla':fields[0],'peptide':fields[1],'original_label':fields[2]}
+
+
+def select_subset(rows,per_class,seed=42):
+    """Uniform reservoir sample separately by original label; local RNG, source order."""
+    rng=random.Random(seed);reservoir={'0':[],'1':[]};seen=Counter()
+    for row in rows:
+        label=row['original_label'];seen[label]+=1
+        if len(reservoir[label])<per_class:reservoir[label].append(dict(row))
+        else:
+            position=rng.randrange(seen[label])
+            if position<per_class:reservoir[label][position]=dict(row)
+    if any(seen[label]<per_class for label in ('0','1')):raise ValueError('Insufficient original class support')
+    selected=sorted(reservoir['0']+reservoir['1'],key=lambda r:r['prepared_row_index'])
+    if len({r['prepared_row_index'] for r in selected})!=len(selected):raise ValueError('Duplicate selected row identity')
+    return selected,dict(seen)
+
+
+def attach_provenance(selected,path):
+    """Selection is already frozen; read only original-coordinate fields of the ledger."""
+    wanted={r['prepared_row_index']:r for r in selected};seen=set()
+    import gzip
+    with raw._read_file(path) as stream,gzip.GzipFile(fileobj=stream) as gz,io.TextIOWrapper(gz,encoding='utf-8',newline='') as text:
+        for record in csv.DictReader(text,strict=True):
+            coordinate=record['derived_row_index']
+            if record['retained']!='1' or not coordinate or int(coordinate) not in wanted:continue
+            index=int(coordinate);row=wanted[index]
+            if (index in seen or [record['resolved_hla'],record['original_peptide'],record['original_label']]
+                    !=[row['hla'],row['peptide'],row['original_label']]):raise ValueError('Original-row lineage join mismatch')
+            row['source_locator']={key:record[key] for key in PROVENANCE_FIELDS}
+            seen.add(index)
+    if seen!=set(wanted):raise ValueError('Selected original-row lineage missing')
+
+
+def verify_separation(training,development):
+    dev={r['peptide'] for r in development};blocked=adapter.substitution_neighborhood(dev)
+    violations=[r['prepared_row_index'] for r in training if r['peptide'] in blocked]
+    if violations:raise ValueError('Exact/one-mismatch development exposure: '+str(violations[:10]))
+    return {'rule':'Global canonical nine-mer Hamming distance<=1, across all HLA',
+            'training_rows':len(training),'development_rows':len(development),'prohibited_matches':0}
+
+
+def csv_text(rows):
+    text=io.StringIO(newline='');writer=csv.writer(text,lineterminator='\n');writer.writerow(['mhc','pep','tgt'])
+    writer.writerows((r['hla'],r['peptide'],r['original_label']) for r in rows)
+    return text.getvalue()
+
+
+@contextmanager
+def pinned_modules(files):
+    names=('mhcuid','encseq','dataset','bigmhc')
+    if any(name in sys.modules for name in names):raise ValueError('External module-name collision')
+    try:
+        for name in names:
+            path=files['source_'+name];module=types.ModuleType(name);module.__file__=str(path)
+            sys.modules[name]=module
+            with raw._read_file(path) as stream:code=compile(stream.read(),str(path),'exec')
+            exec(code,module.__dict__)
+        yield sys.modules['bigmhc'].BigMHC,sys.modules['dataset'].Dataset
+    finally:
+        for name in names:sys.modules.pop(name,None)
+
+
+def seed_runtime(torch,np,config):
+    random.seed(config['seed']);np.random.seed(config['seed']);torch.manual_seed(config['seed'])
+    torch.set_num_threads(config['cpu_threads']);torch.set_num_interop_threads(1)
+    torch.use_deterministic_algorithms(True)
+
+
+def reserve_checkpoint(path):
+    with raw._directory(path.parent) as parent:
+        os.mkdir(path.name,0o700,dir_fd=parent)
+
+
+def checkpoint_identity(path,keys):
+    expected={f'{i}_{key}.lyr' for i,key in enumerate(keys)}
+    if set(p.name for p in path.iterdir() if p.name.endswith('.lyr'))!=expected:
+        raise ValueError('Missing or extra checkpoint tensors')
+    return {name:raw.sha256_file(path/name) for name in sorted(expected)}
+
+
+def overlay_identity(path,keys):
+    expected={f'{i}_{key}.lyr' for i,key in enumerate(keys) if key in TRANSFER}
+    if set(p.name for p in path.iterdir() if p.name.endswith('.lyr'))!=expected:raise ValueError('Invalid IM transfer overlay')
+    return {name:raw.sha256_file(path/name) for name in sorted(expected)}
+
+
+def verify_parent(el,im,lineage):
+    if im.parent!=el or checkpoint_identity(el,lineage['state_keys'])!=lineage['EL_files']:
+        raise ValueError('Transfer overlay does not resolve its authenticated immediate EL parent')
+    if overlay_identity(im,lineage['state_keys'])!=lineage['IM_files']:raise ValueError('IM overlay changed')
+
+
+def state_hashes(model):
+    return {k:hashlib.sha256(v.detach().cpu().contiguous().numpy().tobytes()).hexdigest() for k,v in model.state_dict().items()}
+
+
+def train_epoch(torch,model,dataset,config,transfer):
+    model.cpu().train()
+    parameters=[v for k,v in model.named_parameters() if not transfer or k in TRANSFER]
+    optimizer=torch.optim.AdamW(parameters,lr=config['learning_rate']);lossf=torch.nn.BCEWithLogitsLoss()
+    dataset.makebats(config['batch_size'],shuffle=True,negfrac=None if transfer else 0.99)
+    loader=torch.utils.data.DataLoader(dataset,batch_size=None,shuffle=True,num_workers=0,persistent_workers=False)
+    steps=[];skipped=0;rows=0;weighted=0.0;epoch_error=0.0
+    for index,batch in enumerate(loader,1):
+        target=batch.tgt.float().cpu()
+        if transfer and not target.sum():skipped+=1;continue
+        optimizer.zero_grad()
+        output,_=model(mhc=batch.mhc.float().cpu(),pep=batch.pep.float().cpu())
+        loss=lossf(output,target)
+        if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
+        loss.backward();optimizer.step();value=float(loss.detach());n=len(target)
+        rows+=n;weighted+=value*n;epoch_error+=value/len(loader)
+        steps.append({'batch':index,'rows':n,'positives':int(target.sum()),'BCE_loss':value})
+        print(('IM' if transfer else 'EL')+f' batch {index}/{len(loader)} loss {value:.6f}',flush=True)
+    if not steps:raise ValueError('No genuine optimization steps executed')
+    return {'optimization_steps':len(steps),'batches':len(loader),'all_negative_batches_skipped':skipped,
+        'consumed_rows':rows,'row_weighted_BCE_loss':weighted/rows,'source_style_epoch_loss':epoch_error,
+        'step_log':steps,'optimizer_defaults':optimizer.defaults,'updated_parameters':[k for k,v in model.named_parameters() if not transfer or k in TRANSFER]}
+
+
+def predict(torch,model,dataset,batch_size):
+    model.cpu().eval();dataset.makebats(batch_size,shuffle=False,negfrac=None)
+    result=[]
+    with torch.no_grad():
+        for index in range(len(dataset)):
+            batch=dataset[index];output,_=model(batch.mhc.float().cpu(),batch.pep.float().cpu())
+            result.extend(torch.sigmoid(output).tolist())
+    if len(result)!=len(dataset.df) or any(not math.isfinite(v) or not 0<=v<=1 for v in result):
+        raise ValueError('Invalid development inference coverage')
+    return result
+
+
+def write_predictions(path,rows,probabilities,paths):
+    text=io.StringIO(newline='');fields=['development_row_index','source_row_id','original_hla','resolved_hla','peptide','original_label','probability']
+    writer=csv.DictWriter(text,fieldnames=fields,lineterminator='\n');writer.writeheader()
+    for row,value in zip(rows,probabilities,strict=True):
+        writer.writerow({'development_row_index':row['prepared_row_index'],'source_row_id':row['source_locator']['source_row_id'],
+            'original_hla':row['source_locator']['original_hla'],'resolved_hla':row['hla'],'peptide':row['peptide'],
+            'original_label':row['original_label'],'probability':repr(value)})
+    raw.write_text_report(path,text.getvalue(),paths=paths)
+
+
+def worker(*,config_path,out,paths=None,files=None):
+    paths=paths or resolve_paths();config=load_config(config_path);resolved,inputs=resolve_inputs(config,paths,files)
+    directory,manifest=teacher._run(out,paths)
+    if (manifest['configuration']['file']!={'path':str(Path(config_path).absolute()),'sha256':raw.sha256_file(config_path)}
+            or manifest['configuration']['random_seed']!=42
+            or any(i not in manifest['data_provenance']['input_artifacts'] for i in inputs)):
+        raise ValueError('Runtime run must record committed configuration, seed42 and all actual inputs')
+    inventory=readers._json(resolved['inventory']);allowed=set().union(*(v['by_HLA'] for v in inventory.values()))
+    selected={};subset_info={}
+    for stage,member in (('EL','el_train.csv'),('IM','im_train.csv')):
+        selected[stage],counts=select_subset(input_rows(resolved[stage],allowed),config['rows_per_class'][stage],42)
+        if sum(counts.values())!=config['expected_rows'][stage] or counts!=inventory[member]['class_balances']['original']:
+            raise ValueError('Original training population mismatch')
+        attach_provenance(selected[stage],resolved[stage+'_provenance'])
+        raw.write_text_report(directory/f'processed/{stage.lower()}_original_smoke.csv',csv_text(selected[stage]),paths=paths)
+        subset_info[stage]={'rows':selected[stage],'source_view_sha256':raw.sha256_file(resolved[stage]),'original_population_labels':counts,
+                            'selection':'Uniform within-original-label reservoir sampling seed42; sorted prepared-view row order; no scores/development outcomes'}
+    development=list(input_rows(resolved['development'],allowed))
+    if (len(development)!=383 or Counter(r['original_label'] for r in development)!={'1':120,'0':263}
+            or len({r['hla'] for r in development})!=31):raise ValueError('Frozen development cohort mismatch')
+    attach_provenance(development,resolved['development_provenance'])
+    leakage={stage:verify_separation(rows,development) for stage,rows in selected.items()}
+    raw.write_report(directory/'reports/subset_manifest.json',subset_info,paths=paths)
+    raw.write_report(directory/'reports/leakage_verification.json',leakage,paths=paths)
+    import torch
+    import numpy as np
+    import pandas as pd
+    import psutil
+    import platform
+    import importlib.metadata
+    seed_runtime(torch,np,config)
+    environment={'python':sys.version,'device':'cpu','cpu_threads':torch.get_num_threads(),'interop_threads':torch.get_num_interop_threads(),
+        'versions':{name:importlib.metadata.version(name) for name in ('torch','numpy','pandas','psutil')},
+        'all_installed_distributions':{d.metadata['Name']:d.version for d in importlib.metadata.distributions()},
+        'platform':platform.platform(),'machine':platform.machine(),'host_RAM_bytes':psutil.virtual_memory().total,
+        'cpu_count':os.cpu_count(),'deterministic_algorithms':torch.are_deterministic_algorithms_enabled()}
+    raw.write_report(directory/'reports/environment.json',environment,paths=paths)
+    with raw._read_file(resolved['reference']) as stream,io.TextIOWrapper(stream,encoding='utf-8-sig',newline='') as text:
+        reference_report,_,reference=data._reference(enumerate(csv.reader(text,strict=True),1))
+    if (reference_report['feature_count']!=414 or reference_report['invalid_one_hot_rows']
+            or reference_report['duplicate_identifier_count'] or reference_report['sanitized_UID_collision_groups']):
+        raise ValueError('Invalid authentic receptor representation')
+    needed={r['hla'] for rows in [*selected.values(),development] for r in rows}
+    if any(len(reference.get(h,()))!=1 for h in needed):raise ValueError('Unsupported/ambiguous exact HLA reference')
+    encodings={}
+    with raw._read_file(resolved['reference']) as stream,io.TextIOWrapper(stream,encoding='utf-8-sig',newline='') as text:
+        rows=csv.reader(text);next(rows)
+        for row in rows:
+            h=data.canonical_hla(row[0])
+            if h in needed:encodings[h]=torch.tensor([int(v) for v in row[1:]],dtype=torch.int8)
+    with pinned_modules(resolved) as (BigMHC,Dataset):
+        def dataset(path):return Dataset(Dataset.readPMHCs(str(path),allele=0,pepcol=1,tgtcol=2,hdrcnt=1,verbose=False),mhcenc=encodings)
+        model=BigMHC().cpu();keys=list(model.state_dict())
+        if len(keys)!=36 or tuple(BigMHC.tllayers())!=TRANSFER:raise ValueError('Unexpected authentic architecture state')
+        architecture={'parameter_count':sum(v.numel() for v in model.parameters()),'state_tensors':len(keys),
+                      'constructor':'Pinned BigMHC() defaults: mhclen414,minpep8,enclen20,hidlen1024,layers2','source_commit':SOURCE_COMMIT}
+        print('Authentic architecture:',architecture,flush=True)
+        initial=state_hashes(model)
+        start=time.monotonic();el_training=train_epoch(torch,model,dataset(directory/'processed/el_original_smoke.csv'),config,False)
+        el_training['elapsed_seconds']=time.monotonic()-start
+        el_state=state_hashes(model)
+        if el_state==initial:raise ValueError('EL model parameters did not change')
+        dev=dataset(resolved['development']);el_predictions=predict(torch,model,dev,config['batch_size'])
+        el=directory/'checkpoints/el';reserve_checkpoint(el);model.save(str(el),tl=False)
+        el_files=checkpoint_identity(el,keys)
+        reloaded=BigMHC.load(str(el)).cpu()
+        if state_hashes(reloaded)!=el_state or predict(torch,reloaded,dev,config['batch_size'])!=el_predictions:
+            raise ValueError('EL checkpoint reload or inference mismatch')
+        del model
+        start=time.monotonic();im_training=train_epoch(torch,reloaded,dataset(directory/'processed/im_original_smoke.csv'),config,True)
+        im_training['elapsed_seconds']=time.monotonic()-start;im_state=state_hashes(reloaded)
+        changed=[k for k in keys if im_state[k]!=el_state[k]]
+        if not changed or set(changed)-set(TRANSFER):raise ValueError('IM updated unauthorized model parameters')
+        im_predictions=predict(torch,reloaded,dev,config['batch_size'])
+        im=el/'im';reserve_checkpoint(im);reloaded.save(str(im),tl=True);im_files=overlay_identity(im,keys)
+        lineage={'state_keys':keys,'EL_files':el_files,'IM_files':im_files,'IM_parent_relative_path':'..',
+            'EL_checkpoint':'checkpoints/el','IM_overlay':'checkpoints/el/im','changed_IM_parameters':changed,
+            'initial_state_tensor_sha256':initial,'EL_state_tensor_sha256':el_state,'IM_state_tensor_sha256':im_state,
+            'EL_reload_identical':True,'IM_reload_identical':True,'unoptimized_encoder_weights_unchanged':True}
+        verify_parent(el,im,lineage)
+        del reloaded
+        reconstructed=BigMHC.load(str(im)).cpu()
+        if state_hashes(reconstructed)!=im_state or predict(torch,reconstructed,dev,config['batch_size'])!=im_predictions:
+            raise ValueError('IM parent+overlay reload or inference mismatch')
+        verify_parent(el,im,lineage)
+    write_predictions(directory/'predictions/el_development.csv',development,el_predictions,paths)
+    write_predictions(directory/'predictions/im_development.csv',development,im_predictions,paths)
+    raw.write_report(directory/'reports/checkpoint_lineage.json',lineage,paths=paths)
+    raw.write_report(directory/'reports/training_summary.json',{'architecture':architecture,'EL':el_training,'IM':im_training,
+        'development_rows':383,'development_HLA':31,'prediction_reloads_bitwise_identical':True,'condition':'A',
+        'interpretation':'Tiny debug subsets; engineering readiness only; development cohort is not a final independent external test; no correction evidence',
+        'predictive_performance_metrics':'Not calculated; no model selection or threshold optimization',
+        'adaptations':['Bypass stock CLI seed1; seed Python/NumPy/Torch42 and deterministic CPU algorithms',
+            'DataLoader num_workers0,persistent_workersFalse; no prefetch/worker state',
+            'Strict validated dict receptor lookup; no fuzzy MHCEncoder fallback',
+            'One epoch each; original makebats, loss, optimizer, transfer parameter list and all-negative IM skip preserved',
+            'Generated tensor-only checkpoints; force PyTorch weights-only load within this process']},paths=paths)
+    for identity in inputs:
+        if raw.sha256_file(identity['path'])!=identity['sha256']:raise ValueError('Immutable input changed')
+    outputs={str(p.relative_to(directory)):raw.sha256_file(p) for area in ('processed','reports','predictions','checkpoints')
+             for p in sorted((directory/area).rglob('*')) if p.is_file()}
+    raw.write_report(directory/'reports/execution_verification.json',{'code_commit':manifest['git']['commit_sha'],
+        'config_sha256':raw.sha256_file(config_path),'inputs':inputs,'outputs':outputs,'sealed_payloads_opened':[],
+        'corrected_views_opened':[],'source_inputs_unchanged':True,'seed':42,'condition':'A',
+        'EL_full_checkpoint_tensors':len(el_files),'IM_overlay_tensors':len(im_files),
+        'reload_predictions_identical':True,'new_correction_rules_or_labels':False},paths=paths)
+    return {'run':str(directory),'EL_steps':el_training['optimization_steps'],'IM_steps':im_training['optimization_steps'],
+            'development_predictions_per_model':383,'checkpoint_reload_verified':True}
+
+
+def run(*,config_path,out,paths=None,files=None):
+    """Own one worker process, terminate only that process if the fixed budget is exceeded."""
+    paths=paths or resolve_paths();config=load_config(config_path);resolve_inputs(config,paths,files)
+    directory,_=teacher._run(out,paths)
+    import psutil
+    command=[sys.executable,'-B','-m','stability_label_curation','bigmhc-smoke','--config',str(Path(config_path).absolute()),'--out',str(directory),'--worker']
+    for name,path in (files or {}).items():command+=['--input',name+'='+str(path)]
+    environment=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS=str(config['cpu_threads']),
+        MKL_NUM_THREADS=str(config['cpu_threads']),TORCH_FORCE_WEIGHTS_ONLY_LOAD='1',PYTHONPATH=str(paths.repository_root/'src'))
+    start=time.monotonic();peak=0;blocker=None
+    with raw._directory(directory/'logs') as fd,os.fdopen(os.open('training.log',os.O_CREAT|os.O_EXCL|os.O_WRONLY|os.O_NOFOLLOW,0o600,dir_fd=fd),'wb') as log:
+        process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,cwd=paths.repository_root)
+        try:
+            monitored=psutil.Process(process.pid)
+            while process.poll() is None:
+                try:peak=max(peak,monitored.memory_info().rss)
+                except psutil.NoSuchProcess:pass
+                if time.monotonic()-start>config['wall_seconds']:blocker='wall_clock_budget_exceeded'
+                if peak>config['memory_bytes']:blocker='worker_RSS_budget_exceeded'
+                if blocker:
+                    process.terminate()
+                    try:process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:process.kill();process.wait()
+                    break
+                time.sleep(0.25)
+        finally:
+            if process.poll() is None:process.terminate();process.wait(timeout=5)
+    result={'elapsed_seconds':time.monotonic()-start,'peak_worker_RSS_bytes':peak,'wall_budget_seconds':config['wall_seconds'],
+        'RSS_budget_bytes':config['memory_bytes'],'worker_exit_code':process.returncode,'blocker':blocker,
+        'status':'completed' if process.returncode==0 and blocker is None else 'failed'}
+    raw.write_report(directory/'reports/resource_execution.json',result,paths=paths)
+    if result['status']!='completed':raise RuntimeError('Bounded BigMHC smoke failed; inspect logs/training.log: '+str(result))
+    return result
