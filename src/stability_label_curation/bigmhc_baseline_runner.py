@@ -27,6 +27,7 @@ CONFIG = 'configs/bigmhc_baseline_smoke_v0.json'
 VERSION = 'bigmhc_baseline_smoke_v0'
 WORKER_VERSION = 'bigmhc_gpu_worker_v0'
 FULL_VERSION = 'bigmhc_gpu_full_eligible_v0'
+WEIGHTED_VERSION = 'bigmhc_el_weighted_v1'
 SOURCE_COMMIT = '199e890fa69a63646730bcecea0a520e08ca4f02'
 VIEWS = {'EL':'processed/el_train_original.csv', 'IM':'processed/im_train_original.csv', 'development':'processed/im_development.csv'}
 TRANSFER = ('condenser.att.weight','condenser.att.bias','condenser.out.weight','condenser.out.bias')
@@ -40,19 +41,26 @@ INPUTS = {'EL','IM','development','EL_provenance','IM_provenance','development_p
 def load_config(path):
     c=readers._json(path)
     c.setdefault('device','cpu')
-    full_profile=c.get('version')==FULL_VERSION
-    worker_profile=c.get('version') in (WORKER_VERSION,FULL_VERSION)
+    weighted=c.get('version')==WEIGHTED_VERSION
+    full_profile=c.get('version') in (FULL_VERSION,WEIGHTED_VERSION)
+    worker_profile=c.get('version') in (WORKER_VERSION,FULL_VERSION,WEIGHTED_VERSION)
+    if weighted:
+        from .el_stability_loss_adapter import validate_runtime_spec
+        validate_runtime_spec(c.get('loss_adapter',{}),c.get('condition'))
+    elif 'loss_adapter' in c:
+        raise ValueError('Loss adapter requires its explicit versioned full-population profile')
     if full_profile and (c.get('device')!='cuda' or c.get('batch_size')!=16
             or c.get('rows_per_class')!={'EL':None,'IM':None}
             or c.get('expected_rows')!={'EL':1453578,'IM':3428}
             or c.get('expected_class_counts')!={'EL':{'0':1383509,'1':70069},'IM':{'0':2473,'1':955}}):
         raise ValueError('Full eligible Baseline A requires the complete frozen original populations and CUDA batch16')
-    if (c.get('schema_version')!=1 or c.get('version') not in (VERSION,WORKER_VERSION,FULL_VERSION) or c.get('condition')!='A'
+    if (c.get('schema_version')!=1 or c.get('version') not in (VERSION,WORKER_VERSION,FULL_VERSION,WEIGHTED_VERSION)
+            or c.get('condition') not in ({'A','B','P'} if weighted else {'A'})
             or c.get('label_policy')!='original' or c.get('source_commit')!=SOURCE_COMMIT
             or c.get('seed')!=42 or c.get('device') not in ('cpu','cuda') or c.get('num_workers')!=0
             or c.get('persistent_workers') is not False or c.get('epochs')!={'EL':1,'IM':1}
             or c.get('learning_rate')!=5e-5 or c.get('batch_size') not in (4,8,16)
-            or set(c.get('inputs',{}))!=INPUTS
+            or set(c.get('inputs',{}))!=(INPUTS|{'positive_scores','positive_score_manifest'} if weighted else INPUTS)
             or type(c.get('cpu_threads')) is not int or not 1<=c['cpu_threads']<=4
             or type(c.get('wall_seconds')) is not int or not 60<=c['wall_seconds']<=(7200 if full_profile else 1800 if worker_profile else 600)
             or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=(32 if full_profile else 8 if worker_profile else 6)*1024**3):
@@ -98,6 +106,11 @@ def resolve_inputs(config,paths,files:Mapping|None=None):
     if (receipt['code_commit']!=parent['git']['commit_sha']
             or receipt['reports']['pilot_training_inventory.json']!=raw.sha256_file(result['inventory'])):
         raise ValueError('Parent inventory or committed provenance mismatch')
+    if config.get('loss_adapter') and config['loss_adapter']['matched_reference'] is not None:
+        reference=config['loss_adapter']['matched_reference']
+        path=paths.project_runs_dir/reference['relative_path']
+        if raw.sha256_file(path)!=reference['sha256']:raise ValueError('Matched A reference SHA256 mismatch')
+        result['matched_reference']=path;identities.append({'path':str(path),'sha256':reference['sha256']})
     return result,identities
 
 
@@ -286,31 +299,45 @@ def state_hashes(model):
     return {k:hashlib.sha256(v.detach().cpu().contiguous().numpy().tobytes()).hexdigest() for k,v in model.state_dict().items()}
 
 
-def train_epoch(torch,model,dataset,config,transfer,device='cpu'):
+def train_epoch(torch,model,dataset,config,transfer,device='cpu',*,loss_adapter=None,expected_batches=None):
+    if transfer and loss_adapter is not None:raise ValueError('EL weights cannot modify IM transfer loss')
     on_device(model,device).train()
     parameters=[v for k,v in model.named_parameters() if not transfer or k in TRANSFER]
     optimizer=torch.optim.AdamW(parameters,lr=config['learning_rate']);lossf=torch.nn.BCEWithLogitsLoss()
     dataset.makebats(config['batch_size'],shuffle=True,negfrac=None if transfer else 0.99)
     loader=torch.utils.data.DataLoader(dataset,batch_size=None,shuffle=True,num_workers=0,persistent_workers=False)
     steps=[];skipped_log=[];skipped=0;rows=0;weighted=0.0;epoch_error=0.0
+    audited=getattr(dataset,'source_identity_audit',False) is True;batch_hashes=[];skip_mask=[]
     for index,batch in enumerate(loader,1):
+        if audited:
+            batch_hashes.append(batch.source_batch_sha256)
+            if expected_batches is not None and (index>len(expected_batches) or batch_hashes[-1]!=expected_batches[index-1]):
+                raise ValueError('Matched sampled source-row sequence differs before optimizer update')
         target=on_device(batch.tgt.float(),device)
         n=len(target);positives=int(target.sum())
         if transfer and not positives:
+            if audited:skip_mask.append(True)
             skipped+=1;skipped_log.append({'batch':index,'rows':n,'positives':0,'reason':'native IM all-negative batch skip'})
             continue
         optimizer.zero_grad()
         output,_=model(mhc=on_device(batch.mhc.float(),device),pep=on_device(batch.pep.float(),device))
-        loss=lossf(output,target)
+        if loss_adapter is None:
+            loss=lossf(output,target)
+        else:
+            from .el_stability_loss_adapter import weighted_bce
+            if not audited or dataset.adapter is not loss_adapter:raise ValueError('Weighted loss requires authenticated sampled row identities')
+            loss=weighted_bce(torch,output,target,batch.EL_loss_weights)
         if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
         loss.backward();optimizer.step();value=float(loss.detach())
         rows+=n;weighted+=value*n;epoch_error+=value/len(loader)
         steps.append({'batch':index,'rows':n,'positives':positives,'BCE_loss':value})
+        if audited:skip_mask.append(False)
         print(('IM' if transfer else 'EL')+f' batch {index}/{len(loader)} loss {value:.6f}',flush=True)
+    if expected_batches is not None and len(batch_hashes)!=len(expected_batches):raise ValueError('Matched sample count differs')
     if not steps:raise ValueError('No genuine optimization steps executed')
     positive_exposures=sum(step['positives'] for step in steps)
     skipped_rows=sum(batch['rows'] for batch in skipped_log)
-    return {'optimization_steps':len(steps),'batches':len(loader),'all_negative_batches_skipped':skipped,
+    result={'optimization_steps':len(steps),'batches':len(loader),'all_negative_batches_skipped':skipped,
         'consumed_rows':rows,'row_weighted_BCE_loss':weighted/rows,'source_style_epoch_loss':epoch_error,
         'optimizer_class_exposures':{'1':positive_exposures,'0':rows-positive_exposures},
         'optimizer_positive_fraction':positive_exposures/rows,
@@ -320,6 +347,9 @@ def train_epoch(torch,model,dataset,config,transfer,device='cpu'):
         'requested_batch_size':config['batch_size'],'maximum_optimized_batch_rows':max(step['rows'] for step in steps),
         'sampling':'Pinned makebats(shuffle=True,negfrac='+('None' if transfer else '0.99')+'); no sampler changes',
         'step_log':steps,'optimizer_defaults':optimizer.defaults,'updated_parameters':[k for k,v in model.named_parameters() if not transfer or k in TRANSFER]}
+    if audited:result.update(sampled_batch_sha256=batch_hashes,optimizer_skip_mask=skip_mask,
+        loss_weight_mode=loss_adapter.mode if loss_adapter is not None else 'native_unweighted_IM')
+    return result
 
 
 def predict(torch,model,dataset,batch_size,device='cpu'):
@@ -381,7 +411,12 @@ def development_metrics(labels: list[int], probabilities: list[float]) -> dict:
 
 
 def worker(*,config_path,out,paths=None,files=None):
-    paths=paths or resolve_paths();config=load_config(config_path);resolved,inputs=resolve_inputs(config,paths,files)
+    paths=paths or resolve_paths();config=load_config(config_path)
+    adapted=config.get('loss_adapter') is not None
+    if adapted:
+        from . import el_stability_loss_adapter as weighting
+        weighting.require_training_authorization(config)
+    resolved,inputs=resolve_inputs(config,paths,files)
     directory,manifest=teacher._run(out,paths)
     import torch
     device=runtime_device(torch,config)
@@ -404,7 +439,7 @@ def worker(*,config_path,out,paths=None,files=None):
                             'selection':('All prepared original rows in source order; original prevalence; no resampling'
                                 if config['rows_per_class'][stage] is None else
                                 'Uniform within-original-label reservoir sampling seed42; sorted prepared-view row order; no scores/development outcomes')}
-        if config['version']==FULL_VERSION:
+        if config['version'] in (FULL_VERSION,WEIGHTED_VERSION):
             # Reuse the atomic streaming writer rather than building a multi-GB JSON string.
             relative=f'processed/{stage.lower()}_original_row_manifest.csv.gz'
             fields=['prepared_row_index','hla','peptide',*PROVENANCE_FIELDS]
@@ -433,6 +468,15 @@ def worker(*,config_path,out,paths=None,files=None):
         'platform':platform.platform(),'machine':platform.machine(),'host_RAM_bytes':psutil.virtual_memory().total,
         'cpu_count':os.cpu_count(),'deterministic_algorithms':torch.are_deterministic_algorithms_enabled()}
     raw.write_report(directory/'reports/environment.json',environment,paths=paths)
+    loss_adapter=weighting.runtime_adapter(config,resolved) if adapted else None
+    matched_reference=readers._json(resolved['matched_reference']) if 'matched_reference' in resolved else None
+    matched={}
+    if adapted:
+        matched={'schema_version':1,'version':weighting.VERSION,'configuration_identity':weighting.matched_config_identity(config),
+                 'code_commit':manifest['git']['commit_sha'],'versions':environment['versions'],'device':device}
+        if matched_reference is not None and any(matched[k]!=matched_reference[k] for k in matched):
+            raise ValueError('Matched A code, runtime, device or configuration differs')
+        raw.write_report(directory/'reports/loss_weight_invariants.json',loss_adapter.evidence,paths=paths)
     with raw._read_file(resolved['reference']) as stream,io.TextIOWrapper(stream,encoding='utf-8-sig',newline='') as text:
         reference_report,_,reference=data._reference(enumerate(csv.reader(text,strict=True),1))
     if (reference_report['feature_count']!=414 or reference_report['invalid_one_hot_rows']
@@ -449,15 +493,29 @@ def worker(*,config_path,out,paths=None,files=None):
             if h in needed:encodings[h]=torch.tensor([int(v) for v in row[1:]],dtype=torch.int8)
     with pinned_modules(resolved) as (BigMHC,Dataset):
         def dataset(path):return Dataset(Dataset.readPMHCs(str(path),allele=0,pepcol=1,tgtcol=2,hdrcnt=1,verbose=False),mhcenc=encodings)
+        def training_dataset(stage):
+            native=dataset(directory/f'processed/{stage.lower()}_original_smoke.csv')
+            if not adapted:return native
+            return weighting.IdentityDataset(native,weighting.manifest_rows(directory/f'processed/{stage.lower()}_original_row_manifest.csv.gz'),
+                stage=stage,adapter=loss_adapter if stage=='EL' else None,archive_sha256=loss_adapter.manifest['archive_sha256'])
         model=on_device(BigMHC(),device);keys=list(model.state_dict())
+        if adapted and any(p.dtype!=torch.float32 for p in model.parameters()):raise ValueError('Matched experiment requires FP32 parameters')
         if len(keys)!=36 or tuple(BigMHC.tllayers())!=TRANSFER:raise ValueError('Unexpected authentic architecture state')
         architecture={'parameter_count':sum(v.numel() for v in model.parameters()),'state_tensors':len(keys),
                       'constructor':'Pinned BigMHC() defaults: mhclen414,minpep8,enclen20,hidlen1024,layers2','source_commit':SOURCE_COMMIT}
         print('Authentic architecture:',architecture,flush=True)
         initial=state_hashes(model)
         raw.write_report(directory/'reports/initial_el_state_identity.json',initial,paths=paths)
-        start=time.monotonic();el_training=train_epoch(torch,model,dataset(directory/'processed/el_original_smoke.csv'),config,False,device)
+        if adapted:
+            matched['initial_tensor_sha256']=initial
+            matched['rng_before_EL']=weighting.rng_identity(torch,np)
+            weighting.check_reference(matched_reference,initial=initial,rng=matched['rng_before_EL'],stage='EL')
+        start=time.monotonic();el_training=train_epoch(torch,model,training_dataset('EL'),config,False,device,
+            **({'loss_adapter':loss_adapter,'expected_batches':matched_reference['EL']['sampled_batch_sha256'] if matched_reference else None} if adapted else {}))
         el_training['elapsed_seconds']=time.monotonic()-start
+        if adapted:
+            weighting.check_reference(matched_reference,stage='EL',training=el_training)
+            matched['EL']={k:el_training[k] for k in ('optimization_steps','sampled_batch_sha256','optimizer_defaults','updated_parameters','optimizer_skip_mask')}
         el_state=state_hashes(model)
         if el_state==initial:raise ValueError('EL model parameters did not change')
         dev=dataset(resolved['development']);el_predictions=predict(torch,model,dev,config['batch_size'],device)
@@ -467,8 +525,18 @@ def worker(*,config_path,out,paths=None,files=None):
         if state_hashes(reloaded)!=el_state:raise ValueError('EL checkpoint state reload mismatch')
         el_agreement=prediction_agreement(el_predictions,predict(torch,reloaded,dev,config['batch_size'],device),device)
         del model
-        start=time.monotonic();im_training=train_epoch(torch,reloaded,dataset(directory/'processed/im_original_smoke.csv'),config,True,device)
+        if adapted:
+            matched['rng_before_IM']=weighting.rng_identity(torch,np)
+            weighting.check_reference(matched_reference,rng=matched['rng_before_IM'],stage='IM')
+        start=time.monotonic();im_training=train_epoch(torch,reloaded,training_dataset('IM'),config,True,device,
+            **({'expected_batches':matched_reference['IM']['sampled_batch_sha256'] if matched_reference else None} if adapted else {}))
         im_training['elapsed_seconds']=time.monotonic()-start;im_state=state_hashes(reloaded)
+        if adapted:
+            weighting.check_reference(matched_reference,stage='IM',training=im_training)
+            matched['IM']={k:im_training[k] for k in ('optimization_steps','sampled_batch_sha256','optimizer_defaults','updated_parameters','optimizer_skip_mask')}
+            if el_training['optimization_steps']!=70069 or im_training['optimization_steps']!=214:
+                raise ValueError('Preregistered full-population optimizer-step count differs')
+            raw.write_report(directory/'reports/matched_state.json',matched,paths=paths)
         changed=[k for k in keys if im_state[k]!=el_state[k]]
         if not changed or set(changed)-set(TRANSFER):raise ValueError('IM updated unauthorized model parameters')
         im_predictions=predict(torch,reloaded,dev,config['batch_size'],device)
@@ -498,8 +566,9 @@ def worker(*,config_path,out,paths=None,files=None):
     raw.write_report(directory/'reports/training_configuration.json',config,paths=paths)
     raw.write_report(directory/'reports/checkpoint_lineage.json',lineage,paths=paths)
     raw.write_report(directory/'reports/training_summary.json',{'architecture':architecture,'EL':el_training,'IM':im_training,
-        'device':device,'GPU_memory':gpu_memory,'development_rows':383,'development_HLA':31,'prediction_reloads_bitwise_identical':el_agreement['exactly_identical'] and im_agreement['exactly_identical'],'condition':'A',
-        'interpretation':'Original-label condition A; development cohort is not an independent external test; no correction evidence',
+        'device':device,'GPU_memory':gpu_memory,'development_rows':383,'development_HLA':31,'prediction_reloads_bitwise_identical':el_agreement['exactly_identical'] and im_agreement['exactly_identical'],'condition':config['condition'],
+        'interpretation':('Original labels; optional preregistered EL loss weighting; development cohort is not an independent external test; no correction evidence'
+                          if adapted else 'Original-label condition A; development cohort is not an independent external test; no correction evidence'),
         'predictive_performance_metrics':metrics,
         'adaptations':['Bypass stock CLI seed1; seed Python/NumPy/Torch42 and deterministic algorithms on explicit device',
             'DataLoader num_workers0,persistent_workersFalse; no prefetch/worker state',
@@ -512,7 +581,7 @@ def worker(*,config_path,out,paths=None,files=None):
              for p in sorted((directory/area).rglob('*')) if p.is_file()}
     raw.write_report(directory/'reports/execution_verification.json',{'code_commit':manifest['git']['commit_sha'],
         'config_sha256':raw.sha256_file(config_path),'inputs':inputs,'outputs':outputs,'sealed_payloads_opened':[],
-        'corrected_views_opened':[],'source_inputs_unchanged':True,'seed':42,'condition':'A',
+        'corrected_views_opened':[],'source_inputs_unchanged':True,'seed':42,'condition':config['condition'],
         'EL_full_checkpoint_tensors':len(el_files),'IM_overlay_tensors':len(im_files),
         'reload_predictions_identical':el_agreement['exactly_identical'] and im_agreement['exactly_identical'],
         'reload_predictions_consistent':True,'runtime_device':device,'GPU_memory':gpu_memory,
@@ -523,7 +592,11 @@ def worker(*,config_path,out,paths=None,files=None):
 
 def run(*,config_path,out,paths=None,files=None):
     """Own one worker process, terminate only that process if the fixed budget is exceeded."""
-    paths=paths or resolve_paths();config=load_config(config_path);resolve_inputs(config,paths,files)
+    paths=paths or resolve_paths();config=load_config(config_path)
+    if config.get('loss_adapter'):
+        from .el_stability_loss_adapter import require_training_authorization
+        require_training_authorization(config)
+    resolve_inputs(config,paths,files)
     directory,_=teacher._run(out,paths)
     import psutil
     command=[sys.executable,'-B','-m','stability_label_curation','bigmhc-smoke','--config',str(Path(config_path).absolute()),'--out',str(directory),'--worker']

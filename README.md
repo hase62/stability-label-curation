@@ -1,5 +1,7 @@
 # Stability-guided curation of human HLA-I immunogenicity training labels
 
+Task 2.13 adds the optional [source-ID-safe EL loss adapter](docs/EL_STABILITY_LOSS_ADAPTER.md) and portable positive-score sidecar. Engineering tests do not authorize A/B/P training.
+
 Task 2.12 proposes a prospective **EL-positive loss-weighting A/B/P comparison**,
 with original EL/IM labels preserved. Training approval remains pending; see
 [the weighting protocol](docs/EL_POSITIVE_STABILITY_WEIGHTING_PROTOCOL.md).

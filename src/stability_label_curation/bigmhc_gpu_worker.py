@@ -50,7 +50,14 @@ def verify_inputs(*, config_path: str | Path | None = None,
     total = sum(item['size_bytes'] for item in identities)
     if total != document.get('total_bytes'):
         raise ValueError('GPU handoff total byte count mismatch')
-    runner.resolve_inputs(config, paths)  # Also authenticates original views and parent records.
+    resolved, _ = runner.resolve_inputs(config, paths)  # Also authenticates original views and parent records.
+    if config.get('loss_adapter'):
+        for name in ('positive_scores', 'positive_score_manifest'):
+            entry = config['inputs'][name]
+            with raw._read_file(resolved[name]) as stream:
+                stream.seek(0, 2); size = stream.tell()
+            identities.append({'input_id': name, **entry, 'size_bytes': size})
+            total += size
     return {'schema_version': 1, 'status': 'verified', 'input_count': len(identities),
             'total_bytes': total, 'inputs': identities,
             'transfer_manifest_sha256': raw.sha256_file(manifest_path),
@@ -64,6 +71,9 @@ def execute(*, run_id: str, config_path: str | Path | None = None,
     paths = paths or resolve_paths()
     config_path = Path(config_path or paths.repository_root / CONFIG).absolute()
     config = runner.load_config(config_path)
+    if config.get('loss_adapter'):
+        from .el_stability_loss_adapter import require_training_authorization
+        require_training_authorization(config)
     if config['device'] == 'cuda':
         runner.cuda_visibility()
     verification = verify_inputs(config_path=config_path, manifest_path=manifest_path, paths=paths)
@@ -73,7 +83,9 @@ def execute(*, run_id: str, config_path: str | Path | None = None,
         paths=paths, run_id=run_id, kind='bigmhc_gpu_baseline' if baseline else 'bigmhc_worker_smoke', seed=config['seed'],
         config=config_path, inputs=[item['path'] for item in inputs],
         argv=['bigmhc-worker', 'run', '--run-id', run_id, '--config', str(config_path)],
-        description=('Original-label condition A; complete eligible EL to all original IM; one-epoch development baseline'
+        description=(f'Original labels; preregistered optional EL loss-weight mode {config["condition"]}; matched EL-to-IM'
+                     if config.get('loss_adapter') else
+                     'Original-label condition A; complete eligible EL to all original IM; one-epoch development baseline'
                      if config['version']==runner.FULL_VERSION else
                      'Original-label condition A; EL subset to all original IM; preliminary development baseline'
                      if baseline else 'Original-label condition A; one explicit CPU/CUDA device; engineering smoke only'),
