@@ -79,6 +79,16 @@ class GPUWorkerTests(unittest.TestCase):
         c=deepcopy(self.gpu);c['inputs']['EL']['relative_path']='processed/el_train_low_only.csv'
         with self.assertRaises(ValueError):runner.load_config(self.config_file(c))
 
+    def test_all_original_im_is_explicit_and_worker_only(self):
+        c=deepcopy(self.gpu);c['rows_per_class']={'EL':4096,'IM':None}
+        self.assertIsNone(runner.load_config(self.config_file(c))['rows_per_class']['IM'])
+        c['expected_rows']['IM']=3427
+        with self.assertRaises(ValueError):runner.load_config(self.config_file(c))
+        c=deepcopy(self.cpu);c['rows_per_class']['IM']=None
+        with self.assertRaises(ValueError):runner.load_config(self.config_file(c))
+        c=deepcopy(self.gpu);c['rows_per_class']['EL']=None
+        with self.assertRaises(ValueError):runner.load_config(self.config_file(c))
+
     def test_gpu_seed_and_deterministic_settings(self):
         torch=Mock();np=Mock()
         runner.seed_runtime(torch,np,self.gpu)

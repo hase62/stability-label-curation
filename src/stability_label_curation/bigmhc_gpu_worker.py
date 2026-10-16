@@ -68,11 +68,13 @@ def execute(*, run_id: str, config_path: str | Path | None = None,
         runner.cuda_visibility()
     verification = verify_inputs(config_path=config_path, manifest_path=manifest_path, paths=paths)
     _, inputs = runner.resolve_inputs(config, paths)
+    baseline = config['rows_per_class']['IM'] is None
     directory = runner.runs.create_run(
-        paths=paths, run_id=run_id, kind='bigmhc_worker_smoke', seed=config['seed'],
+        paths=paths, run_id=run_id, kind='bigmhc_gpu_baseline' if baseline else 'bigmhc_worker_smoke', seed=config['seed'],
         config=config_path, inputs=[item['path'] for item in inputs],
         argv=['bigmhc-worker', 'run', '--run-id', run_id, '--config', str(config_path)],
-        description='Original-label condition A; one explicit CPU/CUDA device; engineering smoke only',
+        description=('Original-label condition A; EL subset to all original IM; preliminary development baseline'
+                     if baseline else 'Original-label condition A; one explicit CPU/CUDA device; engineering smoke only'),
     )
     raw.write_report(directory / 'reports/transfer_verification.json', verification, paths=paths)
     return runner.run(config_path=config_path, out=directory, paths=paths)

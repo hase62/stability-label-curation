@@ -106,12 +106,14 @@ The run ID is exclusive and cannot overwrite an existing run.
 The existing `bigmhc-smoke` command remains available; CPU remains its default
 through the approved CPU configuration. The worker profile allows later explicit
 configuration changes to `rows_per_class`, batch size and wall/RSS budgets, without
-changing eligibility or sampling rules. It retains balanced per-class sampling;
-using all IM rows at their original prevalence would require a separately reviewed
-extension. Its guardrails cap EL at 100,000 per class, IM at 1,714 per class,
+changing EL eligibility or sampling rules. Task 2.9 explicitly authorizes all
+3,428 original IM rows at their original prevalence, expressed as
+`rows_per_class.IM: null` in the worker profile. This retains source order and
+every original row; native batching and all-negative IM batch skipping remain
+unchanged. Numeric settings retain balanced sampling. Its guardrails cap EL at
+100,000 per class, sampled IM at 1,714 per class,
 wall time at 1,800 seconds and worker RSS at 8 GiB. The supplied first-run config
-keeps the original 600-second/6-GiB bounds and small row counts. No scale-up run
-is authorized here.
+keeps the original 600-second/6-GiB bounds and small row counts. Task 2.9 authorizes the single larger run below.
 
 ## Preserved semantics and portable checkpoints
 
@@ -153,8 +155,9 @@ configuration, seed and all 21 actual hashed inputs. Outputs include:
 - Worker RSS/wall time, CUDA allocator peak allocated/reserved bytes, and output hashes.
 
 GPU memory values describe PyTorch allocator peaks, not all processes on the GPU.
-Missing GPU fields on CPU mean unavailable, not measured zero GPU usage. No
-predictive-performance comparison is needed for this engineering smoke.
+Missing GPU fields on CPU mean unavailable, not measured zero GPU usage. Development AUROC and AUPRC (non-interpolated average precision, grouping tied
+scores) are saved as preliminary metrics, with no threshold tuning or model
+selection. They are not independent external-test results.
 
 Require successful `reports/resource_execution.json` and
 `reports/execution_verification.json`, then validate the manifest:
@@ -169,3 +172,25 @@ processed row manifests and checkpoint parent/child tree) to Mac through the
 separately authorized transfer mechanism. Preserve directory layout and all file
 bytes; verify output hashes in the execution receipt before analysis. Keep all
 scientific artifacts outside Git. This task performs no connection or transfer.
+
+
+## Task 2.9 first GPU baseline
+
+The authorized configuration is `configs/bigmhc_gpu_baseline_task2_9.json`:
+condition A, CUDA device 0, seed 42, 4,096 original positives + 4,096 original
+negatives EL, all 3,428 original IM rows, one epoch each and batch size 16.
+BCE-with-logits, AdamW, the authentic architecture and four transfer parameters
+remain unchanged. IM starts from the trained and reloaded EL checkpoint.
+
+```bash
+PYTHONPATH=src CUDA_VISIBLE_DEVICES=0 ~/codex/.venvs/bigmhc-gpu/bin/python -B -m stability_label_curation bigmhc-worker run \
+  --config configs/bigmhc_gpu_baseline_task2_9.json --run-id task-2_9-first-gpu-baseline
+```
+
+Use only this single run. If CUDA out-of-memory occurs, one documented retry with
+batch size 8 and the identical dataset is authorized, using a new exclusive run
+ID. Do not launch full-data EL training or other conditions automatically.
+Configuration, step losses, training timings, memory peaks, checkpoints, reload
+checks, two 383-observation prediction files and preliminary metrics are saved
+under the run directory outside Git. `reports/training_configuration.json` saves
+the complete configuration; `reports/development_metrics.json` saves the metrics.

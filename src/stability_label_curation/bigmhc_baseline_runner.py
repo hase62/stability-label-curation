@@ -51,6 +51,10 @@ def load_config(path):
             or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=(8 if worker_profile else 6)*1024**3):
         raise ValueError('Only bounded CPU/CUDA original-label condition A is authorized')
     for stage,limit in (('EL',100000 if worker_profile else 1000),('IM',1714 if worker_profile else 256)):
+        # Task 2.9: retain the complete original IM population, without balancing.
+        if worker_profile and stage=='IM' and c['rows_per_class'][stage] is None:
+            if c['expected_rows'][stage]!=3428:raise ValueError('All-original IM requires the frozen 3428-row population')
+            continue
         if type(c['rows_per_class'][stage]) is not int or not 1<=c['rows_per_class'][stage]<=limit:
             raise ValueError('Subset smoke-size cap exceeded')
     for name,item in c['inputs'].items():
@@ -101,8 +105,13 @@ def input_rows(path,allowed_hla):
             yield {'prepared_row_index':index,'hla':fields[0],'peptide':fields[1],'original_label':fields[2]}
 
 
-def select_subset(rows,per_class,seed=42):
-    """Uniform reservoir sample separately by original label; local RNG, source order."""
+def select_subset(rows,per_class: int | None,seed=42):
+    """Original-label reservoir sample, or all original rows when per_class is None."""
+    if per_class is None:
+        selected=[dict(row) for row in rows]
+        if len({r['prepared_row_index'] for r in selected})!=len(selected):
+            raise ValueError('Duplicate selected row identity')
+        return selected,dict(Counter(r['original_label'] for r in selected))
     rng=random.Random(seed);reservoir={'0':[],'1':[]};seen=Counter()
     for row in rows:
         label=row['original_label'];seen[label]+=1
@@ -328,6 +337,29 @@ def write_predictions(path,rows,probabilities,paths):
     raw.write_text_report(path,text.getvalue(),paths=paths)
 
 
+def development_metrics(labels: list[int], probabilities: list[float]) -> dict:
+    """Tie-aware rank AUROC and non-interpolated average precision (PR area)."""
+    if (not labels or len(labels)!=len(probabilities) or any(type(v) is not int or v not in (0,1) for v in labels)
+            or any(not math.isfinite(v) or not 0<=v<=1 for v in probabilities)):
+        raise ValueError('Invalid development labels or probabilities')
+    positives=sum(labels);negatives=len(labels)-positives
+    if not positives or not negatives:raise ValueError('Development metrics require both original classes')
+    groups={}
+    for label,score in zip(labels,probabilities,strict=True):
+        group=groups.setdefault(score,[0,0]);group[label]+=1
+    tp=fp=0;concordant=0.0;average_precision=0.0
+    for score in sorted(groups,reverse=True):
+        negative,positive=groups[score]
+        # Earlier positives outrank this group's negatives; ties receive half credit.
+        concordant+=tp*negative+0.5*positive*negative
+        tp+=positive;fp+=negative
+        average_precision+=(positive/positives)*(tp/(tp+fp))
+    return {'AUROC':concordant/(positives*negatives),'AUPRC':average_precision,
+            'AUPRC_method':'Non-interpolated average precision; tied scores grouped',
+            'observations':len(labels),'positives':positives,'negatives':negatives,
+            'interpretation':'Preliminary frozen-development metrics; not independent external-test results; no model selection'}
+
+
 def worker(*,config_path,out,paths=None,files=None):
     paths=paths or resolve_paths();config=load_config(config_path);resolved,inputs=resolve_inputs(config,paths,files)
     directory,manifest=teacher._run(out,paths)
@@ -346,7 +378,9 @@ def worker(*,config_path,out,paths=None,files=None):
         attach_provenance(selected[stage],resolved[stage+'_provenance'])
         raw.write_text_report(directory/f'processed/{stage.lower()}_original_smoke.csv',csv_text(selected[stage]),paths=paths)
         subset_info[stage]={'rows':selected[stage],'source_view_sha256':raw.sha256_file(resolved[stage]),'original_population_labels':counts,
-                            'selection':'Uniform within-original-label reservoir sampling seed42; sorted prepared-view row order; no scores/development outcomes'}
+                            'selection':('All prepared original rows in source order; original prevalence; no resampling'
+                                if config['rows_per_class'][stage] is None else
+                                'Uniform within-original-label reservoir sampling seed42; sorted prepared-view row order; no scores/development outcomes')}
     development=list(input_rows(resolved['development'],allowed))
     if (len(development)!=383 or Counter(r['original_label'] for r in development)!={'1':120,'0':263}
             or len({r['hla'] for r in development})!=31):raise ValueError('Frozen development cohort mismatch')
@@ -424,11 +458,15 @@ def worker(*,config_path,out,paths=None,files=None):
                 'peak_reserved_bytes':torch.cuda.max_memory_reserved(0)} if device!='cpu' else None
     write_predictions(directory/'predictions/el_development.csv',development,el_predictions,paths)
     write_predictions(directory/'predictions/im_development.csv',development,im_predictions,paths)
+    metrics={name:development_metrics([int(r['original_label']) for r in development],probabilities)
+             for name,probabilities in (('EL_proxy',el_predictions),('IM',im_predictions))}
+    raw.write_report(directory/'reports/development_metrics.json',metrics,paths=paths)
+    raw.write_report(directory/'reports/training_configuration.json',config,paths=paths)
     raw.write_report(directory/'reports/checkpoint_lineage.json',lineage,paths=paths)
     raw.write_report(directory/'reports/training_summary.json',{'architecture':architecture,'EL':el_training,'IM':im_training,
         'device':device,'GPU_memory':gpu_memory,'development_rows':383,'development_HLA':31,'prediction_reloads_bitwise_identical':el_agreement['exactly_identical'] and im_agreement['exactly_identical'],'condition':'A',
-        'interpretation':'Tiny debug subsets; engineering readiness only; development cohort is not a final independent external test; no correction evidence',
-        'predictive_performance_metrics':'Not calculated; no model selection or threshold optimization',
+        'interpretation':'Original-label condition A; development cohort is not an independent external test; no correction evidence',
+        'predictive_performance_metrics':metrics,
         'adaptations':['Bypass stock CLI seed1; seed Python/NumPy/Torch42 and deterministic algorithms on explicit device',
             'DataLoader num_workers0,persistent_workersFalse; no prefetch/worker state',
             'Strict validated dict receptor lookup; no fuzzy MHCEncoder fallback',

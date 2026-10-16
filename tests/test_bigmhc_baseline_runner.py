@@ -67,6 +67,28 @@ class RuntimeTests(unittest.TestCase):
     def test_insufficient_class_support(self):
         with self.assertRaises(ValueError):runner.select_subset([self.row(1)],1)
 
+    def test_all_original_rows_preserve_imbalanced_population_and_order(self):
+        rows=[self.row(i,'1' if i==3 else '0') for i in range(1,8)]
+        selected,counts=runner.select_subset(iter(rows),None)
+        self.assertEqual(selected,rows)
+        self.assertEqual(counts,{'0':6,'1':1})
+        self.assertIsNot(selected[0],rows[0])
+        with self.assertRaises(ValueError):runner.select_subset([rows[0],rows[0]],None)
+
+    def test_preliminary_development_metrics_with_ranks_and_ties(self):
+        perfect=runner.development_metrics([0,1,0,1],[.1,.8,.2,.9])
+        self.assertEqual(perfect['AUROC'],1);self.assertEqual(perfect['AUPRC'],1)
+        reversed_scores=runner.development_metrics([1,1,0,0],[.1,.2,.8,.9])
+        self.assertEqual(reversed_scores['AUROC'],0)
+        self.assertAlmostEqual(reversed_scores['AUPRC'],5/12)
+        tied=runner.development_metrics([1,0,1,0],[.5,.5,.5,.5])
+        self.assertEqual(tied['AUROC'],.5);self.assertEqual(tied['AUPRC'],.5)
+        mixed=runner.development_metrics([1,0,1,0],[.9,.8,.8,.1])
+        self.assertEqual(mixed['AUROC'],.875);self.assertAlmostEqual(mixed['AUPRC'],5/6)
+        for labels,scores in [([],[]),([1],[.5]),([1,0],[.5]),([1,0],[float('nan'),.1]),
+                              ([1,0],[1.1,.1]),([2,0],[.5,.1])]:
+            with self.assertRaises(ValueError):runner.development_metrics(labels,scores)
+
     def test_duplicate_identity_guard(self):
         with self.assertRaises(ValueError):runner.select_subset([self.row(1,'1'),self.row(1,'0')],1)
 
