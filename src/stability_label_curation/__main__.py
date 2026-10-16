@@ -25,6 +25,7 @@ from . import bigmhc_source_audit as bigmhc_source
 from . import bigmhc_v4_audit as bigmhc_data
 from . import stability_teacher as teacher
 from . import pseudolabel_pilot as pseudolabel
+from . import bigmhc_pilot_adapter as pilot_adapter
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -193,9 +194,27 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             subparser.add_argument("run_id")
         if command != "validate":
             subparser.add_argument("--json", action="store_true")
+    preparation = commands.add_parser("pilot-prepare", help="Frozen-score training views and sequence-hard development cohort; no training")
+    preparation.add_argument("--config", default=pilot_adapter.CONFIG)
+    preparation.add_argument("--out", required=True, help="Existing project run recording all inputs and seed42")
+    preparation.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
+    preparation.add_argument("--verify-existing", action="store_true", help="Read-only deterministic offline replay")
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "pilot-prepare":
+            files = {}
+            for item in args.input:
+                if "=" not in item:
+                    raise ValueError("Input override must be INPUT_ID=PATH")
+                name, path = item.split("=", 1)
+                if name in files:
+                    raise ValueError("Duplicate input override")
+                files[name] = path
+            result = pilot_adapter.prepare(config_path=args.config, out=args.out, paths=paths,
+                                           files=files, verify_existing=args.verify_existing)
+            print(dtu2016.json_report(result), end="")
+            return 0
         if args.command == "pseudolabel":
             files = {}
             for item in args.input:

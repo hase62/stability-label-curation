@@ -1,0 +1,121 @@
+{
+  "bigmhc_commit": "199e890fa69a63646730bcecea0a520e08ca4f02",
+  "development_member": {
+    "rows": 688,
+    "sha256": "55626d7a853a79b0fac38ba0920a6da33a546cd73275abac77307d96c914598e"
+  },
+  "extreme_shift_fraction": 0.9,
+  "inputs": {
+    "cli_code": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+    },
+    "dataset_code": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+    },
+    "el_overrides": {
+      "area": "runs",
+      "relative_path": "task-2_4-el-im-pseudolabel-pilot/processed/el_train_pseudolabel_overrides.csv.gz",
+      "sha256": "1984c5fd46cdb1acc2bb0226b05d0951a2a4c5de7c841d09d00d0213818e1365"
+    },
+    "el_scores": {
+      "area": "runs",
+      "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+      "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+    },
+    "im_overrides": {
+      "area": "runs",
+      "relative_path": "task-2_4-el-im-pseudolabel-pilot/processed/im_train_pseudolabel_overrides.csv.gz",
+      "sha256": "0ec64effe91d1b82a3b8ff891a54ba470f50c4cb3a84bd7c0c7635ba84afce84"
+    },
+    "im_scores": {
+      "area": "runs",
+      "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/im_train_teacher_scores.csv.gz",
+      "sha256": "0c79b17599ce07bb38bd919e9be7c53c85b2ac84042bc2b21e133f4d57153fed"
+    },
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+    },
+    "scoring_receipt": {
+      "area": "runs",
+      "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+      "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+    },
+    "scoring_summary": {
+      "area": "runs",
+      "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+      "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+    },
+    "teacher_metrics": {
+      "area": "runs",
+      "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+      "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+    }
+  },
+  "maximum_hamming_distance": 1,
+  "schema_version": 1,
+  "scoring_config": {
+    "expected_trained_HLA_models": 67,
+    "high_hours_inclusive": 10.0,
+    "inputs": {
+      "archive": {
+        "area": "data",
+        "relative_path": "bigmhc_v4/datasets.zip",
+        "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa"
+      },
+      "mapping": {
+        "area": "runs",
+        "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+        "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+      },
+      "partition": {
+        "area": "runs",
+        "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+        "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+      },
+      "registry": {
+        "area": "runs",
+        "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+        "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+      },
+      "teacher": {
+        "area": "runs",
+        "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+        "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+      },
+      "teacher_manifest": {
+        "area": "runs",
+        "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+        "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+      },
+      "teacher_receipt": {
+        "area": "runs",
+        "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+        "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+      }
+    },
+    "large_class_change_fraction_warning": 0.2,
+    "low_hours_exclusive": 1.0,
+    "members": {
+      "el_train.csv": {
+        "rows": 15324585,
+        "sha256": "31a15f799947977c352f3a8302f31d28661386470171abb9f6becc24bfe551d5"
+      },
+      "im_train.csv": {
+        "rows": 6185,
+        "sha256": "9c1cb91316b4a6a7f5f1a9c06bdfa0f70427d2cb8d570b53987dcbab544f55f7"
+      }
+    },
+    "rule_version": "pseudolabel_pilot_v0",
+    "schema_version": 1,
+    "scope": "Fixed exploratory candidates only; no teacher refit, biological threshold validation, split selection or BigMHC training",
+    "teacher_commit_sha": "081d4f7087f451e08791392c45c375fb9ac0dd6b"
+  },
+  "seed": 42,
+  "version": "bigmhc_pilot_v0"
+}

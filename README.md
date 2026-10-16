@@ -258,3 +258,18 @@ See the guide for hashed-input run creation and read-only `--verify-existing`
 replay. No Teacher refit, validation/test inspection, final split or BigMHC
 training occurs. Future override application requires explicit training-row
 authorization under the subsequently established split protocol.
+
+## Leakage-controlled four-condition pilot data
+
+[Task 2.5 preparation](docs/BIGMHC_PILOT_PREPARATION.md) joins saved frozen-Teacher
+scores to authenticated training rows, protects an IM development cohort by global
+exact/one-substitution sequence separation, and writes identical-cohort original,
+LOW-only and LOW+HIGH label views. Original labels and source-row lineage remain
+available. No models are trained; extreme allele shifts require review.
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation pilot-prepare --config configs/bigmhc_pilot_v0.json --out <existing-hashed-input-run-directory>
+```
+
+Use `--verify-existing` for a read-only byte-identical replay. See the guide for
+run creation, the A–D manifest and remaining training-environment requirements.
