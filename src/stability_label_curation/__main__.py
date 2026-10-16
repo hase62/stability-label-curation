@@ -29,6 +29,7 @@ from . import bigmhc_pilot_adapter as pilot_adapter
 from . import allele_stability_diagnostics as allele_diagnostics
 from . import bigmhc_baseline_runner as baseline_runner
 from . import bigmhc_gpu_worker as gpu_worker
+from . import el_positive_stability_analysis as el_analysis
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -222,9 +223,29 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
             sub.add_argument("--run-id", required=True)
         else:
             sub.add_argument("--json", action="store_true")
+    el_hypothesis = commands.add_parser("el-positive-analysis", help="Positive-first EL stability hypothesis audit; no labels or training")
+    el_hypothesis.add_argument("--config", default=el_analysis.CONFIG)
+    el_hypothesis.add_argument("--out", help="Explicit existing committed project run with all actual hashed inputs")
+    el_hypothesis.add_argument("--json", action="store_true")
+    el_hypothesis.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
+    el_hypothesis.add_argument("--verify-existing", action="store_true")
+    el_hypothesis.add_argument("--no-figures", action="store_true", help="Omit optional Matplotlib figures, retaining complete JSON/CSV")
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "el-positive-analysis":
+            files = {}
+            for item in args.input:
+                if "=" not in item:
+                    raise ValueError("Input override must be INPUT_ID=PATH")
+                name, path = item.split("=", 1)
+                if name in files:
+                    raise ValueError("Duplicate input override")
+                files[name] = path
+            result = el_analysis.execute(config_path=args.config, out=args.out, paths=paths, files=files,
+                                         verify_existing=args.verify_existing, figures=not args.no_figures)
+            print(dtu2016.json_report(result), end="")
+            return 0
         if args.command == "bigmhc-worker":
             options = dict(config_path=args.config, manifest_path=args.transfer_manifest, paths=paths)
             result = (gpu_worker.verify_inputs(**options) if args.worker_command == "verify-inputs"

@@ -308,3 +308,7 @@ For the portable single-GPU execution worker, see
 external inputs with `PYTHONPATH=src python3 -m stability_label_curation bigmhc-worker verify-inputs --json`.
 The CUDA configuration preserves the original-label Task 2.7 smoke; remote
 installation, transfer and GPU validation are separate execution steps.
+
+Task 2.11 examines [low-stability EL positives and repeat-detection evidence](docs/EL_POSITIVE_STABILITY_HYPOTHESIS.md).
+`PYTHONPATH=src python3 -m stability_label_curation el-positive-analysis --json` is read-only.
+It uses original EL positives first, preserves labels, and selects no curation rule.
