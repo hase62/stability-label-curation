@@ -174,3 +174,13 @@ The historical absolute correction rule remains scientifically unapproved.
 Before B/C/D, scientific review must justify an EL/IM correction strategy,
 calibration/reference population, uncertainty handling and controls. No decision
 or implementation of those choices occurs here. Stop after Task 2.7.
+
+## Portable worker extension
+
+The [WSL2 GPU worker guide](BIGMHC_GPU_WORKER.md) documents explicit CPU/CUDA
+selection and the portable 21-input handoff. CPU remains the default. The wrapper
+now stages native saves on CPU and uses a tensor-only loader with explicit
+`map_location='cpu'` before moving to the selected device. The same immediate
+EL-parent/four-file IM-overlay contract is preserved. CUDA requests fail rather
+than falling back to CPU. This extension does not resume the interrupted CPU
+scale-up experiment or authorize corrected-label training.

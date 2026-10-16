@@ -28,6 +28,7 @@ from . import pseudolabel_pilot as pseudolabel
 from . import bigmhc_pilot_adapter as pilot_adapter
 from . import allele_stability_diagnostics as allele_diagnostics
 from . import bigmhc_baseline_runner as baseline_runner
+from . import bigmhc_gpu_worker as gpu_worker
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -206,14 +207,30 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     diagnostic.add_argument("--out", help="Explicit existing hashed-input run; absence is read-only")
     diagnostic.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
     diagnostic.add_argument("--verify-existing", action="store_true")
-    smoke = commands.add_parser("bigmhc-smoke", help="Bounded original-label EL-to-IM CPU smoke; no corrected labels")
+    smoke = commands.add_parser("bigmhc-smoke", help="Bounded original-label EL-to-IM CPU/CUDA smoke; no corrected labels")
     smoke.add_argument("--config", default=baseline_runner.CONFIG)
     smoke.add_argument("--out", required=True, help="Existing committed hashed-input run with seed42")
     smoke.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
     smoke.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
+    worker_parser = commands.add_parser("bigmhc-worker", help="Portable original-label input verification and single-device execution")
+    worker_commands = worker_parser.add_subparsers(dest="worker_command", required=True)
+    for name in ("verify-inputs", "run"):
+        sub = worker_commands.add_parser(name)
+        sub.add_argument("--config", default=gpu_worker.CONFIG)
+        sub.add_argument("--transfer-manifest", default=gpu_worker.TRANSFER_MANIFEST)
+        if name == "run":
+            sub.add_argument("--run-id", required=True)
+        else:
+            sub.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "bigmhc-worker":
+            options = dict(config_path=args.config, manifest_path=args.transfer_manifest, paths=paths)
+            result = (gpu_worker.verify_inputs(**options) if args.worker_command == "verify-inputs"
+                      else gpu_worker.execute(run_id=args.run_id, **options))
+            print(dtu2016.json_report(result), end="")
+            return 0
         if args.command == "bigmhc-smoke":
             files = {}
             for item in args.input:

@@ -25,6 +25,7 @@ from .paths import resolve_paths
 
 CONFIG = 'configs/bigmhc_baseline_smoke_v0.json'
 VERSION = 'bigmhc_baseline_smoke_v0'
+WORKER_VERSION = 'bigmhc_gpu_worker_v0'
 SOURCE_COMMIT = '199e890fa69a63646730bcecea0a520e08ca4f02'
 VIEWS = {'EL':'processed/el_train_original.csv', 'IM':'processed/im_train_original.csv', 'development':'processed/im_development.csv'}
 TRANSFER = ('condenser.att.weight','condenser.att.bias','condenser.out.weight','condenser.out.bias')
@@ -37,17 +38,19 @@ INPUTS = {'EL','IM','development','EL_provenance','IM_provenance','development_p
 
 def load_config(path):
     c=readers._json(path)
-    if (c.get('schema_version')!=1 or c.get('version')!=VERSION or c.get('condition')!='A'
+    c.setdefault('device','cpu')
+    worker_profile=c.get('version')==WORKER_VERSION
+    if (c.get('schema_version')!=1 or c.get('version') not in (VERSION,WORKER_VERSION) or c.get('condition')!='A'
             or c.get('label_policy')!='original' or c.get('source_commit')!=SOURCE_COMMIT
-            or c.get('seed')!=42 or c.get('device')!='cpu' or c.get('num_workers')!=0
+            or c.get('seed')!=42 or c.get('device') not in ('cpu','cuda') or c.get('num_workers')!=0
             or c.get('persistent_workers') is not False or c.get('epochs')!={'EL':1,'IM':1}
             or c.get('learning_rate')!=5e-5 or c.get('batch_size') not in (4,8,16)
             or set(c.get('inputs',{}))!=INPUTS
             or type(c.get('cpu_threads')) is not int or not 1<=c['cpu_threads']<=4
-            or type(c.get('wall_seconds')) is not int or not 60<=c['wall_seconds']<=600
-            or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=6*1024**3):
-        raise ValueError('Only bounded CPU original-label condition A is authorized')
-    for stage,limit in (('EL',1000),('IM',256)):
+            or type(c.get('wall_seconds')) is not int or not 60<=c['wall_seconds']<=(1800 if worker_profile else 600)
+            or type(c.get('memory_bytes')) is not int or not 2*1024**3<=c['memory_bytes']<=(8 if worker_profile else 6)*1024**3):
+        raise ValueError('Only bounded CPU/CUDA original-label condition A is authorized')
+    for stage,limit in (('EL',100000 if worker_profile else 1000),('IM',1714 if worker_profile else 256)):
         if type(c['rows_per_class'][stage]) is not int or not 1<=c['rows_per_class'][stage]<=limit:
             raise ValueError('Subset smoke-size cap exceeded')
     for name,item in c['inputs'].items():
@@ -162,6 +165,80 @@ def seed_runtime(torch,np,config):
     random.seed(config['seed']);np.random.seed(config['seed']);torch.manual_seed(config['seed'])
     torch.set_num_threads(config['cpu_threads']);torch.set_num_interop_threads(1)
     torch.use_deterministic_algorithms(True)
+    if config.get('device','cpu')=='cuda':
+        torch.cuda.manual_seed_all(config['seed'])
+        torch.backends.cudnn.benchmark=False
+        torch.backends.cudnn.deterministic=True
+        torch.backends.cuda.matmul.allow_tf32=False
+        torch.backends.cudnn.allow_tf32=False
+
+
+def cuda_visibility(environ=None):
+    """Require selection of one physical GPU before the process imports Torch."""
+    value=(os.environ if environ is None else environ).get('CUDA_VISIBLE_DEVICES','')
+    if not value.isascii() or not value.isdecimal():
+        raise ValueError('CUDA requires CUDA_VISIBLE_DEVICES set to one GPU index, for example 0 or 1')
+    return value
+
+
+def runtime_device(torch,config):
+    """Explicit device; CUDA failure never falls back to CPU."""
+    requested=config.get('device','cpu')
+    if requested not in ('cpu','cuda'):raise ValueError('Device must be cpu or cuda')
+    if requested=='cpu':return 'cpu'
+    cuda_visibility()
+    if not torch.cuda.is_available():
+        raise RuntimeError('CUDA requested but unavailable; check the NVIDIA driver and CUDA-enabled PyTorch. No CPU fallback.')
+    if torch.cuda.device_count()!=1:
+        raise RuntimeError('CUDA worker requires exactly one visible GPU; set CUDA_VISIBLE_DEVICES=0 or 1')
+    torch.cuda.set_device(0)
+    torch.cuda.reset_peak_memory_stats(0)
+    return 'cuda:0'
+
+
+def device_report(torch,device):
+    report={'device':device,'CUDA_VISIBLE_DEVICES':os.environ.get('CUDA_VISIBLE_DEVICES'),
+            'torch_CUDA_runtime':torch.version.cuda,'GPU_name':None,'cudnn_version':None}
+    if device!='cpu':
+        report.update(GPU_name=torch.cuda.get_device_name(0),cudnn_version=torch.backends.cudnn.version(),
+                      GPU_total_memory_bytes=torch.cuda.get_device_properties(0).total_memory)
+    return report
+
+
+def on_device(value,device):
+    return value.cpu() if device=='cpu' else value.to(device)
+
+
+def save_checkpoint(model,path,*,transfer,device='cpu'):
+    """Native tensor filenames/overlay contract, staged on CPU for portability."""
+    try:
+        model.cpu().save(str(path),tl=transfer)
+    finally:
+        on_device(model,device)
+
+
+def load_checkpoint(torch,BigMHC,path,keys,*,device='cpu',lineage=None):
+    """Load authenticated tensor-only files on CPU, then select the runtime device.
+
+    The four-file IM overlay inherits its immediate 36-file EL parent, as in
+    pinned BigMHC.load; map_location is explicit even for CUDA-tagged tensors.
+    """
+    path=Path(path)
+    if lineage is None:
+        checkpoint_identity(path,keys)
+        base=path;overlay={}
+    else:
+        base=path.parent;verify_parent(base,path,lineage)
+        overlay=lineage['IM_files']
+    state={}
+    for index,key in enumerate(keys):
+        name=f'{index}_{key}.lyr';source=(path if name in overlay else base)/name
+        with raw._read_file(source) as stream:
+            tensor=torch.load(stream,map_location='cpu',weights_only=True)
+        if not torch.is_tensor(tensor):raise ValueError('Checkpoint contains a non-tensor value')
+        state[key]=tensor
+    model=BigMHC();model.load_state_dict(state,strict=True)
+    return on_device(model,device)
 
 
 def reserve_checkpoint(path):
@@ -192,18 +269,18 @@ def state_hashes(model):
     return {k:hashlib.sha256(v.detach().cpu().contiguous().numpy().tobytes()).hexdigest() for k,v in model.state_dict().items()}
 
 
-def train_epoch(torch,model,dataset,config,transfer):
-    model.cpu().train()
+def train_epoch(torch,model,dataset,config,transfer,device='cpu'):
+    on_device(model,device).train()
     parameters=[v for k,v in model.named_parameters() if not transfer or k in TRANSFER]
     optimizer=torch.optim.AdamW(parameters,lr=config['learning_rate']);lossf=torch.nn.BCEWithLogitsLoss()
     dataset.makebats(config['batch_size'],shuffle=True,negfrac=None if transfer else 0.99)
     loader=torch.utils.data.DataLoader(dataset,batch_size=None,shuffle=True,num_workers=0,persistent_workers=False)
     steps=[];skipped=0;rows=0;weighted=0.0;epoch_error=0.0
     for index,batch in enumerate(loader,1):
-        target=batch.tgt.float().cpu()
+        target=on_device(batch.tgt.float(),device)
         if transfer and not target.sum():skipped+=1;continue
         optimizer.zero_grad()
-        output,_=model(mhc=batch.mhc.float().cpu(),pep=batch.pep.float().cpu())
+        output,_=model(mhc=on_device(batch.mhc.float(),device),pep=on_device(batch.pep.float(),device))
         loss=lossf(output,target)
         if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
         loss.backward();optimizer.step();value=float(loss.detach());n=len(target)
@@ -216,16 +293,29 @@ def train_epoch(torch,model,dataset,config,transfer):
         'step_log':steps,'optimizer_defaults':optimizer.defaults,'updated_parameters':[k for k,v in model.named_parameters() if not transfer or k in TRANSFER]}
 
 
-def predict(torch,model,dataset,batch_size):
-    model.cpu().eval();dataset.makebats(batch_size,shuffle=False,negfrac=None)
+def predict(torch,model,dataset,batch_size,device='cpu'):
+    on_device(model,device).eval();dataset.makebats(batch_size,shuffle=False,negfrac=None)
     result=[]
     with torch.no_grad():
         for index in range(len(dataset)):
-            batch=dataset[index];output,_=model(batch.mhc.float().cpu(),batch.pep.float().cpu())
-            result.extend(torch.sigmoid(output).tolist())
+            batch=dataset[index];output,_=model(on_device(batch.mhc.float(),device),on_device(batch.pep.float(),device))
+            probabilities=torch.sigmoid(output)
+            result.extend((probabilities if device=='cpu' else probabilities.cpu()).tolist())
     if len(result)!=len(dataset.df) or any(not math.isfinite(v) or not 0<=v<=1 for v in result):
         raise ValueError('Invalid development inference coverage')
     return result
+
+
+def prediction_agreement(before,after,device='cpu'):
+    """Same-device reload check; CPU exact, CUDA explicit float32 tolerance."""
+    relative,absolute=(0.0,0.0) if device=='cpu' else (1e-6,1e-7)
+    if len(before)!=len(after) or any(not math.isfinite(v) for v in [*before,*after]):
+        raise ValueError('Checkpoint prediction coverage/nonfinite mismatch')
+    if any(not math.isclose(a,b,rel_tol=relative,abs_tol=absolute) for a,b in zip(before,after)):
+        raise ValueError('Checkpoint prediction reload mismatch')
+    return {'device':device,'relative_tolerance':relative,'absolute_tolerance':absolute,
+            'maximum_absolute_difference':max((abs(a-b) for a,b in zip(before,after)),default=0.0),
+            'exactly_identical':before==after,'consistent':True}
 
 
 def write_predictions(path,rows,probabilities,paths):
@@ -241,6 +331,8 @@ def write_predictions(path,rows,probabilities,paths):
 def worker(*,config_path,out,paths=None,files=None):
     paths=paths or resolve_paths();config=load_config(config_path);resolved,inputs=resolve_inputs(config,paths,files)
     directory,manifest=teacher._run(out,paths)
+    import torch
+    device=runtime_device(torch,config)
     if (manifest['configuration']['file']!={'path':str(Path(config_path).absolute()),'sha256':raw.sha256_file(config_path)}
             or manifest['configuration']['random_seed']!=42
             or any(i not in manifest['data_provenance']['input_artifacts'] for i in inputs)):
@@ -262,14 +354,14 @@ def worker(*,config_path,out,paths=None,files=None):
     leakage={stage:verify_separation(rows,development) for stage,rows in selected.items()}
     raw.write_report(directory/'reports/subset_manifest.json',subset_info,paths=paths)
     raw.write_report(directory/'reports/leakage_verification.json',leakage,paths=paths)
-    import torch
     import numpy as np
     import pandas as pd
     import psutil
     import platform
     import importlib.metadata
     seed_runtime(torch,np,config)
-    environment={'python':sys.version,'device':'cpu','cpu_threads':torch.get_num_threads(),'interop_threads':torch.get_num_interop_threads(),
+    environment={'python':sys.version,**device_report(torch,device),'seed':config['seed'],
+        'code_commit':manifest['git']['commit_sha'],'source_commit':SOURCE_COMMIT,'runtime_configuration':config,'cpu_threads':torch.get_num_threads(),'interop_threads':torch.get_num_interop_threads(),
         'versions':{name:importlib.metadata.version(name) for name in ('torch','numpy','pandas','psutil')},
         'all_installed_distributions':{d.metadata['Name']:d.version for d in importlib.metadata.distributions()},
         'platform':platform.platform(),'machine':platform.machine(),'host_RAM_bytes':psutil.virtual_memory().total,
@@ -290,51 +382,58 @@ def worker(*,config_path,out,paths=None,files=None):
             if h in needed:encodings[h]=torch.tensor([int(v) for v in row[1:]],dtype=torch.int8)
     with pinned_modules(resolved) as (BigMHC,Dataset):
         def dataset(path):return Dataset(Dataset.readPMHCs(str(path),allele=0,pepcol=1,tgtcol=2,hdrcnt=1,verbose=False),mhcenc=encodings)
-        model=BigMHC().cpu();keys=list(model.state_dict())
+        model=on_device(BigMHC(),device);keys=list(model.state_dict())
         if len(keys)!=36 or tuple(BigMHC.tllayers())!=TRANSFER:raise ValueError('Unexpected authentic architecture state')
         architecture={'parameter_count':sum(v.numel() for v in model.parameters()),'state_tensors':len(keys),
                       'constructor':'Pinned BigMHC() defaults: mhclen414,minpep8,enclen20,hidlen1024,layers2','source_commit':SOURCE_COMMIT}
         print('Authentic architecture:',architecture,flush=True)
         initial=state_hashes(model)
-        start=time.monotonic();el_training=train_epoch(torch,model,dataset(directory/'processed/el_original_smoke.csv'),config,False)
+        start=time.monotonic();el_training=train_epoch(torch,model,dataset(directory/'processed/el_original_smoke.csv'),config,False,device)
         el_training['elapsed_seconds']=time.monotonic()-start
         el_state=state_hashes(model)
         if el_state==initial:raise ValueError('EL model parameters did not change')
-        dev=dataset(resolved['development']);el_predictions=predict(torch,model,dev,config['batch_size'])
-        el=directory/'checkpoints/el';reserve_checkpoint(el);model.save(str(el),tl=False)
+        dev=dataset(resolved['development']);el_predictions=predict(torch,model,dev,config['batch_size'],device)
+        el=directory/'checkpoints/el';reserve_checkpoint(el);save_checkpoint(model,el,transfer=False,device=device)
         el_files=checkpoint_identity(el,keys)
-        reloaded=BigMHC.load(str(el)).cpu()
-        if state_hashes(reloaded)!=el_state or predict(torch,reloaded,dev,config['batch_size'])!=el_predictions:
-            raise ValueError('EL checkpoint reload or inference mismatch')
+        reloaded=load_checkpoint(torch,BigMHC,el,keys,device=device)
+        if state_hashes(reloaded)!=el_state:raise ValueError('EL checkpoint state reload mismatch')
+        el_agreement=prediction_agreement(el_predictions,predict(torch,reloaded,dev,config['batch_size'],device),device)
         del model
-        start=time.monotonic();im_training=train_epoch(torch,reloaded,dataset(directory/'processed/im_original_smoke.csv'),config,True)
+        start=time.monotonic();im_training=train_epoch(torch,reloaded,dataset(directory/'processed/im_original_smoke.csv'),config,True,device)
         im_training['elapsed_seconds']=time.monotonic()-start;im_state=state_hashes(reloaded)
         changed=[k for k in keys if im_state[k]!=el_state[k]]
         if not changed or set(changed)-set(TRANSFER):raise ValueError('IM updated unauthorized model parameters')
-        im_predictions=predict(torch,reloaded,dev,config['batch_size'])
-        im=el/'im';reserve_checkpoint(im);reloaded.save(str(im),tl=True);im_files=overlay_identity(im,keys)
+        im_predictions=predict(torch,reloaded,dev,config['batch_size'],device)
+        im=el/'im';reserve_checkpoint(im);save_checkpoint(reloaded,im,transfer=True,device=device);im_files=overlay_identity(im,keys)
         lineage={'state_keys':keys,'EL_files':el_files,'IM_files':im_files,'IM_parent_relative_path':'..',
             'EL_checkpoint':'checkpoints/el','IM_overlay':'checkpoints/el/im','changed_IM_parameters':changed,
             'initial_state_tensor_sha256':initial,'EL_state_tensor_sha256':el_state,'IM_state_tensor_sha256':im_state,
+            'checkpoint_storage_device':'cpu','reload_device':device,
+            'checkpoint_loading':'weights_only=True,map_location=cpu,strict state load then selected device',
             'EL_reload_identical':True,'IM_reload_identical':True,'unoptimized_encoder_weights_unchanged':True}
         verify_parent(el,im,lineage)
         del reloaded
-        reconstructed=BigMHC.load(str(im)).cpu()
-        if state_hashes(reconstructed)!=im_state or predict(torch,reconstructed,dev,config['batch_size'])!=im_predictions:
-            raise ValueError('IM parent+overlay reload or inference mismatch')
+        reconstructed=load_checkpoint(torch,BigMHC,im,keys,device=device,lineage=lineage)
+        if state_hashes(reconstructed)!=im_state:raise ValueError('IM parent+overlay state reload mismatch')
+        im_agreement=prediction_agreement(im_predictions,predict(torch,reconstructed,dev,config['batch_size'],device),device)
+        lineage['prediction_reload_agreement']={'EL':el_agreement,'IM':im_agreement}
         verify_parent(el,im,lineage)
+    if device!='cpu':
+        torch.cuda.synchronize(0)
+    gpu_memory={'peak_allocated_bytes':torch.cuda.max_memory_allocated(0),
+                'peak_reserved_bytes':torch.cuda.max_memory_reserved(0)} if device!='cpu' else None
     write_predictions(directory/'predictions/el_development.csv',development,el_predictions,paths)
     write_predictions(directory/'predictions/im_development.csv',development,im_predictions,paths)
     raw.write_report(directory/'reports/checkpoint_lineage.json',lineage,paths=paths)
     raw.write_report(directory/'reports/training_summary.json',{'architecture':architecture,'EL':el_training,'IM':im_training,
-        'development_rows':383,'development_HLA':31,'prediction_reloads_bitwise_identical':True,'condition':'A',
+        'device':device,'GPU_memory':gpu_memory,'development_rows':383,'development_HLA':31,'prediction_reloads_bitwise_identical':el_agreement['exactly_identical'] and im_agreement['exactly_identical'],'condition':'A',
         'interpretation':'Tiny debug subsets; engineering readiness only; development cohort is not a final independent external test; no correction evidence',
         'predictive_performance_metrics':'Not calculated; no model selection or threshold optimization',
-        'adaptations':['Bypass stock CLI seed1; seed Python/NumPy/Torch42 and deterministic CPU algorithms',
+        'adaptations':['Bypass stock CLI seed1; seed Python/NumPy/Torch42 and deterministic algorithms on explicit device',
             'DataLoader num_workers0,persistent_workersFalse; no prefetch/worker state',
             'Strict validated dict receptor lookup; no fuzzy MHCEncoder fallback',
             'One epoch each; original makebats, loss, optimizer, transfer parameter list and all-negative IM skip preserved',
-            'Generated tensor-only checkpoints; force PyTorch weights-only load within this process']},paths=paths)
+            'Native checkpoint saves staged on CPU; tensor-only map_location=cpu load then selected device']},paths=paths)
     for identity in inputs:
         if raw.sha256_file(identity['path'])!=identity['sha256']:raise ValueError('Immutable input changed')
     outputs={str(p.relative_to(directory)):raw.sha256_file(p) for area in ('processed','reports','predictions','checkpoints')
@@ -343,7 +442,9 @@ def worker(*,config_path,out,paths=None,files=None):
         'config_sha256':raw.sha256_file(config_path),'inputs':inputs,'outputs':outputs,'sealed_payloads_opened':[],
         'corrected_views_opened':[],'source_inputs_unchanged':True,'seed':42,'condition':'A',
         'EL_full_checkpoint_tensors':len(el_files),'IM_overlay_tensors':len(im_files),
-        'reload_predictions_identical':True,'new_correction_rules_or_labels':False},paths=paths)
+        'reload_predictions_identical':el_agreement['exactly_identical'] and im_agreement['exactly_identical'],
+        'reload_predictions_consistent':True,'runtime_device':device,'GPU_memory':gpu_memory,
+        'new_correction_rules_or_labels':False},paths=paths)
     return {'run':str(directory),'EL_steps':el_training['optimization_steps'],'IM_steps':im_training['optimization_steps'],
             'development_predictions_per_model':383,'checkpoint_reload_verified':True}
 
@@ -357,6 +458,9 @@ def run(*,config_path,out,paths=None,files=None):
     for name,path in (files or {}).items():command+=['--input',name+'='+str(path)]
     environment=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',OMP_NUM_THREADS=str(config['cpu_threads']),
         MKL_NUM_THREADS=str(config['cpu_threads']),TORCH_FORCE_WEIGHTS_ONLY_LOAD='1',PYTHONPATH=str(paths.repository_root/'src'))
+    if config['device']=='cuda':
+        cuda_visibility(environment)
+        environment['CUBLAS_WORKSPACE_CONFIG']=':4096:8'
     start=time.monotonic();peak=0;blocker=None
     with raw._directory(directory/'logs') as fd,os.fdopen(os.open('training.log',os.O_CREAT|os.O_EXCL|os.O_WRONLY|os.O_NOFOLLOW,0o600,dir_fd=fd),'wb') as log:
         process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,env=environment,cwd=paths.repository_root)

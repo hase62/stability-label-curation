@@ -1,0 +1,138 @@
+{
+  "approved_base_commit": "d7f5c45049aaf99d20b129cc93e3d00ab85da8e9",
+  "checksum_scope": "Locally verified exact bytes; no claim of publisher-provided verification",
+  "excluded": "No corrected views, overrides, sealed evaluation payloads, archives, Teacher artifacts or prior checkpoints",
+  "input_count": 21,
+  "inputs": {
+    "EL": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+      "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf",
+      "size_bytes": 34885884
+    },
+    "EL_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+      "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656",
+      "size_bytes": 156522312
+    },
+    "IM": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_original.csv",
+      "sha256": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61",
+      "size_bytes": 82284
+    },
+    "IM_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_provenance.csv.gz",
+      "sha256": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21",
+      "size_bytes": 379743
+    },
+    "development": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development.csv",
+      "sha256": "b4feb0c2765b99f6f845350c60be325895d6d33b184806fd2f2b28801687a2b1",
+      "size_bytes": 9204
+    },
+    "development_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development_provenance.csv.gz",
+      "sha256": "2a8afa230dc1088d575858e9dda6bceeef8c735c5c46e7fa076ba2bca8b32ed5",
+      "size_bytes": 67246
+    },
+    "experiment": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+      "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736",
+      "size_bytes": 4767
+    },
+    "inventory": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+      "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc",
+      "size_bytes": 37950
+    },
+    "parent_manifest": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+      "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb",
+      "size_bytes": 6002
+    },
+    "parent_receipt": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+      "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2",
+      "size_bytes": 6666
+    },
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a",
+      "size_bytes": 15921144
+    },
+    "source_LICENSE": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac",
+      "size_bytes": 8706
+    },
+    "source_README": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818",
+      "size_bytes": 6794
+    },
+    "source_bigmhc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f",
+      "size_bytes": 8525
+    },
+    "source_cli": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac",
+      "size_bytes": 11393
+    },
+    "source_dataset": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22",
+      "size_bytes": 8584
+    },
+    "source_encseq": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d",
+      "size_bytes": 1577
+    },
+    "source_mhcenc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2",
+      "size_bytes": 5863
+    },
+    "source_mhcuid": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11",
+      "size_bytes": 581
+    },
+    "source_predict": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7",
+      "size_bytes": 2217
+    },
+    "source_train": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412",
+      "size_bytes": 2332
+    }
+  },
+  "path_convention": "area is relative to ~/codex/{data,runs}/stability-label-curation, resolved by stability_label_curation.paths",
+  "schema_version": 1,
+  "source_commit": "199e890fa69a63646730bcecea0a520e08ca4f02",
+  "total_bytes": 207979774
+}

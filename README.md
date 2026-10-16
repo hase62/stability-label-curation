@@ -302,3 +302,9 @@ PYTHONPATH=src <isolated-runtime-python> -B -m stability_label_curation bigmhc-s
 
 See the guide for environment versions, seed42, run creation, checkpoint-parent
 layout and resource bounds. No published checkpoints or sealed tests are used.
+
+For the portable single-GPU execution worker, see
+[BigMHC WSL2 worker handoff](docs/BIGMHC_GPU_WORKER.md). Verify the 21 pinned
+external inputs with `PYTHONPATH=src python3 -m stability_label_curation bigmhc-worker verify-inputs --json`.
+The CUDA configuration preserves the original-label Task 2.7 smoke; remote
+installation, transfer and GPU validation are separate execution steps.
