@@ -1,5 +1,11 @@
 # Frozen-Teacher EL/IM pseudolabel pilot v0
 
+**Current status — Task 2.6:** The historical LOW <1 h / HIGH ≥10 h
+corrected views are **scientifically unapproved for BigMHC training**. Their
+original bytes remain preserved. See [the allele diagnostic](ALLELE_SPECIFIC_STABILITY_DIAGNOSTICS.md)
+and its checksum-linked status report; this notice supersedes the earlier
+pending-review status without rewriting historical manifests.
+
 Task 2.4 scores the two released BigMHC Version 4 **training** members and writes
 reversible candidate overrides. It does not modify original labels, refit the
 Teacher, select final splits, optimize thresholds, evaluate predictive performance

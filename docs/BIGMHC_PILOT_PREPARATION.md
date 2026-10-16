@@ -1,5 +1,11 @@
 # Task 2.5: leakage-controlled nine-mer BigMHC pilot preparation
 
+**Current status — Task 2.6:** The historical LOW <1 h / HIGH ≥10 h
+corrected views are **scientifically unapproved for BigMHC training**. Their
+original bytes remain preserved. See [the allele diagnostic](ALLELE_SPECIFIC_STABILITY_DIAGNOSTICS.md)
+and its checksum-linked status report; this notice supersedes the earlier
+pending-review status without rewriting historical manifests.
+
 This task prepares data for four future conditions, without training a model:
 A original EL → original IM; B candidate EL → original IM; C original EL →
 candidate IM; D candidate EL → candidate IM. Original experimental/publisher

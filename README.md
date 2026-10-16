@@ -273,3 +273,17 @@ PYTHONPATH=src python3 -B -m stability_label_curation pilot-prepare --config con
 
 Use `--verify-existing` for a read-only byte-identical replay. See the guide for
 run creation, the A–D manifest and remaining training-environment requirements.
+
+## Allele-specific stability diagnostic
+
+[Task 2.6](docs/ALLELE_SPECIFIC_STABILITY_DIAGNOSTICS.md) compares frozen training
+scores by HLA and original label, with descriptive training-set ROC-AUC and saved
+DTU validation context. **Historical LOW/HIGH corrected views are scientifically
+unapproved for BigMHC training.** No replacement strategy or cutoff is selected.
+
+```sh
+PYTHONPATH=src python3 -B -m stability_label_curation allele-diagnostics
+```
+
+Inspection is read-only. An explicit `--out <existing-hashed-input-run>` writes
+aggregate reports; `--verify-existing` performs read-only deterministic replay.

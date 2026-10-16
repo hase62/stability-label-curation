@@ -26,6 +26,7 @@ from . import bigmhc_v4_audit as bigmhc_data
 from . import stability_teacher as teacher
 from . import pseudolabel_pilot as pseudolabel
 from . import bigmhc_pilot_adapter as pilot_adapter
+from . import allele_stability_diagnostics as allele_diagnostics
 
 
 def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = None) -> int:
@@ -199,9 +200,27 @@ def main(argv: Sequence[str] | None = None, *, env: Mapping[str, str] | None = N
     preparation.add_argument("--out", required=True, help="Existing project run recording all inputs and seed42")
     preparation.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
     preparation.add_argument("--verify-existing", action="store_true", help="Read-only deterministic offline replay")
+    diagnostic = commands.add_parser("allele-diagnostics", help="Read-only frozen-score stability/label associations; no correction selection")
+    diagnostic.add_argument("--config", default=allele_diagnostics.CONFIG)
+    diagnostic.add_argument("--out", help="Explicit existing hashed-input run; absence is read-only")
+    diagnostic.add_argument("--input", action="append", default=[], metavar="INPUT_ID=PATH")
+    diagnostic.add_argument("--verify-existing", action="store_true")
     args = parser.parse_args(argv)
     try:
         paths = resolve_paths(env)
+        if args.command == "allele-diagnostics":
+            files = {}
+            for item in args.input:
+                if "=" not in item:
+                    raise ValueError("Input override must be INPUT_ID=PATH")
+                name, path = item.split("=", 1)
+                if name in files:
+                    raise ValueError("Duplicate input override")
+                files[name] = path
+            reports = allele_diagnostics.execute(config_path=args.config, out=args.out, paths=paths,
+                                                 files=files, verify_existing=args.verify_existing)
+            print(dtu2016.json_report(reports), end="")
+            return 0
         if args.command == "pilot-prepare":
             files = {}
             for item in args.input:
