@@ -1,5 +1,10 @@
 # Stability-guided curation of human HLA-I immunogenicity training labels
 
+Task 2.12 proposes a prospective **EL-positive loss-weighting A/B/P comparison**,
+with original EL/IM labels preserved. Training approval remains pending; see
+[the weighting protocol](docs/EL_POSITIVE_STABILITY_WEIGHTING_PROTOCOL.md).
+This predictive-utility proposal does not establish EL mislabeling or detection reproducibility.
+
 The goal is to test whether an independent stability labeler trained on provenance-traceable measured human HLA-I stability data improves external generalization by removing or holding out high-confidence stability-inconsistent positive training examples. Stability is not added as an input feature, and the immunogenicity evaluator architecture and loss remain unchanged.
 
 ## Local storage

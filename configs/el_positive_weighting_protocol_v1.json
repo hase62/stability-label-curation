@@ -1,0 +1,125 @@
+{
+  "approval_decisions": [
+    "Approve predictive-utility-only hypothesis and interpretation",
+    "Approve fixed rank/tie/missing-score/small-group rules and strength 0.5",
+    "Approve A/B/P comparison and single domain-separated permutation",
+    "Approve per-example mean loss and no-op audit; fresh matched A required",
+    "Approve unchanged full cohorts, sampler, initialization, seed, FP32 and EL-to-IM training",
+    "Approve frozen development-only metric plan and no tuning or sealed-test access"
+  ],
+  "conditions": {
+    "A": "Original labels; all weights 1",
+    "B": "Original labels; within-HLA positive midrank weights",
+    "P": "Original labels; B weights Fisher-Yates-permuted within-HLA positives"
+  },
+  "evaluation": {
+    "development_outcomes_used_in_design": false,
+    "development_population": 383,
+    "inference": "One seed, one permutation; exploratory descriptive contrasts only",
+    "paired_differences": [
+      "B-A",
+      "B-P",
+      "P-A"
+    ],
+    "per_HLA_metric_min_negative": 5,
+    "per_HLA_metric_min_positive": 5,
+    "primary": "IM average precision, grouped score ties; not trapezoidal PR area",
+    "secondary": [
+      "IM AUROC",
+      "EL-proxy average precision",
+      "EL-proxy AUROC"
+    ]
+  },
+  "fixed_training_reference": {
+    "architecture": "Unchanged authentic BigMHC; full EL checkpoint / four-tensor IM transfer overlay",
+    "baseline_execution_evidence": "Task2.10 user-approved summary; local Task2.10 checkpoints/logs not acquired or verified in this task",
+    "batch_size": 16,
+    "epochs": {
+      "EL": 1,
+      "IM": 1
+    },
+    "expected_EL_negative": 1383509,
+    "expected_EL_positive": 70069,
+    "expected_EL_rows": 1453578,
+    "expected_EL_steps": 70069,
+    "expected_IM_rows": 3428,
+    "expected_IM_steps": 214,
+    "learning_rate": 5e-05,
+    "optimizer": "AdamW, preserve complete native/default parameter dictionary",
+    "precision": "FP32",
+    "seed": 42,
+    "source_commit": "199e890fa69a63646730bcecea0a520e08ca4f02"
+  },
+  "frozen_future_inputs_not_read_here": {
+    "IM": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_original.csv",
+      "sha256": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61"
+    },
+    "IM_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_provenance.csv.gz",
+      "sha256": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21"
+    },
+    "development": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development.csv",
+      "sha256": "b4feb0c2765b99f6f845350c60be325895d6d33b184806fd2f2b28801687a2b1"
+    },
+    "development_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development_provenance.csv.gz",
+      "sha256": "2a8afa230dc1088d575858e9dda6bceeef8c735c5c46e7fa076ba2bca8b32ed5"
+    }
+  },
+  "loss": {
+    "EL": "mean(weight_i * BCEWithLogits(logit_i, original_label_i, reduction=none)); denominator=batch rows, not sum weights",
+    "IM": "Unmodified native mean BCEWithLogits; original IM labels only",
+    "negative_weight": "1",
+    "no_sampler_changes": true
+  },
+  "parent_analysis_configuration": {
+    "relative_path": "configs/el_positive_stability_analysis_v0.json",
+    "sha256": "b31b76992af095a5dd947ac7bd7834eff5bfc9e7e7f9a3c493b966fe71fea026"
+  },
+  "parent_code_commit": "8e2f415ce6ed9dbf620b3ab1588232705affce68",
+  "parent_evidence": {
+    "alignment": {
+      "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_coverage_alignment.json",
+      "sha256": "dc7317b09a561585b4273034d2eca7d8e179a376bd0ca83100844274790fce5a"
+    },
+    "manifest": {
+      "relative_path": "task-2_11-el-positive-reproducibility/manifest.json",
+      "sha256": "76bf2b2e1b171a9ae47f4454820d68a66c769ff324ef81fd08b44868535064e5"
+    },
+    "receipt": {
+      "relative_path": "task-2_11-el-positive-reproducibility/reports/execution_verification.json",
+      "sha256": "637c9a04f8c9c0f1e1458cf5deffbf7359de2de14aa4a23e81119131a47f0306"
+    },
+    "reliability": {
+      "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_reliability.json",
+      "sha256": "a809bc33d6a98347218021125940c3e80b0dc97ff19dec5289131ba542038676"
+    }
+  },
+  "permutation": {
+    "algorithm": "Sort positive immutable source_row_ids lexicographically, Fisher-Yates descending j with local randrange(j+1); pin Python version",
+    "global_rng_mutation": false,
+    "identity_assignments": "Permitted; no repeat draws or outcome-based choice",
+    "stream": "SHA256(version + NUL + permutation + NUL + decimal_seed + NUL + exact_HLA), big-endian integer -> local random.Random"
+  },
+  "purpose": "Preregister predictive utility only; aggregate design analysis; no training, label changes or row-weight export",
+  "rank": {
+    "formula": "r = (number_strictly_below + number_tied / 2) / n",
+    "missing_or_unsupported": "Abort matched experiment preflight; no substitution, population change or fuzzy HLA mapping",
+    "negative_weight": "1",
+    "population": "All 70069 retained original EL positives, grouped by exact resolved HLA; observation-based, no deduplication",
+    "positive_weight": "1 + 0.5 * (r - 0.5)",
+    "small_n": "Same rule including n=1 or all tied -> weight 1; flag n<10 descriptively; no exclusion",
+    "ties": "Exact Decimal numeric equality of stored nonnegative finite hour strings; no tolerance, jitter or tie breaking"
+  },
+  "schema_version": 1,
+  "seed": 42,
+  "strength": "0.5",
+  "training_approval": "decision_pending",
+  "version": "el_positive_weighting_preregistration_v1"
+}
