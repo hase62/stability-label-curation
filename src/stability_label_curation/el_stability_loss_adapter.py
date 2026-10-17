@@ -138,6 +138,29 @@ def row_binding(identity, hla, peptide, label):
     return digest([identity, hla, peptide, str(int(label))])
 
 
+def original_fields(record: dict, stage: str) -> tuple[list[str], list[str]]:
+    """Verify Task 2.5's parsed-string serialization, retaining IM's raw flag.
+
+    Historical ledgers omitted rand, but retain its four-column SHA256. Recover
+    the audited literal binary flag only when the complete original hash matches.
+    An explicit flag must match as supplied; never normalize its formatting.
+    """
+    header = ['mhc', 'pep', 'tgt']
+    fields = [record['original_hla'], record['original_peptide'], record['original_label']]
+    if stage == 'IM':
+        header.append('rand')
+        candidates = [record['original_rand']] if 'original_rand' in record else ['0', '1']
+        matches = [flag for flag in candidates if flag in {'0', '1'} and
+                   design.prior.adapter.source_hash(header, fields + [flag]) == record['source_row_sha256']]
+        if len(matches) != 1:
+            raise ValueError('IM four-column raw-row hash mismatch; original rand unavailable or modified')
+        record['original_rand'] = matches[0]
+        fields.append(matches[0])
+    if design.prior.adapter.source_hash(header, fields) != record['source_row_sha256']:
+        raise ValueError('Original raw-row hash mismatch')
+    return header, fields
+
+
 class IdentityDataset:
     """Delegate every native batching/encoding operation; carry only auxiliary IDs."""
     source_identity_audit = True
@@ -158,13 +181,15 @@ class IdentityDataset:
             label, identity = str(int(row.tgt)), record['source_row_id']
             source = int(record['row_index'])
             expected_member = 'el_train.csv' if stage == 'EL' else 'im_train.csv'
+            original_fields(record, stage)
             if (float(row.tgt) not in (0.0, 1.0) or source <= last_source
                     or identity != design.prior.pilot.row_id(archive, expected_member, source)
                     or record['source_file'] != expected_member or int(record['derived_row_index']) != index
+                    or ('prepared_row_index' in record and int(record['prepared_row_index']) != index)
+                    or ('retained' in record and record['retained'] != '1')
                     or int(record['source_line_number']) != source + 1
                     or [record['resolved_hla'], record['original_peptide'], record['original_label']] != [row.mhc, row.pep, label]
-                    or record['source_row_sha256'] != design.prior.adapter.source_hash(
-                        ['mhc', 'pep', 'tgt'], [record['original_hla'], row.pep, label])):
+                    or design.prior.pilot.bigmhc.canonical_hla(record['original_hla']) != row.mhc):
                 raise ValueError('Native source-row join/label/order mismatch')
             if stage == 'EL':
                 if label == '1':

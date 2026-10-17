@@ -77,12 +77,73 @@ class ExperimentTests(unittest.TestCase):
                 return current if path.parts[0] == 'current' else summary
             raise AssertionError(path)
         with patch.object(runner.readers, '_json', side_effect=read), patch.object(
-                experiment, 'prediction_rows', return_value=[{'source_row_id': 'id', 'probability': '0.5'}]):
+                experiment, 'prediction_rows', return_value=[{'source_row_id': 'id', 'probability': '0.5'}]), patch.object(
+                experiment, 'training_report', side_effect=lambda path: current if str(path)=='current' else summary):
             result = experiment.compare_historical(Path('current'), Path('historical'))
             self.assertEqual(result['EL_loss_maximum_absolute_difference'], 0)
             current['EL']['step_log'][0]['BCE_loss'] = 0.6
             with self.assertRaisesRegex(ValueError, 'loss trajectory'):
                 experiment.compare_historical(Path('current'), Path('historical'))
+
+    def report_fixture(self, directory, content):
+        reports=directory/'reports';reports.mkdir(exist_ok=True)
+        path=reports/'training_summary.json';path.write_bytes(content)
+        (reports/'execution_verification.json').write_text(json.dumps({'outputs':{
+            'reports/training_summary.json':runner.raw.sha256_file(path)}}))
+        return path
+
+    def test_receipt_authenticated_report_above_generic_8_MiB(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory=Path(tmp)
+            content=json.dumps({'architecture':{},'EL':{},'IM':{},'padding':'x'*(8*1024*1024)}).encode()
+            path=self.report_fixture(directory,content)
+            with self.assertRaisesRegex(ValueError,'inspection bound'):runner.readers._json(path)
+            self.assertEqual(experiment.training_report(directory)['EL'],{})
+            with path.open('ab') as stream:stream.write(b' ')
+            with self.assertRaisesRegex(ValueError,'SHA256'):experiment.training_report(directory)
+
+    def test_training_report_malformed_duplicate_nonfinite_and_oversized_fail(self):
+        for content in (b'{',b'[]',b'{"architecture":{},"EL":{},"EL":{},"IM":{}}',
+                        b'{"architecture":{},"EL":{},"IM":{},"bad":NaN}', b'{}',
+                        b' '*(32*1024*1024+1)):
+            with self.subTest(prefix=content[:40]),tempfile.TemporaryDirectory() as tmp:
+                directory=Path(tmp);self.report_fixture(directory,content)
+                with self.assertRaises(ValueError):experiment.training_report(directory)
+
+    def test_planned_ABP_configs_preserve_scientific_identity_and_reference_gate(self):
+        from stability_label_curation.bigmhc_abp_preflight import planned_configurations
+        base=runner.load_config(experiment.CONFIG)
+        result=planned_configurations(base)
+        for mode,c in result.items():
+            self.assertEqual(weights.matched_config_identity(c),weights.matched_config_identity(base))
+            weights.validate_runtime_spec(c['loss_adapter'],mode)
+            if mode!='A':
+                self.assertIsNone(c['loss_adapter']['matched_reference']['sha256'])
+                with self.assertRaises(ValueError):weights.require_training_authorization(c)
+
+    def test_worker_preflight_failure_occurs_before_model_optimizer_or_training(self):
+        from stability_label_curation import bigmhc_abp_preflight as preflight
+        config=runner.load_config(experiment.CONFIG)
+        with patch.object(runner,'resolve_inputs',return_value=({},[])), patch.object(
+                experiment,'arm_run',return_value=(Path('/unused'),{})), patch.object(
+                preflight,'validate',side_effect=ValueError('full IM binding failed')), patch.object(
+                runner.raw,'write_report') as write, patch.object(runner,'runtime_device') as device, patch.object(
+                runner,'train_epoch') as train:
+            with self.assertRaisesRegex(ValueError,'full IM binding'):
+                runner.worker(config_path=experiment.CONFIG,out='/unused')
+            device.assert_not_called();train.assert_not_called()
+            self.assertEqual(write.call_args.args[1]['status'],'failed')
+
+    def test_preflight_only_records_failure_without_launching_training(self):
+        from stability_label_curation import bigmhc_abp_preflight as preflight
+        with patch.object(preflight,'validate',side_effect=ValueError('bad history')),patch.object(
+                runner.raw,'write_report') as write,patch.object(runner,'train_epoch') as train:
+            with self.assertRaisesRegex(ValueError,'bad history'):
+                preflight.record(config_path=Path(experiment.CONFIG),report=Path('/unused/report.json'))
+            result=write.call_args.args[1]
+            self.assertEqual(result['optimizer_initializations'],0)
+            self.assertEqual(result['development_observations_scored'],0)
+            train.assert_not_called()
 
 
 if __name__ == '__main__':

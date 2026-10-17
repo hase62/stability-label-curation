@@ -111,3 +111,74 @@ by `compare_historical`. That gate would need a bounded full-report reader befor
 a retry. The current attempt stopped earlier at the IM raw-hash check; the
 large-report gate was not reached. Neither blocker was bypassed or patched after
 the stop.
+
+## Task 2.14C: integration repair and preflight only
+
+The executed Task 2.14B commit and its final `8e913f9` commit have identical
+implementation, tests and configuration; the latter adds only the outcome above.
+Task 2.14C branches from that completed commit. No scientific training resumes.
+
+IM provenance now verifies the original parsed strings with the exact Task 2.5
+serialization: UTF-8 `json.dumps([header, fields], ensure_ascii=False,
+separators=(',', ':'))`, header order `mhc,pep,tgt,rand`. CSV quoting is parsed
+before hashing. Historical ledgers omitted the flag, but retained its full hash:
+the adapter recovers a literal binary flag only if exactly one complete four-field
+hash matches. Explicit flags must match without numeric coercion. All 3,428
+original rows recover `"0"`. New IM coordinate manifests retain `original_rand`;
+native model inputs remain `mhc,pep,tgt`. Missing, modified, extra, duplicate or
+misordered identities still fail. No historical ledger or hash is rewritten.
+
+The historical Task 2.10 summary is 8,795,232 bytes. The historical comparison
+requires its complete step-loss trajectory, so a compact summary is insufficient.
+A dedicated internal-summary reader verifies the execution-receipt SHA256 and
+enforces a 32 MiB bound, duplicate-key rejection and nonfinite-literal rejection.
+This avoids a new streaming parser dependency; arbitrary evidence retains the
+original 8 MiB reader limit. The same reader handles newly completed arm summaries.
+
+`bigmhc_abp_preflight.validate` verifies both complete input stages through the
+pinned native CSV reader and identity wrapper, Teacher binding, all three weight
+assignments, population/class counts, sequence separation, exact receptor and
+peptide encodings, source identities and historical reports/checkpoint lineage.
+It reuses authenticated inputs, holds one native cohort at a time, and creates no
+dataset copies. Both the matched launcher and each weighted worker call this gate
+before EL optimization. Failures record their reason before training can begin.
+
+The CLI supports `--preflight-only --preflight-report <new-report-path>` and
+`--config <configuration-path>`. For example, from the repository with the pinned
+GPU Python environment, `PYTHONPATH=src CUDA_VISIBLE_DEVICES=0 python -B -m
+stability_label_curation.bigmhc_abp_experiment --preflight-only --preflight-report
+<new-report-path>` runs all A/B/P input/configuration checks. Resolve the report
+destination through `stability_label_curation.paths.resolve_paths().project_runs_dir`
+and create its parent directories first. Preflight does not construct a model or
+optimizer, batch/sample rows, write checkpoints, or score development observations.
+B/P's future matched-A reference is explicitly unresolved and training-disabled
+in the prospective configuration checks; the existing launcher must supply the
+authenticated completed fresh A reference before B/P may train. No dummy hash or
+old incomplete A reference substitutes for that gate. A separately authorized
+fresh experiment must use a new `--run-id` with the original experiment ID plus a
+suffix; existing run directories remain protected from reuse or overwrite.
+
+Future workers publish separate stage-start, stage-completion, stage-failure and
+checkpoint receipts. Full-precision losses, stage times, CUDA allocator peaks,
+ordered sampled-batch hashes and model lineage are saved before starting the next
+stage. These deterministic writes do not draw RNG values or alter training logic.
+No missing Task 2.14B measurements or sampled-sequence evidence is reconstructed.
+
+WSL2 acceptance: all 1,453,578 EL rows (70,069 positive), 3,428 IM rows and 70,069
+Teacher-positive observations across 49 HLA groups bind successfully; A/B/P real
+input and weight-invariant preflights pass. Guarded CLI execution prohibits model,
+optimizer, training, scoring and checkpoint calls. The synthetic CUDA gate has
+exact loss/gradient/AdamW equivalence (two synthetic optimizer steps only).
+The targeted suite passes 51 tests; the complete suite runs 795 tests with 786
+passed and nine separate Teacher-environment tests skipped. Evidence is under
+`task-2_14c-preflight-integration-repair/` in project runs, outside Git.
+
+All 59 Task 2.14B artifacts and all 64 Task 2.10 artifacts retain their original
+hashes. A's 36 EL checkpoint files remain byte-identical to Task 2.10 and strict
+CPU reload confirms equal tensors. That checkpoint is technically usable as an IM
+initial state under separate authorization, with the same architecture/transfer
+contract. Exact continuation of the original IM sampling/RNG boundary cannot be
+proved: those states and Task 2.14B's sampled EL sequence were not persisted.
+Tensor equality and rounded-loss equality do not prove matched sampling. The
+current launcher implements fresh A/B/P runs, not checkpoint resumption; reuse
+must not be represented as a fully audited fresh matched A/B/P comparison.

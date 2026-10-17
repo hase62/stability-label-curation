@@ -3,6 +3,7 @@ from collections import defaultdict
 from copy import deepcopy
 import csv
 import json
+import hashlib
 from pathlib import Path
 import time
 
@@ -24,10 +25,13 @@ def arm_run(out: str | Path, paths: StoragePaths, config: dict) -> tuple[Path, d
     directory = Path(out).absolute()
     if directory.parent == paths.project_runs_dir:
         return runner.teacher._run(directory, paths)
-    if (directory.parent != paths.project_runs_dir / RUN_ID
+    if (directory.parent.parent != paths.project_runs_dir
+            or not (directory.parent.name == RUN_ID or directory.parent.name.startswith(RUN_ID + '-'))
             or directory.name != config['condition'] or directory.name not in {'A', 'B', 'P'}):
         raise ValueError('Unexpected matched arm output directory')
     _, parent = runner.teacher._run(directory.parent, paths)
+    if parent['run_kind'] != 'bigmhc_matched_abp_experiment':
+        raise ValueError('Unexpected matched experiment manifest')
     manifest = runner.runs.validate_manifest(runner.readers._json(directory / 'manifest.json'))
     if manifest['git'] != parent['git'] or manifest['run_id'] != directory.name:
         raise ValueError('Matched arm committed lineage differs from experiment')
@@ -74,6 +78,30 @@ def prediction_rows(directory: Path, stage: str) -> list[dict]:
         return list(csv.DictReader(stream))
 
 
+def training_report(directory: Path) -> dict:
+    """Bounded exception for receipt-authenticated internal training summaries.
+
+    The complete step trajectory is required by compare_historical. A compact
+    summary cannot implement that gate; a streaming JSON parser would add a new
+    parser/dependency. Keep the generic evidence reader's 8 MiB bound intact.
+    """
+    receipt = runner.readers._json(directory / 'reports/execution_verification.json')
+    expected = receipt['outputs']['reports/training_summary.json']
+    if not runner.adapter.pilot._sha(expected):
+        raise ValueError('Invalid training report receipt hash')
+    with runner.raw._read_file(directory / 'reports/training_summary.json') as stream:
+        content = stream.read(32 * 1024 * 1024 + 1)
+    if len(content) > 32 * 1024 * 1024:
+        raise ValueError('Internal training report 32 MiB bound exceeded')
+    if hashlib.sha256(content).hexdigest() != expected:
+        raise ValueError('Internal training report receipt SHA256 mismatch')
+    result = json.loads(content, object_pairs_hook=runner.readers.dtu._unique_json,
+                        parse_constant=runner.readers._nonfinite_json)
+    if not isinstance(result, dict) or not all(k in result for k in ('architecture', 'EL', 'IM')):
+        raise ValueError('Malformed internal training report')
+    return result
+
+
 def compare_historical(current: Path, historical: Path) -> dict:
     """Gate B/P on unchanged scientific configuration, exposures and A trajectory.
 
@@ -91,8 +119,8 @@ def compare_historical(current: Path, historical: Path) -> dict:
     for filename in ('initial_el_state_identity.json',):
         if read(current / 'reports' / filename) != read(historical / 'reports' / filename):
             raise ValueError('Historical A initial tensors differ')
-    a = read(current / 'reports/training_summary.json')
-    h = read(historical / 'reports/training_summary.json')
+    a = training_report(current)
+    h = training_report(historical)
     if a['architecture'] != h['architecture']:
         raise ValueError('Historical A architecture differs')
     result = {'initial_tensors_identical': True, 'scientific_configuration_identical': True,
@@ -152,10 +180,13 @@ def per_hla_metrics(directory: Path) -> dict:
     return result
 
 
-def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = None) -> dict:
+def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = None, run_id: str = RUN_ID) -> dict:
     paths = paths or resolve_paths()
     config_path = paths.repository_root / CONFIG
     base = runner.load_config(config_path)
+    runner.runs.validate_run_id(run_id)
+    if run_id != RUN_ID and not run_id.startswith(RUN_ID + '-'):
+        raise ValueError('Matched experiment run ID must use the Task 2.14B prefix')
     runner.cuda_visibility()
     noop = runner.readers._json(noop_report)
     required = ('loss_exactly_equal', 'gradients_exactly_equal', 'AdamW_updates_identical',
@@ -170,12 +201,14 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
     tests = test_log.read_text()
     if '\nOK' not in tests or '\nFAILED' in tests:
         raise ValueError('Full test suite must pass before training')
-    verification = gpu.verify_inputs(config_path=config_path, paths=paths)
+    from .bigmhc_abp_preflight import validate
+    preflight = validate(config_path=config_path, paths=paths)
+    verification = preflight['input_verification']
     files, inputs = runner.resolve_inputs(base, paths)
     sidecar = weights.runtime_adapter(base, files)
     historical = paths.project_runs_dir / HISTORICAL
     historical_verification = verify_artifacts(historical)
-    parent = runner.runs.create_run(paths=paths, run_id=RUN_ID, kind='bigmhc_matched_abp_experiment',
+    parent = runner.runs.create_run(paths=paths, run_id=run_id, kind='bigmhc_matched_abp_experiment',
         seed=42, config=config_path, inputs=[item['path'] for item in inputs],
         argv=['bigmhc_abp_experiment'], description='Task 2.14B; single-seed A/B/P; frozen development only')
     def write(path: Path, value: dict) -> None:
@@ -183,6 +216,7 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
     write(parent / 'reports/cuda_noop_equivalence.json', noop)
     runner.raw.write_text_report(parent / 'logs/pretraining_tests.log', tests, paths=paths)
     write(parent / 'reports/input_preflight.json', {'verification': verification,
+        'full_cohort_preflight': preflight,
         'sidecar': sidecar.evidence, 'historical_artifacts': historical_verification,
         'starting_GitHub_main': '0c3b5cf245c42803854c9139f4c4058cc36f7dbf'})
     metrics, evidence, reference = {}, {}, None
@@ -225,7 +259,7 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
             if mode == 'A':
                 comparison = compare_historical(arm, historical)
                 write(parent / 'reports/matched_A_vs_task2_10.json', comparison)
-                relative = f'{RUN_ID}/A/reports/matched_state.json'
+                relative = f'{run_id}/A/reports/matched_state.json'
                 reference = {'area': 'runs', 'relative_path': relative,
                              'sha256': runner.raw.sha256_file(paths.project_runs_dir / relative)}
             print(f'Completed arm {mode}; saved artifacts verified', flush=True)
@@ -248,7 +282,20 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--noop-report', type=Path, required=True)
-    parser.add_argument('--test-log', type=Path, required=True)
+    parser.add_argument('--noop-report', type=Path)
+    parser.add_argument('--test-log', type=Path)
+    parser.add_argument('--preflight-only', action='store_true')
+    parser.add_argument('--preflight-report', type=Path)
+    parser.add_argument('--config', type=Path, default=Path(CONFIG))
+    parser.add_argument('--run-id', default=RUN_ID, help='Use a fresh suffixed ID for any separately authorized retry')
     args = parser.parse_args()
-    print(json.dumps(execute(noop_report=args.noop_report, test_log=args.test_log), indent=2))
+    if args.preflight_only:
+        if args.preflight_report is None:
+            parser.error('--preflight-only requires --preflight-report')
+        from .bigmhc_abp_preflight import record
+        result = record(config_path=args.config, report=args.preflight_report)
+    else:
+        if args.noop_report is None or args.test_log is None:
+            parser.error('training requires --noop-report and --test-log')
+        result = execute(noop_report=args.noop_report, test_log=args.test_log, run_id=args.run_id)
+    print(json.dumps(result, indent=2))
