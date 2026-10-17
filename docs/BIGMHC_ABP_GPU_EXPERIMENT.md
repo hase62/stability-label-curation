@@ -63,3 +63,51 @@ This is one exploratory seed and one permutation on previously viewed developmen
 data. Neither improved utility nor a null result establishes whether low-stability
 EL positives are erroneous or reproducible. Sealed independent outcomes, extra
 seeds, alternative strengths and correction methods are outside authorization.
+
+## Workstation execution outcome: stopped before IM optimization
+
+Execution code commit: `9f794b1bc953b7d7b007fb73bef2ab56a1687175`.
+The sidecar and all 23 inputs verified. The final CUDA synthetic gate had exact
+loss, gradients and AdamW updates; A/B/P synthetic initialization, source IDs,
+encoded inputs and RNG states matched. The full suite ran 787 tests successfully
+(778 passed; nine separate Teacher-environment fitting tests skipped), both before
+execution and after the failure.
+
+A completed 70,069 EL updates, then stopped while constructing the IM identity
+wrapper: `Native source-row join/label/order mismatch`. No IM optimizer update
+ran, and B/P did not start. The first and all 3,428 IM rows have a raw-hash schema
+mismatch: original IM provenance hashes include `mhc,pep,tgt,rand`, whereas the
+Task 2.13 wrapper reconstructs `mhc,pep,tgt`. Source IDs, source coordinates,
+HLA, peptide and original labels otherwise agree. The synthetic IM fixture used
+three-column hashes and therefore did not expose this integration blocker.
+Training was stopped as required; no retry, adapter bypass or new evaluation ran.
+
+All 36 A EL checkpoint files are byte-identical to Task 2.10. CPU-map strict
+reload independently verified the same 36 tensor states. Every one of the
+70,069 six-decimal logged losses matches Task 2.10. The mean computed from those
+rounded log values is approximately 0.07459771805; the new full-precision mean
+was not persisted. Worker elapsed time was 1,307.044 seconds and peak worker RSS
+was 3,554,689,024 bytes (3.311 GiB). Separate EL/IM wall times, peak CUDA allocator
+measurements and complete sampled source-ID sequences remained in memory when
+the worker failed and are unavailable. No new development predictions or metrics
+were saved; A/B/P AUROC/AP and their contrasts are therefore unavailable.
+
+Preserved output includes the original failure receipt, full EL training log,
+36-tensor EL checkpoint, manifests, source-row membership, initial identities,
+CUDA gate and test logs. `reports/failure_diagnosis.json` and
+`reports/final_artifact_verification.json` record the read-only investigation;
+`reports/final_output_manifest.json` authenticates the preserved files. Source
+inputs remain unchanged and sealed tests were not opened.
+
+The next necessary step is a reviewed IM provenance fix, with a synthetic
+four-column raw-source fixture and full-cohort identity binding for both stages
+before GPU optimization. Only after separate authorization should the same
+preregistered fresh A/B/P comparison restart. This incomplete execution provides
+no evidence about predictive utility or biological repeat-detection reliability.
+
+The read-only audit also found a prospective launcher blocker: Task 2.10's
+`training_summary.json` exceeds the inherited evidence reader's 8 MiB bound used
+by `compare_historical`. That gate would need a bounded full-report reader before
+a retry. The current attempt stopped earlier at the IM raw-hash check; the
+large-report gate was not reached. Neither blocker was bypassed or patched after
+the stop.
