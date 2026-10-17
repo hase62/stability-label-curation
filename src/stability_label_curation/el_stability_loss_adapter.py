@@ -283,7 +283,8 @@ def check_reference(reference, *, initial=None, rng=None, stage=None, training=N
     if training is not None:
         expected = reference[stage]
         for key in ('optimization_steps', 'sampled_batch_sha256', 'optimizer_defaults', 'updated_parameters', 'optimizer_skip_mask'):
-            if training[key] != expected[key]:
+            # JSON references represent AdamW's tuple defaults as lists.
+            if digest(training[key]) != digest(expected[key]):
                 raise ValueError('Matched sampling/optimizer exposure differs: ' + stage + '/' + key)
 
 
@@ -358,10 +359,10 @@ def prepare(*, out=None, verify_existing=False, paths=None):
     return result
 
 
-def synthetic_noop_evidence(*, paths=None):
-    """Pinned architecture forward/backward only, synthetic data, zero optimizer steps.
+def synthetic_noop_evidence(*, paths=None, device="cpu"):
+    """Pinned synthetic forward/backward; CUDA also checks two matched AdamW steps.
 
-    Optional existing CPU runtime; not called during sidecar preparation or on
+    Optional existing tensor runtime; not called during sidecar preparation or on
     import. No scientific CSV, development outcomes or checkpoints are read.
     """
     import time
@@ -378,7 +379,12 @@ def synthetic_noop_evidence(*, paths=None):
         path = paths.project_data_dir / spec['relative_path']
         if raw.sha256_file(path) != spec['sha256']: raise ValueError('Synthetic check source SHA256 mismatch')
         files['source_' + name] = path; inputs.append({'path': str(path), 'sha256': spec['sha256']})
-    torch.set_num_threads(2)
+    runtime = runner.load_config(paths.repository_root / CONFIG)
+    if device not in {'cpu', 'cuda'}:
+        raise ValueError('Synthetic gate requires explicit cpu or cuda')
+    runtime['device'] = device
+    selected_device = runner.runtime_device(torch, runtime)
+    runner.seed_runtime(torch, np, runtime)
     hla, archive = 'HLA-A*02:01', 'a' * 64
     positives = []
     records = []
@@ -419,28 +425,52 @@ def synthetic_noop_evidence(*, paths=None):
                 if mode=='A': test_batch=batches[0]
         if schedules['A']!=schedules['B'] or schedules['A']!=schedules['P'] or len({digest(r) for r in final_rngs.values()})!=1:
             raise ValueError('Adapter changed native sampling or RNG streams')
-        torch.manual_seed(42); model=BigMHC().cpu().train(); initial=runner.state_hashes(model)
+        initial_by_mode = {}
+        for mode in ('A', 'B', 'P'):
+            random.seed(42); np.random.seed(42); torch.manual_seed(42)
+            LossAdapter(positives, metadata, mode)
+            model = runner.on_device(BigMHC(), selected_device).train()
+            initial_by_mode[mode] = runner.state_hashes(model)
+        initial = initial_by_mode['A']
+        if any(state != initial for state in initial_by_mode.values()):
+            raise ValueError('Synthetic A/B/P initialization mismatch')
         if len(initial)!=36: raise ValueError('Expected authentic 36-tensor architecture')
         rng=torch.get_rng_state().clone(); saved=None; maximum=0.0;exact=True;losses=[]
+        cuda_rng = torch.cuda.get_rng_state_all() if selected_device != 'cpu' else None
+        initial_state = {k: v.detach().clone() for k, v in model.state_dict().items()}
+        update_hashes = []
         for adapted in (False,True):
+            model.load_state_dict(initial_state)
             model.zero_grad(set_to_none=True);torch.set_rng_state(rng)
-            output,_=model(test_batch.mhc.float(),test_batch.pep.float());target=test_batch.tgt.float()
+            if cuda_rng is not None: torch.cuda.set_rng_state_all(cuda_rng)
+            optimizer = torch.optim.AdamW(model.parameters(), lr=5e-5) if cuda_rng is not None else None
+            output,_=model(runner.on_device(test_batch.mhc.float(), selected_device),
+                           runner.on_device(test_batch.pep.float(), selected_device))
+            target=runner.on_device(test_batch.tgt.float(), selected_device)
             loss=weighted_bce(torch,output,target,test_batch.EL_loss_weights) if adapted else torch.nn.BCEWithLogitsLoss()(output,target)
             loss.backward();losses.append(float(loss.detach()))
             if not adapted:
                 saved={k:p.grad.detach().clone() for k,p in model.named_parameters()}
-                forward=output.detach().clone();after=torch.get_rng_state().clone()
+                forward=output.detach().clone();after=rng_identity(torch,np)
             else:
                 torch.testing.assert_close(output,forward,rtol=1e-6,atol=1e-7)
-                if not torch.equal(after,torch.get_rng_state()):raise ValueError('No-op loss consumed training RNG')
+                if after != rng_identity(torch,np):raise ValueError('No-op loss consumed training RNG')
                 for key,param in model.named_parameters():
                     torch.testing.assert_close(param.grad,saved[key],rtol=1e-6,atol=1e-7)
                     exact &= torch.equal(param.grad,saved[key])
                     maximum=max(maximum,float((param.grad-saved[key]).abs().max()))
+            if optimizer is not None:
+                optimizer.step()
+                update_hashes.append(runner.state_hashes(model))
+        if update_hashes and update_hashes[0] != update_hashes[1]:
+            raise ValueError('CUDA no-op AdamW parameter updates differ')
+        model.load_state_dict(initial_state)
         if initial!=runner.state_hashes(model) or abs(losses[0]-losses[1])>1e-7+1e-6*abs(losses[0]):
             raise ValueError('No-op changed parameters or loss')
     return {'schema_version':1,'fixture':'Synthetic 272 unique nine-mers: 16 positives + 256 negatives; zero receptor vector; not scientific observations',
-        'source_commit':runner.SOURCE_COMMIT,'source_inputs':inputs,'device':'cpu','precision':'FP32',
+        'source_commit':runner.SOURCE_COMMIT,'source_inputs':inputs,'device':selected_device,'precision':'FP32',
+        'adapter_source_sha256':raw.sha256_file(Path(__file__)),
+        'runner_source_sha256':raw.sha256_file(Path(runner.__file__)),
         'versions':{n:importlib.metadata.version(n) for n in ('torch','numpy','pandas')},
         'authentic_architecture_state_tensors':36,'legacy_loss':losses[0],'adapter_A_loss':losses[1],
         'loss_exactly_equal':losses[0]==losses[1],'gradient_maximum_absolute_difference':maximum,
@@ -449,7 +479,8 @@ def synthetic_noop_evidence(*, paths=None):
         'A_B_P_ordered_source_identity_digest':digest(schedules['A']),
         'native_encoded_tensors_and_labels_identical':True,'model_sampler_RNG_states_identical':True,
         'source_row_identity_collation_verified':True,'model_parameters_unchanged':True,
-        'authentic_model_optimizer_steps':0,'real_training_rows_read':0,'development_predictions_generated':0,
+        'authentic_model_optimizer_steps':len(update_hashes),'real_training_rows_read':0,'development_predictions_generated':0,
+        'A_B_P_initial_tensor_sha256':initial_by_mode,'AdamW_updates_identical':bool(update_hashes) and update_hashes[0]==update_hashes[1],
         'elapsed_seconds':time.monotonic()-start}
 
 

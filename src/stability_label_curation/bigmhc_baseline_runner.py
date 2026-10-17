@@ -417,7 +417,11 @@ def worker(*,config_path,out,paths=None,files=None):
         from . import el_stability_loss_adapter as weighting
         weighting.require_training_authorization(config)
     resolved,inputs=resolve_inputs(config,paths,files)
-    directory,manifest=teacher._run(out,paths)
+    if adapted:
+        from .bigmhc_abp_experiment import arm_run
+        directory,manifest=arm_run(out,paths,config)
+    else:
+        directory,manifest=teacher._run(out,paths)
     import torch
     device=runtime_device(torch,config)
     if (manifest['configuration']['file']!={'path':str(Path(config_path).absolute()),'sha256':raw.sha256_file(config_path)}
@@ -597,7 +601,11 @@ def run(*,config_path,out,paths=None,files=None):
         from .el_stability_loss_adapter import require_training_authorization
         require_training_authorization(config)
     resolve_inputs(config,paths,files)
-    directory,_=teacher._run(out,paths)
+    if config.get('loss_adapter'):
+        from .bigmhc_abp_experiment import arm_run
+        directory,_=arm_run(out,paths,config)
+    else:
+        directory,_=teacher._run(out,paths)
     import psutil
     command=[sys.executable,'-B','-m','stability_label_curation','bigmhc-smoke','--config',str(Path(config_path).absolute()),'--out',str(directory),'--worker']
     for name,path in (files or {}).items():command+=['--input',name+'='+str(path)]
