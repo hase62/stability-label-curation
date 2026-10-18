@@ -15,7 +15,7 @@ from . import el_stability_loss_adapter as binding
 from .paths import StoragePaths, resolve_paths
 
 CONFIG = 'configs/bigmhc_stability_auxiliary_task2_20.json'
-RUN_ID = 'task-2_20-stability-auxiliary'
+RUN_ID = 'task-2_21-stability-auxiliary-gpu'
 LEGACY_CONFIG = 'configs/bigmhc_low_stability_task2_19.json'
 
 
