@@ -4,6 +4,8 @@ from copy import deepcopy
 from dataclasses import asdict, replace
 from fractions import Fraction
 import importlib.util
+import csv
+import io
 import json
 from pathlib import Path
 import random
@@ -38,9 +40,11 @@ def manifest(rows):
 def ledger(total=272, positives=16, member='el_train.csv'):
     for index in range(1,total+1):
         label = '1' if index <= positives else '0'
+        header=['mhc','pep','tgt']+(['rand'] if member=='im_train.csv' else [])
+        fields=[HLA,'AAAAAAAAA',label]+(['0'] if member=='im_train.csv' else [])
         yield {'derived_row_index':str(index),'row_index':str(index),'source_line_number':str(index+1),
             'source_file':member,'source_row_id':w.design.prior.pilot.row_id(ARCHIVE,member,index),
-            'source_row_sha256':w.design.prior.adapter.source_hash(['mhc','pep','tgt'],[HLA,'AAAAAAAAA',label]),
+            'source_row_sha256':w.design.prior.adapter.source_hash(header,fields),
             'original_hla':HLA,'resolved_hla':HLA,'original_peptide':'AAAAAAAAA','original_label':label}
 
 
@@ -311,6 +315,44 @@ class TensorAdapterTests(unittest.TestCase):
         wrapper=w.IdentityDataset(self.native(),ledger(member='im_train.csv'),stage='IM',archive_sha256=ARCHIVE)
         wrapper.makebats(16)
         self.assertFalse(hasattr(wrapper[0],'EL_loss_weights'))
+
+    def test_authentic_quoted_four_column_IM_fixture(self):
+        # Hash parsed original strings, not CSV bytes or numerically coerced values.
+        source='"mhc","pep","tgt","rand"\r\n"HLA-A*02:01","AAAAAAAAA","1","0"\r\n'
+        header, fields = list(csv.reader(io.StringIO(source, newline=''), strict=True))
+        self.assertEqual(json.dumps([header,fields],ensure_ascii=False,separators=(',',':')),
+            '[["mhc","pep","tgt","rand"],["HLA-A*02:01","AAAAAAAAA","1","0"]]')
+        records=list(ledger(member='im_train.csv'))
+        records[0]['source_row_sha256']=w.design.prior.adapter.source_hash(header,fields)
+        self.assertNotEqual(records[0]['source_row_sha256'],w.design.prior.adapter.source_hash(header[:3],fields[:3]))
+        w.IdentityDataset(self.native(),records,stage='IM',archive_sha256=ARCHIVE)
+        self.assertEqual({r['original_rand'] for r in records},{'0'})
+
+    def test_IM_missing_modified_duplicate_and_formatting_rejected(self):
+        records=list(ledger(member='im_train.csv'))
+        cases=[records[:-1],records+[records[-1]],records[:1]+records,
+               [dict(records[0],original_rand='1')]+records[1:],
+               [dict(records[0],original_rand='0.0')]+records[1:],
+               [dict(records[0],original_label='0')]+records[1:],
+               [dict(records[0],source_row_sha256='0'*64)]+records[1:],
+               [dict(records[0],prepared_row_index='99')]+records[1:],
+               [dict(records[0],retained='0')]+records[1:],
+               [dict(records[0],source_line_number='99')]+records[1:]]
+        for case in cases:
+            with self.subTest(first=case[0]),self.assertRaises(ValueError):
+                w.IdentityDataset(self.native(),case,stage='IM',archive_sha256=ARCHIVE)
+
+    def test_IM_literal_rand_recovered_only_by_complete_hash(self):
+        for flag in ('0','1'):
+            record=next(ledger(member='im_train.csv'))
+            record['source_row_sha256']=w.design.prior.adapter.source_hash(
+                ['mhc','pep','tgt','rand'],[HLA,'AAAAAAAAA','1',flag])
+            header,fields=w.original_fields(record,'IM')
+            self.assertEqual(fields[-1],flag)
+            self.assertEqual(record['original_rand'],flag)
+        record['source_row_sha256']=w.design.prior.adapter.source_hash(
+            ['mhc','pep','tgt','rand'],[HLA,'AAAAAAAAA','1','0.0'])
+        with self.assertRaises(ValueError):w.original_fields(record,'IM')
 
     def test_wrong_loss_shapes_or_negative_weight_fail(self):
         torch=self.torch

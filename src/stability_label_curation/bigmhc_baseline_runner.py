@@ -158,6 +158,10 @@ def attach_provenance(selected,path):
             if (index in seen or [record['resolved_hla'],record['original_peptide'],record['original_label']]
                     !=[row['hla'],row['peptide'],row['original_label']]):raise ValueError('Original-row lineage join mismatch')
             row['source_locator']={key:record[key] for key in PROVENANCE_FIELDS}
+            if record['source_file']=='im_train.csv':
+                from .el_stability_loss_adapter import original_fields
+                original_fields(record,'IM')
+                row['source_locator']['original_rand']=record['original_rand']
             seen.add(index)
     if seen!=set(wanted):raise ValueError('Selected original-row lineage missing')
 
@@ -417,7 +421,20 @@ def worker(*,config_path,out,paths=None,files=None):
         from . import el_stability_loss_adapter as weighting
         weighting.require_training_authorization(config)
     resolved,inputs=resolve_inputs(config,paths,files)
-    directory,manifest=teacher._run(out,paths)
+    if adapted:
+        from .bigmhc_abp_experiment import arm_run
+        directory,manifest=arm_run(out,paths,config)
+    else:
+        directory,manifest=teacher._run(out,paths)
+    if adapted:
+        from .bigmhc_abp_preflight import validate
+        try:
+            preflight=validate(config_path=config_path,paths=paths,files=files)
+        except Exception as error:
+            raw.write_report(directory/'reports/full_cohort_preflight.json',
+                {'status':'failed','failure_reason':repr(error),'optimizer_steps':0},paths=paths)
+            raise
+        raw.write_report(directory/'reports/full_cohort_preflight.json',preflight,paths=paths)
     import torch
     device=runtime_device(torch,config)
     if (manifest['configuration']['file']!={'path':str(Path(config_path).absolute()),'sha256':raw.sha256_file(config_path)}
@@ -442,7 +459,7 @@ def worker(*,config_path,out,paths=None,files=None):
         if config['version'] in (FULL_VERSION,WEIGHTED_VERSION):
             # Reuse the atomic streaming writer rather than building a multi-GB JSON string.
             relative=f'processed/{stage.lower()}_original_row_manifest.csv.gz'
-            fields=['prepared_row_index','hla','peptide',*PROVENANCE_FIELDS]
+            fields=['prepared_row_index','hla','peptide',*PROVENANCE_FIELDS]+(['original_rand'] if stage=='IM' else [])
             with adapter.artifact_csv(directory/relative,fields,True) as (writer,sink):
                 for row in selected[stage]:
                     writer.writerow({key:row[key] for key in ('prepared_row_index','hla','peptide')} | row['source_locator'])
@@ -510,9 +527,33 @@ def worker(*,config_path,out,paths=None,files=None):
             matched['initial_tensor_sha256']=initial
             matched['rng_before_EL']=weighting.rng_identity(torch,np)
             weighting.check_reference(matched_reference,initial=initial,rng=matched['rng_before_EL'],stage='EL')
-        start=time.monotonic();el_training=train_epoch(torch,model,training_dataset('EL'),config,False,device,
+        def stage_epoch(stage, current_model, transfer, **kwargs):
+            # Separate immutable receipts survive a later stage/encoding/reload failure.
+            raw.write_report(directory/f'reports/{stage.lower()}_stage_started.json',
+                {'stage':stage,'status':'started','initial_state_tensor_sha256':state_hashes(current_model),
+                 'code_commit':manifest['git']['commit_sha'], 'condition':config['condition']},paths=paths)
+            if device!='cpu':
+                torch.cuda.synchronize(0);torch.cuda.reset_peak_memory_stats(0)
+            start=time.monotonic()
+            try:
+                training=train_epoch(torch,current_model,training_dataset(stage),config,transfer,device,**kwargs)
+                if device!='cpu':torch.cuda.synchronize(0)
+            except Exception as error:
+                raw.write_report(directory/f'reports/{stage.lower()}_stage_failed.json',
+                    {'stage':stage,'status':'failed','failure_reason':repr(error),
+                     'elapsed_seconds':time.monotonic()-start},paths=paths)
+                raise
+            training['elapsed_seconds']=time.monotonic()-start
+            training['GPU_memory']=({'peak_allocated_bytes':torch.cuda.max_memory_allocated(0),
+                'peak_reserved_bytes':torch.cuda.max_memory_reserved(0)} if device!='cpu' else None)
+            raw.write_report(directory/f'reports/{stage.lower()}_stage_completed.json',
+                {'stage':stage,'status':'completed','training':training,
+                 'state_tensor_sha256':state_hashes(current_model),
+                 'ordered_sampled_batches_sha256':weighting.digest(training['sampled_batch_sha256']) if adapted else None,
+                 'checkpoint_status':'pending; see separate stage checkpoint receipt'},paths=paths)
+            return training
+        el_training=stage_epoch('EL',model,False,
             **({'loss_adapter':loss_adapter,'expected_batches':matched_reference['EL']['sampled_batch_sha256'] if matched_reference else None} if adapted else {}))
-        el_training['elapsed_seconds']=time.monotonic()-start
         if adapted:
             weighting.check_reference(matched_reference,stage='EL',training=el_training)
             matched['EL']={k:el_training[k] for k in ('optimization_steps','sampled_batch_sha256','optimizer_defaults','updated_parameters','optimizer_skip_mask')}
@@ -524,13 +565,17 @@ def worker(*,config_path,out,paths=None,files=None):
         reloaded=load_checkpoint(torch,BigMHC,el,keys,device=device)
         if state_hashes(reloaded)!=el_state:raise ValueError('EL checkpoint state reload mismatch')
         el_agreement=prediction_agreement(el_predictions,predict(torch,reloaded,dev,config['batch_size'],device),device)
+        raw.write_report(directory/'reports/el_stage_checkpoint.json',
+            {'status':'verified','checkpoint':'checkpoints/el','files':el_files,
+             'initial_state_tensor_sha256':initial,'state_tensor_sha256':el_state,
+             'strict_reload_identical':True,'code_commit':manifest['git']['commit_sha']},paths=paths)
         del model
         if adapted:
             matched['rng_before_IM']=weighting.rng_identity(torch,np)
             weighting.check_reference(matched_reference,rng=matched['rng_before_IM'],stage='IM')
-        start=time.monotonic();im_training=train_epoch(torch,reloaded,training_dataset('IM'),config,True,device,
+        im_training=stage_epoch('IM',reloaded,True,
             **({'expected_batches':matched_reference['IM']['sampled_batch_sha256'] if matched_reference else None} if adapted else {}))
-        im_training['elapsed_seconds']=time.monotonic()-start;im_state=state_hashes(reloaded)
+        im_state=state_hashes(reloaded)
         if adapted:
             weighting.check_reference(matched_reference,stage='IM',training=im_training)
             matched['IM']={k:im_training[k] for k in ('optimization_steps','sampled_batch_sha256','optimizer_defaults','updated_parameters','optimizer_skip_mask')}
@@ -548,6 +593,10 @@ def worker(*,config_path,out,paths=None,files=None):
             'checkpoint_loading':'weights_only=True,map_location=cpu,strict state load then selected device',
             'EL_reload_identical':True,'IM_reload_identical':True,'unoptimized_encoder_weights_unchanged':True}
         verify_parent(el,im,lineage)
+        raw.write_report(directory/'reports/im_stage_checkpoint.json',
+            {'status':'verified','checkpoint':'checkpoints/el/im','parent':'checkpoints/el',
+             'files':im_files,'parent_state_tensor_sha256':el_state,'state_tensor_sha256':im_state,
+             'code_commit':manifest['git']['commit_sha']},paths=paths)
         del reloaded
         reconstructed=load_checkpoint(torch,BigMHC,im,keys,device=device,lineage=lineage)
         if state_hashes(reconstructed)!=im_state:raise ValueError('IM parent+overlay state reload mismatch')
@@ -558,6 +607,9 @@ def worker(*,config_path,out,paths=None,files=None):
         torch.cuda.synchronize(0)
     gpu_memory={'peak_allocated_bytes':torch.cuda.max_memory_allocated(0),
                 'peak_reserved_bytes':torch.cuda.max_memory_reserved(0)} if device!='cpu' else None
+    if gpu_memory is not None:
+        gpu_memory={key:max(gpu_memory[key],el_training['GPU_memory'][key],im_training['GPU_memory'][key])
+                    for key in gpu_memory}
     write_predictions(directory/'predictions/el_development.csv',development,el_predictions,paths)
     write_predictions(directory/'predictions/im_development.csv',development,im_predictions,paths)
     metrics={name:development_metrics([int(r['original_label']) for r in development],probabilities)
@@ -597,7 +649,11 @@ def run(*,config_path,out,paths=None,files=None):
         from .el_stability_loss_adapter import require_training_authorization
         require_training_authorization(config)
     resolve_inputs(config,paths,files)
-    directory,_=teacher._run(out,paths)
+    if config.get('loss_adapter'):
+        from .bigmhc_abp_experiment import arm_run
+        directory,_=arm_run(out,paths,config)
+    else:
+        directory,_=teacher._run(out,paths)
     import psutil
     command=[sys.executable,'-B','-m','stability_label_curation','bigmhc-smoke','--config',str(Path(config_path).absolute()),'--out',str(directory),'--worker']
     for name,path in (files or {}).items():command+=['--input',name+'='+str(path)]
