@@ -33,7 +33,7 @@ class CheckpointPackageTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        self.root = Path(self.temp.name).resolve()
         self.paths = restore.storage(self.root / 'original')
         self.registry = self.root / 'registry.json'
         self.registry.write_bytes(package.json_bytes({'schema_version': 1,
@@ -139,6 +139,22 @@ class CheckpointPackageTests(unittest.TestCase):
             self.assertEqual(restore.restore(artifact, clean)['action'], 'all_destinations_reused')
             a.unlink()  # Only a disposable synthetic restored alias.
             self.assertTrue(restore.restore(artifact, clean)['status']['complete'])
+        self.assert_originals_unchanged()
+
+    def test_existing_local_package_restores_all_aliases_without_network(self):
+        receipt, artifact = self.build()
+        source = self.paths.project_data_dir / receipt['archive_relative_path']
+        clean = restore.storage(self.root / 'local-package-recovery')
+        local = restore.package_path(artifact, clean)
+        local.parent.mkdir(parents=True); local.write_bytes(source.read_bytes())
+        with patch.dict('os.environ', {}, clear=True):
+            result = restore.restore(artifact, clean, opener=SimpleNamespace(
+                open=lambda *a, **k: self.fail('Existing package must not be downloaded')))
+        self.assertTrue(result['status']['complete'])
+        self.assertEqual(result['download']['bytes_downloaded'], 0)
+        self.assertFalse(restore.cache_path(artifact, clean).exists())
+        for member in restore.restoration_members(artifact):
+            self.assertEqual(restore.file_status(restore.destination(member, clean), member), 'verified')
         self.assert_originals_unchanged()
 
     def test_authenticated_inventory_and_manifest_disagreements_rejected(self):

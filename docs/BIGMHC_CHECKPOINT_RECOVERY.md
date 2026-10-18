@@ -1,9 +1,11 @@
 # Windows BigMHC checkpoint backup (Task 2.16W)
 
-Artifact ID: `bigmhc-windows-checkpoints-task2-16w`. Publication to Dropbox and
-external recovery are **pending**. No remote URL is stored in Git. Upload the
-existing archive manually; connecting its eventual locator does not change its
-bytes, manifest or hashes.
+Artifact ID: `bigmhc-windows-checkpoints-task2-16w`; the shorter recovery alias is
+`bigmhc-windows-checkpoints`. Task 2.16R registers the owner-provided Dropbox URL
+in the confirmed-private repository. No environment variable or manual download
+is required. The approved archive bytes, hashes, members and 116 checkpoint
+restoration destinations are unchanged. External checkpoint restoration remains
+pending Z790 verification; it was not downloaded on Mac.
 
 The single archive is written to the configured project data directory:
 `~/codex/data/stability-label-curation/artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.tar.gz`
@@ -16,8 +18,8 @@ a circular hash. Archive and sidecars stay outside Git.
 The completed archive is **666,954,318 bytes** (636.06 MiB), SHA256
 `4787ea9b3fea2a42f4b32a15a9b38d3c8453fa6d6187bd48100b4014bb0a4909`.
 It has 106 stored members: 80 checkpoint files, 25 provenance JSON files and the
-package manifest; 36 additional checkpoint destinations are aliases. The coverage
-auditor excludes packages marked publication pending from external-backup counts.
+package manifest; 36 additional checkpoint destinations are aliases. The locator
+is now registered; registration does not certify a successful external restoration.
 
 ## Contents and historical identities
 
@@ -83,19 +85,25 @@ The existing bounded transport accepts archives up to 2 GiB, allowing the one
 combined package. Every download still has the exact registered byte count and
 SHA256 bound. No real checkpoint is restored into a second tree for testing.
 
-## Recovery after manual upload
+## Recovery with the registered locator
 
-Supply the authorized direct-download Dropbox URL privately through the process
-environment variable `SLC_ARTIFACT_BIGMHC_WINDOWS_CHECKPOINTS_URL`. Do not put its
-value in Git, logs or command-line arguments. No registry edit or repackaging is
-needed. With that variable set, the existing restore CLI can recover all 116
-checkpoint destinations and the included provenance records:
+From the repository root:
 
 ```sh
-python3 -B scripts/restore_artifacts.py dry-run bigmhc-windows-checkpoints-task2-16w --workspace-root "$HOME/codex"
-python3 -B scripts/restore_artifacts.py restore bigmhc-windows-checkpoints-task2-16w --workspace-root "$HOME/codex"
-python3 -B scripts/restore_artifacts.py verify bigmhc-windows-checkpoints-task2-16w --workspace-root "$HOME/codex"
+python3 -B scripts/restore_artifacts.py restore bigmhc-windows-checkpoints --workspace-root "$HOME/codex"
 ```
+
+The command uses the persistent URL, authenticates all required content internally
+and preserves the existing mapping. It reuses an authenticated archive in
+`data/stability-label-curation/artifacts/packages/` without making a duplicate in
+the cache. Newly downloaded archives go to `data/artifacts/cache/`; valid existing
+checkpoint destinations are not copied again. The [fresh-clone guide](FRESH_CLONE_RECOVERY.md)
+provides one command covering the inputs, scores and checkpoints together.
+
+The registry contains restricted project access information. Do not print its
+URLs or publish the private repository/history. CLI receipts contain identities
+and checksums, never the access-bearing locations. Revoked shared links require
+an authorized registry update.
 
 Use a different workspace root when recovering to a different machine/layout.
 The CLI verifies the entire archive before publishing files, verifies every
@@ -107,5 +115,6 @@ Exact saved checkpoint recovery is covered. Task 2.14B did not produce an A IM
 overlay or B/P checkpoints. Its per-batch sampling fingerprints and RNG boundary
 were not persisted before failure; interrupted optimizer/RNG resumption is not
 established. These are retained historical limitations, not missing model bytes.
-Dropbox upload/download and external restoration have not been verified in this
-task. Stop after packaging; no training, predictions, merge or push is authorized.
+Task 2.16W packaged the files; Task 2.16R registered the owner-provided location
+and tested recovery with small fixtures. Real external checkpoint download and
+restoration are not claimed by the Mac task. No training is part of recovery.

@@ -1,4 +1,7 @@
 {
+  "artifact_id_aliases": {
+    "bigmhc-windows-checkpoints": "bigmhc-windows-checkpoints-task2-16w"
+  },
   "artifacts": [
     {
       "artifact_id": "gpu-inputs-23af9966",
@@ -24,7 +27,7 @@
           "*.dropboxusercontent.com",
           "*.dropbox.com"
         ],
-        "environment_variable": "SLC_ARTIFACT_GPU_INPUTS_URL"
+        "url": "https://www.dropbox.com/scl/fi/ws0duvfgpnwyxwftfnz5w/stability-label-curation-gpu-inputs-23af9966.tar.gz?rlkey=iejgmapdpeimr0ez4zy6glhhz&dl=1"
       },
       "member_count": 21,
       "member_manifest": {
@@ -61,7 +64,7 @@
           "*.dropboxusercontent.com",
           "*.dropbox.com"
         ],
-        "environment_variable": "SLC_ARTIFACT_EL_POSITIVE_SCORES_URL"
+        "url": "https://www.dropbox.com/scl/fi/dpziod22jcp4vcsp07q2z/stability-label-curation-el-positive-scores-task2_13.tar.gz?rlkey=0775hmko9n4hvlawocixkvt1r&dl=1"
       },
       "member_count": 2,
       "members": [
@@ -788,7 +791,7 @@
       "dependencies": [],
       "exact_restoration": true,
       "expanded_size_bytes": 739222308,
-      "external_publication": "pending",
+      "external_publication": "Dropbox locator registered by owner; external restoration pending Z790 verification",
       "external_restoration_verified": false,
       "filename": "stability-label-curation-bigmHC-windows-checkpoints.tar.gz",
       "format": "tar.gz",
@@ -806,7 +809,7 @@
           "*.dropboxusercontent.com",
           "*.dropbox.com"
         ],
-        "environment_variable": "SLC_ARTIFACT_BIGMHC_WINDOWS_CHECKPOINTS_URL"
+        "url": "https://www.dropbox.com/scl/fi/qrm80og2r8hwlbj4gx3fu/stability-label-curation-bigmHC-windows-checkpoints.tar.gz?rlkey=m3l2m35fzrd03iqp9u2ftajnb&dl=1"
       },
       "logical_checkpoint_count": 116,
       "member_count": 106,
@@ -1576,7 +1579,7 @@
     "codex/data/stability-label-curation/": "data/stability-label-curation/",
     "codex/runs/stability-label-curation/": "runs/stability-label-curation/"
   },
-  "private_locator_policy": "Capability-bearing Dropbox links are supplied externally via environment variables; never logged or committed. Repository is private; data sharing still requires authorization.",
+  "private_locator_policy": "Restricted project information. Owner-approved capability-bearing Dropbox URLs are persistent in this private repository for authorized collaborators. Never print locators in logs/receipts or publish this tree without removing restricted access information.",
   "project_name": "stability-label-curation",
   "schema_version": 1,
   "source_metadata_authority": "configs/data_sources.toml and existing source-specific locks; archive members must agree with their referenced manifests"

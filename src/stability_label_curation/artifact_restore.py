@@ -119,7 +119,18 @@ def load_registry(path=None):
         if aid in stack: raise ValueError('Artifact dependency cycle')
         for other in result[aid].get('dependencies',[]): visit(other,stack|{aid})
     for aid in result: visit(aid,set())
+    artifact_id_aliases(document, result)
     return result
+
+
+def artifact_id_aliases(document: dict, artifacts: dict) -> dict[str, str]:
+    aliases = document.get('artifact_id_aliases', {})
+    if (not isinstance(aliases, dict) or any(
+            not isinstance(alias, str) or not re.fullmatch('[a-z0-9][a-z0-9_-]{0,95}', alias)
+            or alias in artifacts or not isinstance(target, str) or target not in artifacts
+            for alias, target in aliases.items())):
+        raise ValueError('Invalid artifact ID aliases')
+    return aliases
 
 
 def validate_url(url, hosts):
@@ -146,6 +157,18 @@ def destination(member, paths):
 
 def cache_path(artifact, paths):
     return paths.project_data_dir/'artifacts/cache'/(artifact['sha256']+'--'+artifact['filename'])
+
+
+def package_path(artifact, paths) -> Path:
+    return paths.project_data_dir/'artifacts/packages'/artifact['filename']
+
+
+def archive_path(artifact, paths) -> Path:
+    cached = cache_path(artifact, paths)
+    if cached.exists() or cached.is_symlink(): return cached
+    packaged = package_path(artifact, paths)
+    if packaged.exists() or packaged.is_symlink(): return packaged
+    return cached
 
 
 def restoration_members(artifact):
@@ -177,12 +200,13 @@ def status(artifact, paths):
     return {'artifact_id':artifact['artifact_id'],'files':files,
             'complete':all(m['status']=='verified' for m in files),
             'cache':file_status(cache_path(artifact,paths),artifact),
+            'local_package':file_status(package_path(artifact,paths),artifact),
             'locator_configured':bool(artifact['locator'].get('url') or os.environ.get(artifact['locator'].get('environment_variable','')))}
 
 
 def preflight(artifact, paths):
     report=status(artifact,paths)
-    if report['cache']=='wrong_hash' or any(f['status']=='wrong_hash' for f in report['files']):
+    if report['cache']=='wrong_hash' or report['local_package']=='wrong_hash' or any(f['status']=='wrong_hash' for f in report['files']):
         raise ValueError('Existing wrong-hash artifact preserved; resolve collision explicitly')
     return report
 
@@ -205,6 +229,7 @@ def atomic_destination(path):
 def fetch(artifact, paths, *, opener=None, timeout=30):
     before=preflight(artifact,paths)
     if before['cache']=='verified': return {'artifact_id':artifact['artifact_id'],'action':'verified_cache_reused','bytes_downloaded':0}
+    if before['local_package']=='verified': return {'artifact_id':artifact['artifact_id'],'action':'verified_local_package_reused','bytes_downloaded':0}
     if before['complete']: return {'artifact_id':artifact['artifact_id'],'action':'verified_destinations_reused','bytes_downloaded':0}
     locator=artifact['locator'];url=locator.get('url') or os.environ.get(locator.get('environment_variable',''))
     if not url: raise ValueError('Authorized locator required via '+locator['environment_variable'])
@@ -238,8 +263,8 @@ def fetch(artifact, paths, *, opener=None, timeout=30):
 
 
 def check_archive(artifact, paths):
-    archive=cache_path(artifact,paths)
-    if file_status(archive,artifact)!='verified': raise ValueError('Authenticated cache archive is required')
+    archive=archive_path(artifact,paths)
+    if file_status(archive,artifact)!='verified': raise ValueError('Authenticated cache or local package archive is required')
     if artifact['format']=='file': return
     expected={m['archive_path']:m for m in artifact['members']};seen=set()
     with raw._read_file(archive) as stream,tarfile.open(fileobj=stream,mode='r:gz') as bundle:
@@ -281,7 +306,7 @@ def restore(artifact, paths, *, opener=None):
                 digest.update(chunk);output.write(chunk)
             if size!=member['size_bytes'] or digest.hexdigest()!=member['sha256']: raise ValueError('Materialized-file SHA256 mismatch')
         written.append({'area':member['area'],'relative_path':member['relative_path'],'sha256':member['sha256']})
-    archive=cache_path(artifact,paths)
+    archive=archive_path(artifact,paths)
     if artifact['format']=='file':
         with raw._read_file(archive) as stream:publish(artifact['members'][0],stream)
     else:
@@ -313,6 +338,8 @@ def main(argv=None):
     try:
         artifacts=load_registry(args.registry);paths=storage(args.workspace_root)
         selected=list(artifacts) if args.all or args.operation=='list' and not args.artifact_ids else args.artifact_ids
+        aliases=artifact_id_aliases(read_json(args.registry or Path(__file__).resolve().parents[2]/REGISTRY), artifacts)
+        selected=list(dict.fromkeys(aliases.get(a, a) for a in selected))
         if not selected or any(a not in artifacts for a in selected): raise ValueError('Select registered artifact IDs or --all')
         report=[];failed=False
         for aid in selected:
@@ -320,7 +347,7 @@ def main(argv=None):
             if args.operation=='list':report.append({k:item[k] for k in ['artifact_id','version','role','filename','size_bytes','sha256','member_count']})
             elif args.dry_run or args.operation=='dry-run':
                 report.append({'artifact_id':aid,'planned_cache_relative_path':str(cache_path(item,paths).relative_to(paths.project_data_dir)),
-                    'restoration_mapping':item['members'],'current':status(item,paths),'writes_performed':False})
+                    'restoration_mapping':restoration_members(item),'current':status(item,paths),'writes_performed':False})
             elif args.operation in ('status','verify'):
                 found=status(item,paths);report.append(found)
                 if args.operation=='verify' and not found['complete']:failed=True

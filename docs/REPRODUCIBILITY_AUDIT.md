@@ -1,5 +1,10 @@
 # Repository-driven reproducibility audit (Task 2.15M)
 
+Task 2.16R update: the prior environment-only Dropbox policy below is historical.
+Owner-approved private-repository locators are now persistent; see the current
+[fresh-clone recovery guide](FRESH_CLONE_RECOVERY.md). Windows checkpoint recovery
+is registered, with actual external restoration pending Z790 verification.
+
 This audit starts from approved commit `0c3b5cf245c42803854c9139f4c4058cc36f7dbf`.
 It performs transport, cryptographic verification and metadata inventory only. It
 runs no model, reads no scientific table rows and opens no sealed BigMHC ZIP member.

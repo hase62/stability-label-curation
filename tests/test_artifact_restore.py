@@ -217,6 +217,86 @@ class RestoreTests(unittest.TestCase):
                     r.restore(a,self.paths,opener=self.client())
                 self.assertFalse(self.paths.project_runs_dir.exists())
 
+    def test_three_persistent_locators_and_original_checkpoint_mapping(self):
+        with patch.dict('os.environ', {}, clear=True):
+            artifacts=r.load_registry()
+        document=r.read_json(Path(r.__file__).resolve().parents[2]/r.REGISTRY)
+        aliases=r.artifact_id_aliases(document, artifacts)
+        ids=('gpu-inputs-23af9966','el-positive-scores-task2-13','bigmhc-windows-checkpoints')
+        for aid in ids:
+            item=artifacts[aliases.get(aid,aid)]
+            self.assertTrue('url' in item['locator'])
+            self.assertFalse('environment_variable' in item['locator'])
+            self.assertTrue(item['locator']['url'].startswith('https://www.dropbox.com/'))
+        checkpoint=artifacts[aliases[ids[2]]]
+        self.assertEqual(checkpoint['size_bytes'],666954318)
+        self.assertEqual(checkpoint['sha256'],'4787ea9b3fea2a42f4b32a15a9b38d3c8453fa6d6187bd48100b4014bb0a4909')
+        self.assertEqual(checkpoint['unique_checkpoint_count'],80)
+        self.assertEqual(sum('/checkpoints/' in m['relative_path'] for m in r.restoration_members(checkpoint)),116)
+        mapping={k:checkpoint[k] for k in ('members','aliases','package_manifest')}
+        self.assertEqual(sha(json.dumps(mapping,sort_keys=True,separators=(',',':')).encode()),
+                         '2e699adf49f9fadb3ea74cf7caae57f919a20a467661e133bd23ec8c84560db1')
+
+    def test_direct_url_without_environment_and_no_locator_in_receipt(self):
+        a={**self.a,'locator':{'url':'https://files.example.test/archive?rlkey=restricted-fixture',
+                             'allowed_hosts':['files.example.test']}}
+        self.save_registry(a)
+        output=io.StringIO()
+        with patch.dict('os.environ',{},clear=True),patch.object(r,'build_opener',return_value=self.client()),redirect_stdout(output):
+            code=r.main(['restore','fixture','--registry',str(self.registry),'--workspace-root',str(self.paths.codex_root)])
+        self.assertEqual(code,0);self.assertEqual(self.calls,1)
+        self.assertNotIn('rlkey',output.getvalue());self.assertNotIn('restricted-fixture',output.getvalue())
+
+    def test_alias_resolves_once_and_preserves_canonical_identity(self):
+        doc=json.loads(self.registry.read_text());doc['artifact_id_aliases']={'short':'fixture'}
+        self.registry.write_text(json.dumps(doc));output=io.StringIO()
+        with redirect_stdout(output):code=r.main(['list','short','fixture','--registry',str(self.registry)])
+        receipt=json.loads(output.getvalue())
+        self.assertEqual(code,0);self.assertEqual(len(receipt['artifacts']),1)
+        self.assertEqual(receipt['artifacts'][0]['artifact_id'],'fixture')
+
+    def test_invalid_artifact_id_aliases_rejected(self):
+        for aliases in ({'short':'missing'},{'fixture':'fixture'},{'../escape':'fixture'},{'short':3},[]):
+            doc=json.loads(self.registry.read_text());doc['artifact_id_aliases']=aliases
+            self.registry.write_text(json.dumps(doc))
+            with self.assertRaisesRegex(ValueError,'aliases'):r.load_registry(self.registry)
+
+    def test_private_locator_redacted_for_read_only_commands(self):
+        a={**self.a,'locator':{'url':'https://files.example.test/archive?rlkey=restricted-fixture',
+                             'allowed_hosts':['files.example.test']}}
+        self.save_registry(a)
+        for command in ('list','status','verify','dry-run'):
+            output=io.StringIO()
+            with redirect_stdout(output):r.main([command,'fixture','--registry',str(self.registry),'--workspace-root',str(self.paths.codex_root)])
+            self.assertNotIn('rlkey',output.getvalue());self.assertNotIn('restricted-fixture',output.getvalue())
+        self.assertFalse(self.paths.codex_root.exists())
+
+    def test_existing_local_package_restore_without_copy_or_download(self):
+        path=r.package_path(self.a,self.paths);path.parent.mkdir(parents=True);path.write_bytes(self.blob)
+        before=path.stat()
+        with patch.dict('os.environ',{},clear=True):
+            result=r.restore(self.a,self.paths,opener=SimpleNamespace(open=lambda *a,**k:self.fail('No network')))
+        self.assertTrue(result['status']['complete'])
+        self.assertEqual(result['download']['action'],'verified_local_package_reused')
+        self.assertEqual(result['download']['bytes_downloaded'],0)
+        self.assertFalse(r.cache_path(self.a,self.paths).exists())
+        self.assertEqual(path.stat().st_ino,before.st_ino);self.assertEqual(path.read_bytes(),self.blob)
+        stamps={m['archive_path']:r.destination(m,self.paths).stat().st_mtime_ns for m in self.members}
+        self.assertEqual(r.restore(self.a,self.paths)['action'],'all_destinations_reused')
+        self.assertEqual(stamps,{m['archive_path']:r.destination(m,self.paths).stat().st_mtime_ns for m in self.members})
+
+    def test_wrong_local_package_preserved_without_download(self):
+        path=r.package_path(self.a,self.paths);path.parent.mkdir(parents=True);path.write_bytes(b'wrong hash')
+        with self.assertRaisesRegex(ValueError,'wrong-hash'):
+            r.restore(self.a,self.paths,opener=self.client())
+        self.assertEqual(self.calls,0);self.assertEqual(path.read_bytes(),b'wrong hash')
+
+    def test_symlink_local_package_rejected(self):
+        source=self.root/'archive';source.write_bytes(self.blob)
+        path=r.package_path(self.a,self.paths);path.parent.mkdir(parents=True);path.symlink_to(source)
+        with self.assertRaises((ValueError,OSError)):r.restore(self.a,self.paths,opener=self.client())
+        self.assertEqual(self.calls,0)
+
     def test_raw_file_artifact(self):
         blob=b'raw source';member={**self.members[0],'sha256':sha(blob),'size_bytes':len(blob)}
         a={**self.a,'format':'file','sha256':sha(blob),'size_bytes':len(blob),'expanded_size_bytes':len(blob),'members':[member],'member_count':1}
