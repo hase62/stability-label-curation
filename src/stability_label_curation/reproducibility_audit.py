@@ -29,7 +29,8 @@ def inspect(*, paths=None, plan_path=None):
     artifacts=restore.load_registry(paths.repository_root/restore.REGISTRY)
     covered=defaultdict(list)
     for aid,a in artifacts.items():
-        for member in a['members']:
+        if a.get('external_publication') == 'pending': continue
+        for member in restore.restoration_members(a):
             covered[(member['area'],member['relative_path'],member['sha256'])].append(aid)
     groups=[];files=[];links=[];physical=Counter();hashes={}
     planned={g['group_id']:g for g in plan['groups']}
@@ -84,7 +85,8 @@ def inspect(*, paths=None, plan_path=None):
     existing={g['group_id'] for g in groups}
     for g in plan['groups']:
         if g['group_id'] in existing:continue
-        subset=[m for aid in g.get('artifact_ids',[]) for m in artifacts[aid]['members']]
+        subset=[m for aid in g.get('artifact_ids',[]) if artifacts[aid].get('external_publication') != 'pending'
+                for m in restore.restoration_members(artifacts[aid])]
         local=[m for m in subset if hashes.get((m['area'],m['relative_path']))==m['sha256']]
         groups.append({**g,'local_file_count':len(local),'local_bytes':sum(m['size_bytes'] for m in local),
             'local_availability':'verified_payload_files_present' if local else 'absent_on_Mac',

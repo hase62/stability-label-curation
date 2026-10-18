@@ -1,0 +1,85 @@
+{
+  "alias_confirmation": {
+    "key": "A_EL_checkpoint_36_files_byte_identical_to_Task2_10",
+    "relative_path": "task-2_14b-abp-gpu-experiment/reports/failure_diagnosis.json"
+  },
+  "approved_source_commit": "2c1c839ac484031dcf37f08f6a674cacf22e057a",
+  "artifact_id": "bigmhc-windows-checkpoints-task2-16w",
+  "filename": "stability-label-curation-bigmHC-windows-checkpoints.tar.gz",
+  "inventory": {
+    "area": "runs",
+    "relative_path": "task-2_15w-wsl-artifact-integration/reports/windows_checkpoint_backup_inventory.json",
+    "sha256": "f2fc6af46a862def1fe17e4646c29183a07918c45c3d836e507315085b9a22e7"
+  },
+  "known_limitations": [
+    "Task 2.14B completed A EL only; no A IM overlay and no B/P checkpoint was produced.",
+    "Task 2.14B per-batch sampling fingerprints and RNG boundary were not persisted before failure; exact checkpoint bytes are recoverable, interrupted optimizer/RNG resumption is not established.",
+    "Historical absolute paths remain evidence inside original manifests; restoration uses only portable registry destinations.",
+    "No external publication or Dropbox recovery has been performed."
+  ],
+  "locator": {
+    "allowed_hosts": [
+      "www.dropbox.com",
+      "dl.dropboxusercontent.com",
+      "*.dropboxusercontent.com",
+      "*.dropbox.com"
+    ],
+    "environment_variable": "SLC_ARTIFACT_BIGMHC_WINDOWS_CHECKPOINTS_URL"
+  },
+  "producing_task": "Task 2.16W; stored Windows checkpoints from Tasks 2.9, 2.10 and 2.14B A",
+  "runs": [
+    {
+      "checkpoint_manifest": "reports/execution_verification.json",
+      "checkpoint_map_key": "outputs",
+      "checkpoint_prefix": "checkpoints",
+      "expected_checkpoint_count": 40,
+      "metadata": [
+        "manifest.json",
+        "reports/checkpoint_lineage.json",
+        "reports/environment.json",
+        "reports/execution_verification.json",
+        "reports/training_configuration.json",
+        "reports/subset_manifest.json",
+        "reports/training_summary.json"
+      ],
+      "relative_path": "task-2_9-first-gpu-baseline"
+    },
+    {
+      "checkpoint_manifest": "reports/execution_verification.json",
+      "checkpoint_map_key": "outputs",
+      "checkpoint_prefix": "checkpoints",
+      "expected_checkpoint_count": 40,
+      "metadata": [
+        "manifest.json",
+        "reports/checkpoint_lineage.json",
+        "reports/environment.json",
+        "reports/execution_verification.json",
+        "reports/training_configuration.json",
+        "reports/subset_manifest.json",
+        "reports/training_summary.json",
+        "reports/initial_el_state_identity.json"
+      ],
+      "relative_path": "task-2_10-full-eligible-baseline-a"
+    },
+    {
+      "checkpoint_manifest": "reports/final_output_manifest.json",
+      "checkpoint_map_key": "sha256",
+      "checkpoint_prefix": "A/checkpoints",
+      "expected_checkpoint_count": 36,
+      "metadata": [
+        "manifest.json",
+        "A/manifest.json",
+        "A/reports/environment.json",
+        "A/reports/initial_el_state_identity.json",
+        "A/reports/subset_manifest.json",
+        "A/reports/loss_weight_invariants.json",
+        "reports/configuration_A.json",
+        "reports/experiment_blocker.json",
+        "reports/failure_diagnosis.json",
+        "reports/final_output_manifest.json"
+      ],
+      "relative_path": "task-2_14b-abp-gpu-experiment"
+    }
+  ],
+  "schema_version": 1
+}

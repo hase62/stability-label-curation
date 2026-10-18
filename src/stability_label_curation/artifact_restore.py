@@ -63,7 +63,7 @@ def load_registry(path=None):
                 or artifact.get('role') not in {'external_input','precomputed_output'}
                 or not artifact.get('version') or artifact.get('format') not in {'tar.gz','file'}
                 or not sha(artifact.get('sha256')) or type(artifact.get('size_bytes')) is not int
-                or not 0 < artifact['size_bytes'] <= 512*1024**2):
+                or not 0 < artifact['size_bytes'] <= 2*1024**3):
             raise ValueError('Incomplete or invalid artifact identity')
         relative(artifact['filename'])
         if '/' in artifact['filename']: raise ValueError('Archive filename must be a basename')
@@ -86,8 +86,11 @@ def load_registry(path=None):
         else: members = artifact.get('members',[])
         if not isinstance(members,list) or not members or len(members) != artifact.get('member_count'):
             raise ValueError('Missing/invalid restoration mapping')
+        aliases = artifact.get('aliases', [])
+        if not isinstance(aliases, list): raise ValueError('Invalid artifact aliases')
+        sources = {m['archive_path']: m for m in members}
         names = set()
-        for member in members:
+        for member in members + aliases:
             if not isinstance(member,dict): raise ValueError('Member mapping must be an object')
             relative(member.get('relative_path')); relative(member.get('archive_path'))
             if (member.get('area') not in {'data','runs'} or not sha(member.get('sha256'))
@@ -100,6 +103,11 @@ def load_registry(path=None):
             if key in destinations and destinations[key] != member['sha256']:
                 raise ValueError('Conflicting canonical destination hashes')
             destinations[key]=member['sha256']
+        for alias in aliases:
+            source = sources.get(alias.get('source_archive_path'))
+            if source is None or any(alias[k] != source[k] for k in ('sha256', 'size_bytes')):
+                raise ValueError('Alias must reference an identical regular archive member')
+        if aliases and artifact['format'] != 'tar.gz': raise ValueError('Aliases require an archive')
         if artifact['format']=='file' and (len(members)!=1 or members[0]['sha256']!=artifact['sha256'] or members[0]['size_bytes']!=artifact['size_bytes']):
             raise ValueError('Raw-file restoration mapping disagrees with download')
         if sum(m['size_bytes'] for m in members) != artifact.get('expanded_size_bytes'):
@@ -140,6 +148,11 @@ def cache_path(artifact, paths):
     return paths.project_data_dir/'artifacts/cache'/(artifact['sha256']+'--'+artifact['filename'])
 
 
+def restoration_members(artifact):
+    """Regular stored members plus logical destinations backed by those members."""
+    return artifact['members'] + artifact.get('aliases', [])
+
+
 def file_status(path, expected):
     try:
         with raw._read_file(path) as stream:
@@ -160,7 +173,7 @@ def file_status(path, expected):
 
 def status(artifact, paths):
     files=[{'area':m['area'],'relative_path':m['relative_path'],'status':file_status(destination(m,paths),m),
-            'expected_sha256':m['sha256'],'expected_size_bytes':m['size_bytes']} for m in artifact['members']]
+            'expected_sha256':m['sha256'],'expected_size_bytes':m['size_bytes']} for m in restoration_members(artifact)]
     return {'artifact_id':artifact['artifact_id'],'files':files,
             'complete':all(m['status']=='verified' for m in files),
             'cache':file_status(cache_path(artifact,paths),artifact),
@@ -275,6 +288,12 @@ def restore(artifact, paths, *, opener=None):
         with raw._read_file(archive) as stream,tarfile.open(fileobj=stream,mode='r:gz') as bundle:
             for member in bundle:
                 with bundle.extractfile(member) as source:publish(expected[member.name],source)
+    # Aliases are regular, independently writable restored files, never tar links.
+    # Only authenticated canonical members may supply their bytes.
+    for alias in artifact.get('aliases', []):
+        canonical = expected[alias['source_archive_path']]
+        with raw._read_file(destination(canonical, paths)) as source:
+            publish(alias, source)
     after=status(artifact,paths)
     if not after['complete']: raise ValueError('Restoration did not authenticate all destinations')
     return {'artifact_id':artifact['artifact_id'],'action':'restored','download':acquisition,'published':written,'status':after}

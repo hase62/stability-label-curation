@@ -476,6 +476,1099 @@
       "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa",
       "size_bytes": 144274974,
       "version": "1"
+    },
+    {
+      "aliases": [
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr",
+          "sha256": "b62eb66a01356b7a8159417769914b0ad0a9f180fc784aa57b89476932a1aea9",
+          "size_bytes": 3955615,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr",
+          "sha256": "e4b6c28490f4b42486780e4d52a2dfb53c5a4bc6deb9bd9156d6210d7e642a38",
+          "size_bytes": 18313,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr",
+          "sha256": "2580951d4d3542fb616bda71ab3783fcfc31c1d710f376b21743efb0834d4c20",
+          "size_bytes": 18313,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr",
+          "sha256": "3acc16006f71bece35fef430ebe2790269411eb25f9ef1460c3dd056a3275e11",
+          "size_bytes": 82500518,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr",
+          "sha256": "23b371fbc09895a4679c2610c8990018194e3ac2b30797032e86d330315cb611",
+          "size_bytes": 33304,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr",
+          "sha256": "d323c9bee4f1e3104b55111314e8a5db2f71a9330dc5b4d0bb924afe3c627c09",
+          "size_bytes": 27501421,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr",
+          "sha256": "30929fec7c60b4d2e7607381d5015e07eab78937a2e070d998aa30d057674725",
+          "size_bytes": 12319,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr",
+          "sha256": "78ad085cc17931710ed5f34b5d56591458b84487f896134fb5684c634790d199",
+          "size_bytes": 42960735,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr",
+          "sha256": "6642d629b39c0085662a4c1ae22d5623e7a0a628e282cd378584a7e8c1cb2575",
+          "size_bytes": 16779103,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr",
+          "sha256": "cd776d2c4de270f489f07fa021b09ff77887758d2058f56841915a0adc003350",
+          "size_bytes": 18193,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr",
+          "sha256": "bc42bcfcc3b1febf81afe1f315a0814c743e3d726d70c5f26bd601edccce6dd9",
+          "size_bytes": 18193,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr",
+          "sha256": "e895302f1f2e2f37e561705091cf3fde2015ff8266dd7eaa819d48dbdfab8a94",
+          "size_bytes": 8721,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr",
+          "sha256": "8fe2727547053bc0a0fa2a028929b156f4c68c8e23114252e7dbcc06a781cb39",
+          "size_bytes": 42960791,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr",
+          "sha256": "00c233addcab9e0f5a9f8c8fa9f4a4459eec33b88f785e249c1fa3313da2262b",
+          "size_bytes": 16779159,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr",
+          "sha256": "a3392994acbd1568d4692461e758564cbfacfe590bd4d69208d8bd1532a8810d",
+          "size_bytes": 18313,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr",
+          "sha256": "6016865c08e52880d45773951cb8a5a6f9d1bf7e4c511a4d51dde69f72c04089",
+          "size_bytes": 18313,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr",
+          "sha256": "87ccf9e479206bf43f2810c9cf850ac9cd7ffa3cd0602c219f55abdd34937f20",
+          "size_bytes": 2353131,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr",
+          "sha256": "f98160430efc4926062c529ceda553ffca42fffbba6070c387e6f55bccda11bb",
+          "size_bytes": 6109,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr",
+          "sha256": "d645bb548dcd84a9fcd786a95e477d7b601dae7215f9d8eefaf2b68237f78c7a",
+          "size_bytes": 6547435,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr",
+          "sha256": "2f76e23a8dc6baa30f5d1cba6fc28c288ad8ea67e9ec533c2ee047b806746c7d",
+          "size_bytes": 6109,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr",
+          "sha256": "459b0189d5b5f9f3b88479c5a9799e2d794ec6920c055f59cfdd72a6897cfe3b",
+          "size_bytes": 19130545,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr",
+          "sha256": "2907ae853255a0fa02f9410f4598058cb1e9a66f653f1d178409ae16f33d5d19",
+          "size_bytes": 6307,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr",
+          "sha256": "0a29c0ae8335331bd1fa052a0223d83f74316f6630ff2edd35c9a5fa24249e12",
+          "size_bytes": 1319782,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr",
+          "sha256": "2b52f1a89bdcf2611bafbc19857080004271f205567f4147c33ea46194d82096",
+          "size_bytes": 23324849,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr",
+          "sha256": "5d61c2b072f696ff1e4d99cd15d725156841d6c06c3e063c89a99d39232a24e4",
+          "size_bytes": 6307,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/32_condenser.att.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/32_condenser.att.weight.lyr",
+          "sha256": "57bb6dcb16f65467e8b2ed98468a5336653cc3e9d769cb1cf017b7fa2381d443",
+          "size_bytes": 11126745,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/32_condenser.att.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/33_condenser.att.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/33_condenser.att.bias.lyr",
+          "sha256": "26ef2db6ff90be30b6f8d9ecec95af498addeb54876cd3a45ed82992f2d33b0a",
+          "size_bytes": 3339,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/33_condenser.att.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/34_condenser.out.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/34_condenser.out.weight.lyr",
+          "sha256": "fe96e14b3c0b128f6a7ef1ae23bed67463e6bc953f7901dfc37287b5d77f8b36",
+          "size_bytes": 3417,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/34_condenser.out.weight.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/35_condenser.out.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/35_condenser.out.bias.lyr",
+          "sha256": "6d30cf002900a11f9f86e4055be19565a9111b792fdb8d7aa1e4edc47d2de9a1",
+          "size_bytes": 1675,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/35_condenser.out.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr",
+          "sha256": "af7fb7b1619f55256ea34562adb01db594a3b70f904e8a277461ebdb3d559c84",
+          "size_bytes": 4120,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr",
+          "sha256": "4129717870585f367945cb28e44a9a85aac59d25ba97419ec328e2f9967f36ad",
+          "size_bytes": 9406296,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr",
+          "sha256": "aba07c9adcd15a8d6f4adcb08b8550434c34a82dd8a5d95662a901dc88f7d8d2",
+          "size_bytes": 16779096,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr",
+          "sha256": "05f204c3c9281afba9ea4c61f2c47053e90e7263a0afb929b59da13fed1a4f70",
+          "size_bytes": 18186,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr",
+          "sha256": "2e1f94523fc64351b4fa71e15acff7c3b1a6cea0a088ecf8cb48c6efa95a71ca",
+          "size_bytes": 18186,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr",
+          "sha256": "2f48d45ce099821e8ffd802788661efedacf021e0a7b8917afb7308306bfd6ea",
+          "size_bytes": 9406352,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr"
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr",
+          "sha256": "b417ab26ce54c2079b80295bd677451b905fe2fdecb98a7503ef2ded5fce39ea",
+          "size_bytes": 16779152,
+          "source_archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr"
+        }
+      ],
+      "artifact_id": "bigmhc-windows-checkpoints-task2-16w",
+      "checksum_evidence": {
+        "alias_evidence": "Authenticated historical manifests and duplicate-content inventory; alias bytes not repackaged",
+        "all_stored_files_verified_while_packaging": true,
+        "archive_relative_path": "artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.tar.gz",
+        "artifact_id": "bigmhc-windows-checkpoints-task2-16w",
+        "checkpoint_alias_count": 36,
+        "external_publication": "pending",
+        "external_restoration_verified": false,
+        "logical_checkpoint_count": 116,
+        "original_checkpoints_modified": false,
+        "schema_version": 1,
+        "sha256": "4787ea9b3fea2a42f4b32a15a9b38d3c8453fa6d6187bd48100b4014bb0a4909",
+        "size_bytes": 666954318,
+        "training_executed": false,
+        "unique_checkpoint_count": 80
+      },
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 739222308,
+      "external_publication": "pending",
+      "external_restoration_verified": false,
+      "filename": "stability-label-curation-bigmHC-windows-checkpoints.tar.gz",
+      "format": "tar.gz",
+      "known_limitations": [
+        "Task 2.14B completed A EL only; no A IM overlay and no B/P checkpoint was produced.",
+        "Task 2.14B per-batch sampling fingerprints and RNG boundary were not persisted before failure; exact checkpoint bytes are recoverable, interrupted optimizer/RNG resumption is not established.",
+        "Historical absolute paths remain evidence inside original manifests; restoration uses only portable registry destinations.",
+        "No external publication or Dropbox recovery has been performed."
+      ],
+      "local_package_relative_path": "artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.tar.gz",
+      "locator": {
+        "allowed_hosts": [
+          "www.dropbox.com",
+          "dl.dropboxusercontent.com",
+          "*.dropboxusercontent.com",
+          "*.dropbox.com"
+        ],
+        "environment_variable": "SLC_ARTIFACT_BIGMHC_WINDOWS_CHECKPOINTS_URL"
+      },
+      "logical_checkpoint_count": 116,
+      "member_count": 106,
+      "members": [
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr",
+          "sha256": "b62eb66a01356b7a8159417769914b0ad0a9f180fc784aa57b89476932a1aea9",
+          "size_bytes": 3955615
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr",
+          "sha256": "e4b6c28490f4b42486780e4d52a2dfb53c5a4bc6deb9bd9156d6210d7e642a38",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr",
+          "sha256": "2580951d4d3542fb616bda71ab3783fcfc31c1d710f376b21743efb0834d4c20",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr",
+          "sha256": "3acc16006f71bece35fef430ebe2790269411eb25f9ef1460c3dd056a3275e11",
+          "size_bytes": 82500518
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr",
+          "sha256": "23b371fbc09895a4679c2610c8990018194e3ac2b30797032e86d330315cb611",
+          "size_bytes": 33304
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr",
+          "sha256": "d323c9bee4f1e3104b55111314e8a5db2f71a9330dc5b4d0bb924afe3c627c09",
+          "size_bytes": 27501421
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr",
+          "sha256": "30929fec7c60b4d2e7607381d5015e07eab78937a2e070d998aa30d057674725",
+          "size_bytes": 12319
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr",
+          "sha256": "78ad085cc17931710ed5f34b5d56591458b84487f896134fb5684c634790d199",
+          "size_bytes": 42960735
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr",
+          "sha256": "6642d629b39c0085662a4c1ae22d5623e7a0a628e282cd378584a7e8c1cb2575",
+          "size_bytes": 16779103
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr",
+          "sha256": "cd776d2c4de270f489f07fa021b09ff77887758d2058f56841915a0adc003350",
+          "size_bytes": 18193
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr",
+          "sha256": "bc42bcfcc3b1febf81afe1f315a0814c743e3d726d70c5f26bd601edccce6dd9",
+          "size_bytes": 18193
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr",
+          "sha256": "e895302f1f2e2f37e561705091cf3fde2015ff8266dd7eaa819d48dbdfab8a94",
+          "size_bytes": 8721
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr",
+          "sha256": "8fe2727547053bc0a0fa2a028929b156f4c68c8e23114252e7dbcc06a781cb39",
+          "size_bytes": 42960791
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr",
+          "sha256": "00c233addcab9e0f5a9f8c8fa9f4a4459eec33b88f785e249c1fa3313da2262b",
+          "size_bytes": 16779159
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr",
+          "sha256": "a3392994acbd1568d4692461e758564cbfacfe590bd4d69208d8bd1532a8810d",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr",
+          "sha256": "6016865c08e52880d45773951cb8a5a6f9d1bf7e4c511a4d51dde69f72c04089",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr",
+          "sha256": "87ccf9e479206bf43f2810c9cf850ac9cd7ffa3cd0602c219f55abdd34937f20",
+          "size_bytes": 2353131
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr",
+          "sha256": "f98160430efc4926062c529ceda553ffca42fffbba6070c387e6f55bccda11bb",
+          "size_bytes": 6109
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr",
+          "sha256": "d645bb548dcd84a9fcd786a95e477d7b601dae7215f9d8eefaf2b68237f78c7a",
+          "size_bytes": 6547435
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr",
+          "sha256": "2f76e23a8dc6baa30f5d1cba6fc28c288ad8ea67e9ec533c2ee047b806746c7d",
+          "size_bytes": 6109
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr",
+          "sha256": "459b0189d5b5f9f3b88479c5a9799e2d794ec6920c055f59cfdd72a6897cfe3b",
+          "size_bytes": 19130545
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr",
+          "sha256": "2907ae853255a0fa02f9410f4598058cb1e9a66f653f1d178409ae16f33d5d19",
+          "size_bytes": 6307
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr",
+          "sha256": "0a29c0ae8335331bd1fa052a0223d83f74316f6630ff2edd35c9a5fa24249e12",
+          "size_bytes": 1319782
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr",
+          "sha256": "2b52f1a89bdcf2611bafbc19857080004271f205567f4147c33ea46194d82096",
+          "size_bytes": 23324849
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr",
+          "sha256": "5d61c2b072f696ff1e4d99cd15d725156841d6c06c3e063c89a99d39232a24e4",
+          "size_bytes": 6307
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/32_condenser.att.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/32_condenser.att.weight.lyr",
+          "sha256": "57bb6dcb16f65467e8b2ed98468a5336653cc3e9d769cb1cf017b7fa2381d443",
+          "size_bytes": 11126745
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/33_condenser.att.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/33_condenser.att.bias.lyr",
+          "sha256": "26ef2db6ff90be30b6f8d9ecec95af498addeb54876cd3a45ed82992f2d33b0a",
+          "size_bytes": 3339
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/34_condenser.out.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/34_condenser.out.weight.lyr",
+          "sha256": "fe96e14b3c0b128f6a7ef1ae23bed67463e6bc953f7901dfc37287b5d77f8b36",
+          "size_bytes": 3417
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/35_condenser.out.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/35_condenser.out.bias.lyr",
+          "sha256": "6d30cf002900a11f9f86e4055be19565a9111b792fdb8d7aa1e4edc47d2de9a1",
+          "size_bytes": 1675
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr",
+          "sha256": "af7fb7b1619f55256ea34562adb01db594a3b70f904e8a277461ebdb3d559c84",
+          "size_bytes": 4120
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr",
+          "sha256": "4129717870585f367945cb28e44a9a85aac59d25ba97419ec328e2f9967f36ad",
+          "size_bytes": 9406296
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr",
+          "sha256": "aba07c9adcd15a8d6f4adcb08b8550434c34a82dd8a5d95662a901dc88f7d8d2",
+          "size_bytes": 16779096
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr",
+          "sha256": "05f204c3c9281afba9ea4c61f2c47053e90e7263a0afb929b59da13fed1a4f70",
+          "size_bytes": 18186
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr",
+          "sha256": "2e1f94523fc64351b4fa71e15acff7c3b1a6cea0a088ecf8cb48c6efa95a71ca",
+          "size_bytes": 18186
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr",
+          "sha256": "2f48d45ce099821e8ffd802788661efedacf021e0a7b8917afb7308306bfd6ea",
+          "size_bytes": 9406352
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr",
+          "sha256": "b417ab26ce54c2079b80295bd677451b905fe2fdecb98a7503ef2ded5fce39ea",
+          "size_bytes": 16779152
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/im/32_condenser.att.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/im/32_condenser.att.weight.lyr",
+          "sha256": "b6d7422f1f71b0f5e68a7c506055f1c656d1fc3bf91de13750d21fe7fe5f3998",
+          "size_bytes": 11126745
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/im/33_condenser.att.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/im/33_condenser.att.bias.lyr",
+          "sha256": "7f979c949be82b3ef936b67dcf87444e4d0cec8b6d30b1eaae225c68bb12e378",
+          "size_bytes": 3339
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/im/34_condenser.out.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/im/34_condenser.out.weight.lyr",
+          "sha256": "2c3f53326095fedf2e226dd16f9f073b13c23e41e48fe30327fac6537cac46ff",
+          "size_bytes": 3417
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/checkpoints/el/im/35_condenser.out.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/checkpoints/el/im/35_condenser.out.bias.lyr",
+          "sha256": "004c7ec40f7a6538f21f4c75dd65809184d3e79b340dcdc72726e94265dd1cea",
+          "size_bytes": 1675
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/0_lstm.cells.0.att.in_proj_weight.lyr",
+          "sha256": "019c177aaa4ab4e5920b92b231f01cb9245d850f1bbc8d3de5fec202d2b1e5e7",
+          "size_bytes": 3955615
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/10_lstm.cells.0.lstm.bias_ih_l0_reverse.lyr",
+          "sha256": "f22f44ebec79b52d14f0b6343bff971c7687444961c45ea7406c63e30f0680d8",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/11_lstm.cells.0.lstm.bias_hh_l0_reverse.lyr",
+          "sha256": "c20ba46c41bd9a30c0fcde590576de7a6fe65cd91635ae78edf60c2e9e245eb1",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/12_lstm.cells.1.att.in_proj_weight.lyr",
+          "sha256": "f27a24e930faf37496be43cd923afdfebd241d37cf626caf6c33bc18c73e8f2e",
+          "size_bytes": 82500518
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/13_lstm.cells.1.att.in_proj_bias.lyr",
+          "sha256": "2815f8a8856807ba8151be03541a4d2f18b987a7386b9c79bd74ded1724691fd",
+          "size_bytes": 33304
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/14_lstm.cells.1.att.out_proj.weight.lyr",
+          "sha256": "9d22a1351efd8fa6a58c0108a7beaa8f56f5700fc307cf4c002e4f2dff42363c",
+          "size_bytes": 27501421
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/15_lstm.cells.1.att.out_proj.bias.lyr",
+          "sha256": "68bbb19683b7ba01e88109aea584b8872d8e64f88a8ef168ff027a7554663020",
+          "size_bytes": 12319
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/16_lstm.cells.1.lstm.weight_ih_l0.lyr",
+          "sha256": "6bfb434ff1cd8a18653b42404cc8e3ca7bac52e57c62bcff12b15c4e9aad7a2f",
+          "size_bytes": 42960735
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/17_lstm.cells.1.lstm.weight_hh_l0.lyr",
+          "sha256": "d44413e0fa268d811ad16cc4f898b2ad54114272302c0437a9712829cd77ea09",
+          "size_bytes": 16779103
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/18_lstm.cells.1.lstm.bias_ih_l0.lyr",
+          "sha256": "94c79cacccb54030b04efe73a4bedaa4c2e169ccf6aa30fad69fcb21d76f25d3",
+          "size_bytes": 18193
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/19_lstm.cells.1.lstm.bias_hh_l0.lyr",
+          "sha256": "db0bd294b047d037c07a507420d7df63254403418a409d8473a13a9447deabd9",
+          "size_bytes": 18193
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/1_lstm.cells.0.att.in_proj_bias.lyr",
+          "sha256": "16ea6c88dd63c2f4a7db0ddd88505e3b0693d8872ff529fd985f8a912a4215a9",
+          "size_bytes": 8721
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/20_lstm.cells.1.lstm.weight_ih_l0_reverse.lyr",
+          "sha256": "05e4e5517e740bc54cf486ce4086d259eb1443c3a41cb9f07851a7d2e8a48cbb",
+          "size_bytes": 42960791
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/21_lstm.cells.1.lstm.weight_hh_l0_reverse.lyr",
+          "sha256": "9a6f793eba6c38da9ad484ca51c7b9e91b46e7c6dbdd0c3cbf559cd1820939f5",
+          "size_bytes": 16779159
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/22_lstm.cells.1.lstm.bias_ih_l0_reverse.lyr",
+          "sha256": "0f3bbf4a977664af62f361697e80afc83ba4c0f299e033c4407d24373a29704f",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/23_lstm.cells.1.lstm.bias_hh_l0_reverse.lyr",
+          "sha256": "0aaca3d698165f23aa86fa968e081ef71053243f7f5c3ef44a1f7b10586597dc",
+          "size_bytes": 18313
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/24_anchorBlock.denseBlock.denseLayers.0.linear.weight.lyr",
+          "sha256": "6453d659739de99fc56ff1c73d0291bb854ed0c4ed536d39927a71d3e3ec6b06",
+          "size_bytes": 2353131
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/25_anchorBlock.denseBlock.denseLayers.0.linear.bias.lyr",
+          "sha256": "18ae3f4e1f9d25b1de44cc0d92ae51c6ca70b3122cef1705039616901437ab1a",
+          "size_bytes": 6109
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/26_anchorBlock.denseBlock.denseLayers.1.linear.weight.lyr",
+          "sha256": "0c0d18cf8741e643bea538095f3a7d142d796ba9b3da8e01d2415644c0b61d75",
+          "size_bytes": 6547435
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/27_anchorBlock.denseBlock.denseLayers.1.linear.bias.lyr",
+          "sha256": "b68171faa4d096be8857a1c62d0570590989e0551c37f4e4fa69d5fe65df7c2b",
+          "size_bytes": 6109
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/28_condenser.preAttentionDenseBlock.denseLayers.0.linear.weight.lyr",
+          "sha256": "7ecf2b04a72e4bfe22bf30cce86b9d12fbf286027c6664a3eec7d59434b10fab",
+          "size_bytes": 19130545
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/29_condenser.preAttentionDenseBlock.denseLayers.0.linear.bias.lyr",
+          "sha256": "2d9126c9bba4ce33d250b93a2624067fb0ddbcb3ea2c66275c1d05eb895aff7c",
+          "size_bytes": 6307
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/2_lstm.cells.0.att.out_proj.weight.lyr",
+          "sha256": "2e42ed804bfc7bf0f3d5fc6b5091c9ffe2993730341d334c7a618538da02ac44",
+          "size_bytes": 1319782
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/30_condenser.preAttentionDenseBlock.denseLayers.1.linear.weight.lyr",
+          "sha256": "f1710b02a1c33a71896641656c1fa36a7ccc8d0d4c19dd79b7cdce0d6f25ed42",
+          "size_bytes": 23324849
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/31_condenser.preAttentionDenseBlock.denseLayers.1.linear.bias.lyr",
+          "sha256": "63343f8600a55638dbde4f7b706869d8df0f0f46aa19574f51d3b548573c81bf",
+          "size_bytes": 6307
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/32_condenser.att.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/32_condenser.att.weight.lyr",
+          "sha256": "b97e802ce03fb163334bb9c56ead6f70fae9c9ed0125d9bb858727a6f6bf2cb5",
+          "size_bytes": 11126745
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/33_condenser.att.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/33_condenser.att.bias.lyr",
+          "sha256": "adf8396b4a5ef6e7fb532ebcf71f6d491aa6d65b50b3906daea203c3efa6f056",
+          "size_bytes": 3339
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/34_condenser.out.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/34_condenser.out.weight.lyr",
+          "sha256": "29d322075b45fc892841b650a9a17dcfc313f13aacb4b267d38951c12727193d",
+          "size_bytes": 3417
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/35_condenser.out.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/35_condenser.out.bias.lyr",
+          "sha256": "804088a92f1b12b70c542f10b70e3ec6bf3404c3d3a158771ce667152f255f2e",
+          "size_bytes": 1675
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/3_lstm.cells.0.att.out_proj.bias.lyr",
+          "sha256": "524c1d1aacea45a29e50c540bdfe0427ce679de14f777af3489179392ffbad0a",
+          "size_bytes": 4120
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/4_lstm.cells.0.lstm.weight_ih_l0.lyr",
+          "sha256": "ecb37e6bd9d24459784500f8c8a0015c921c42e6ba89fe87bf61ddc3e00c1704",
+          "size_bytes": 9406296
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/5_lstm.cells.0.lstm.weight_hh_l0.lyr",
+          "sha256": "c3013f710442cfdb9e7507c5b2baa42122a6fc5bccd6d670b6b6fc4ba7cd3539",
+          "size_bytes": 16779096
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/6_lstm.cells.0.lstm.bias_ih_l0.lyr",
+          "sha256": "8ee491b112837335ba0f5ff8aded48cf09c4051def8ac50d8e274c07f3392130",
+          "size_bytes": 18186
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/7_lstm.cells.0.lstm.bias_hh_l0.lyr",
+          "sha256": "cd9a8ba7bfbdc37240b7a46562265fc2d4643873a1dfa87bb258be471f46e0fa",
+          "size_bytes": 18186
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/8_lstm.cells.0.lstm.weight_ih_l0_reverse.lyr",
+          "sha256": "2cbc65f76ccc93a910a5b7a140d5746b3640aa028b6da1b9b1ea41e4ee7d280d",
+          "size_bytes": 9406352
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/9_lstm.cells.0.lstm.weight_hh_l0_reverse.lyr",
+          "sha256": "d6a7a70eaf1dd5ae76a6a7b9c0015cee465c03f9a64bcdbb7650d304a0a12d58",
+          "size_bytes": 16779152
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/im/32_condenser.att.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/im/32_condenser.att.weight.lyr",
+          "sha256": "c588528241862c30591b95b1826d2d5f2b0b36322c47730b6b674484adf9edea",
+          "size_bytes": 11126745
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/im/33_condenser.att.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/im/33_condenser.att.bias.lyr",
+          "sha256": "bdb10d8314657326fea4fc903d12ddbf2070ec1182832c6b2d10f6d3573b0de8",
+          "size_bytes": 3339
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/im/34_condenser.out.weight.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/im/34_condenser.out.weight.lyr",
+          "sha256": "64c2dc1e676728792bd9b2a29bb3db6278cb4a75e9f77aaf8ab2a8f35c41aec6",
+          "size_bytes": 3417
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/checkpoints/el/im/35_condenser.out.bias.lyr",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/checkpoints/el/im/35_condenser.out.bias.lyr",
+          "sha256": "42092cd394c53c378b15b8c0c33a75b087d14ca9a9f93917adda0ae60f6a948e",
+          "size_bytes": 1675
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/manifest.json",
+          "sha256": "7cfb3a2d9c4508cf325a09350ddb1c79cf9f248e0b49f72fab46b1c14b288f31",
+          "size_bytes": 6816
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/reports/checkpoint_lineage.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/reports/checkpoint_lineage.json",
+          "sha256": "96105ba86abc9e6a1e3891be787a410b3f527c09c9952d2c95b90f0e5d630004",
+          "size_bytes": 19452
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/reports/environment.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/reports/environment.json",
+          "sha256": "9b0365e58baffa89a2983e4619454507ba19d741341bf671ebfd6a12e6807356",
+          "size_bytes": 7423
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/reports/execution_verification.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/reports/execution_verification.json",
+          "sha256": "08923db696c04b80561b8ca4033c5b920da3285c8e9cdbd745cf72534c626641",
+          "size_bytes": 11979
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/reports/training_configuration.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/reports/training_configuration.json",
+          "sha256": "93c131fca6ae6c6b952d5dee5380c9b495fd6cb4e59151bf988cebf3d8a1dddb",
+          "size_bytes": 5298
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/reports/subset_manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/reports/subset_manifest.json",
+          "sha256": "5f07a2788fc668e2a8aee2b6ff0945b56bc8f8575e2af121896dc8eb979ee551",
+          "size_bytes": 8112813
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_9-first-gpu-baseline/reports/training_summary.json",
+          "area": "runs",
+          "relative_path": "task-2_9-first-gpu-baseline/reports/training_summary.json",
+          "sha256": "e5d153c20aca459d94ac2fae62c6fff2ad22f10ddaa2db25fe3ca889a6816d11",
+          "size_bytes": 93461
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/manifest.json",
+          "sha256": "0674315e613f5210ba4270176d5faf286ed878e5e9160f0eebf23a5d1cfccfd0",
+          "size_bytes": 6848
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/checkpoint_lineage.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/checkpoint_lineage.json",
+          "sha256": "320a01841f2d18d5556f4bfb657fb34fde256477d7c062d32e024dd130cb1e47",
+          "size_bytes": 19452
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/environment.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/environment.json",
+          "sha256": "21e46e98211eec7011a1506a35f549076a5ed24809f79090e862c36094f679c3",
+          "size_bytes": 7591
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/execution_verification.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/execution_verification.json",
+          "sha256": "07467eddf0cce7ef31f97decfd4638d84d7d011f620d15beabcedffae68012bd",
+          "size_bytes": 12537
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/training_configuration.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/training_configuration.json",
+          "sha256": "1ee7e3181a68bdb82dd06f48a38693812014c0efd2bbd465c7c2801e39d1feef",
+          "size_bytes": 5446
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/subset_manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/subset_manifest.json",
+          "sha256": "6e5f4dca886a9a3ec323804d1f28ea4ed2324f9d1a46eaeee454634e751874e7",
+          "size_bytes": 1193
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/training_summary.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/training_summary.json",
+          "sha256": "d6fdc5231ec5a6fc02d90d7b8331ba7414651ec8c98e180aebbcd6190b8fe32b",
+          "size_bytes": 8795232
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_10-full-eligible-baseline-a/reports/initial_el_state_identity.json",
+          "area": "runs",
+          "relative_path": "task-2_10-full-eligible-baseline-a/reports/initial_el_state_identity.json",
+          "sha256": "93a6f9104639a93ae41c2b559baf0d2b3a2e433da911c7339d53660ae79d2715",
+          "size_bytes": 3947
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/manifest.json",
+          "sha256": "a56cb9be0f9551e65ae64a9fabe526a223b9268ef73fee30d68df7418eb8a5c4",
+          "size_bytes": 7106
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/manifest.json",
+          "sha256": "831ee67e982aebf66d6ac6e383909bedab70aa709c92bc5777d695122a2be9df",
+          "size_bytes": 7082
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/reports/environment.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/reports/environment.json",
+          "sha256": "90fbeab7c5f0b24bca1c5a6b20537ab64d5aa7863b6389b71b1368b984e12d1f",
+          "size_bytes": 9511
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/reports/initial_el_state_identity.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/reports/initial_el_state_identity.json",
+          "sha256": "93a6f9104639a93ae41c2b559baf0d2b3a2e433da911c7339d53660ae79d2715",
+          "size_bytes": 3947
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/reports/subset_manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/reports/subset_manifest.json",
+          "sha256": "6e5f4dca886a9a3ec323804d1f28ea4ed2324f9d1a46eaeee454634e751874e7",
+          "size_bytes": 1193
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/A/reports/loss_weight_invariants.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/A/reports/loss_weight_invariants.json",
+          "sha256": "b35fb9b48663ff5ae36b09c9597f703b3ffddde0a8792e29fdf97d5e624baea3",
+          "size_bytes": 27971
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/reports/configuration_A.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/reports/configuration_A.json",
+          "sha256": "70c0a931582f64e6d11dc4048373f6d13f4708e7c39b7970a9e345de76e1fbcb",
+          "size_bytes": 7290
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/reports/experiment_blocker.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/reports/experiment_blocker.json",
+          "sha256": "4ce2692d2346696ca15d3fbb7cea70dfaa84520b3a561a3588a1be060aaa07ce",
+          "size_bytes": 378
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/reports/failure_diagnosis.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/reports/failure_diagnosis.json",
+          "sha256": "98936c52c5b08a6a8087641f3467630ba17cbe41fb65cfc05e40255e4f6b3a80",
+          "size_bytes": 6807
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_14b-abp-gpu-experiment/reports/final_output_manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_14b-abp-gpu-experiment/reports/final_output_manifest.json",
+          "sha256": "8c821b7db1f4cc5cce3b3844bb06bf68868f2a0e8c1141f4a9641940f3c1d0e5",
+          "size_bytes": 7228
+        },
+        {
+          "archive_path": "codex/data/stability-label-curation/artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.manifest.json",
+          "area": "data",
+          "relative_path": "artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.manifest.json",
+          "sha256": "4afc0e103dc176df09c1004ca9f33a6964c17b19332b856847e3770118713b06",
+          "size_bytes": 67031
+        }
+      ],
+      "package_manifest": {
+        "archive_path": "codex/data/stability-label-curation/artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.manifest.json",
+        "area": "data",
+        "relative_path": "artifacts/packages/stability-label-curation-bigmHC-windows-checkpoints.manifest.json",
+        "sha256": "4afc0e103dc176df09c1004ca9f33a6964c17b19332b856847e3770118713b06",
+        "size_bytes": 67031
+      },
+      "producing_commit": "2c1c839ac484031dcf37f08f6a674cacf22e057a",
+      "producing_task": "Task 2.16W; stored Windows checkpoints from Tasks 2.9, 2.10 and 2.14B A",
+      "regeneration_recipe": null,
+      "role": "precomputed_output",
+      "sha256": "4787ea9b3fea2a42f4b32a15a9b38d3c8453fa6d6187bd48100b4014bb0a4909",
+      "size_bytes": 666954318,
+      "unique_checkpoint_count": 80,
+      "version": "1"
     }
   ],
   "base_commit": "0c3b5cf245c42803854c9139f4c4058cc36f7dbf",

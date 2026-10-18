@@ -87,3 +87,20 @@ class InventoryTests(unittest.TestCase):
         self.assertTrue(payload['complete_exact_byte_directory_recovery'])
         self.assertEqual(reports['checkpoint_recovery_coverage.json']['exact_download_covered_files'],1)
         self.assertTrue(p.exists())
+
+    def test_unpublished_local_package_is_not_external_backup_coverage(self):
+        self.write('runs','parent/checkpoints/weights.lyr',b'weights')
+        member={'area':'runs','relative_path':'parent/checkpoints/weights.lyr',
+                'sha256':hashlib.sha256(b'weights').hexdigest(),'size_bytes':7}
+        artifact={'members':[member],'external_publication':'pending'}
+        with patch.object(audit.restore,'load_registry',return_value={'pending':artifact}):
+            report=self.inspect()['checkpoint_recovery_coverage.json']
+        self.assertEqual(report['exact_download_covered_files'],0)
+
+    def test_published_alias_counts_as_external_backup_destination(self):
+        self.write('runs','alias/checkpoints/weights.lyr',b'weights')
+        alias={'area':'runs','relative_path':'alias/checkpoints/weights.lyr',
+               'sha256':hashlib.sha256(b'weights').hexdigest(),'size_bytes':7}
+        with patch.object(audit.restore,'load_registry',return_value={'published':{'members':[],'aliases':[alias]}}):
+            report=self.inspect()['checkpoint_recovery_coverage.json']
+        self.assertEqual(report['exact_download_covered_files'],1)

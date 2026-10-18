@@ -60,9 +60,11 @@ configuration, seed, authenticated input list, environment and generation comman
 for that group. Create a **new** run; preserve old runs. Parent provenance hashes
 may require exact legacy recovery or separately approved versioned rebinding.
 Never run a training recipe automatically to recover a missing checkpoint.
-There is currently no authenticated remote locator for the frozen Teacher or
-baseline models; request an approved backup definition before claiming exact
-recovery. Existing weights must not be replaced by newly trained surrogates.
+There is currently no authenticated remote locator for the frozen Teacher.
+The [Windows checkpoint package](BIGMHC_CHECKPOINT_RECOVERY.md) covers the existing
+Task 2.9/2.10 and Task 2.14B A EL checkpoint bytes locally; Dropbox publication and
+external recovery remain pending. Existing weights must not be replaced by newly
+trained surrogates.
 
 After Windows Task 2.14C has finished, the following checks require no GPU job:
 
