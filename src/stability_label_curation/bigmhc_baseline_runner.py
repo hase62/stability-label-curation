@@ -55,7 +55,7 @@ def load_config(path):
             or c.get('expected_class_counts')!={'EL':{'0':1383509,'1':70069},'IM':{'0':2473,'1':955}}):
         raise ValueError('Full eligible Baseline A requires the complete frozen original populations and CUDA batch16')
     if (c.get('schema_version')!=1 or c.get('version') not in (VERSION,WORKER_VERSION,FULL_VERSION,WEIGHTED_VERSION)
-            or c.get('condition') not in ({'A','B','P'} if weighted else {'A'})
+            or c.get('condition') not in ({'A','B','L','P'} if weighted else {'A'})
             or c.get('label_policy')!='original' or c.get('source_commit')!=SOURCE_COMMIT
             or c.get('seed')!=42 or c.get('device') not in ('cpu','cuda') or c.get('num_workers')!=0
             or c.get('persistent_workers') is not False or c.get('epochs')!={'EL':1,'IM':1}
@@ -417,6 +417,7 @@ def development_metrics(labels: list[int], probabilities: list[float]) -> dict:
 def worker(*,config_path,out,paths=None,files=None):
     paths=paths or resolve_paths();config=load_config(config_path)
     adapted=config.get('loss_adapter') is not None
+    reuse_inputs=adapted and config['loss_adapter']['protocol_version']=='el_low_stability_positive_v1'
     if adapted:
         from . import el_stability_loss_adapter as weighting
         weighting.require_training_authorization(config)
@@ -450,13 +451,17 @@ def worker(*,config_path,out,paths=None,files=None):
         if 'expected_class_counts' in config and counts!=config['expected_class_counts'][stage]:
             raise ValueError('Configured original class counts disagree with authenticated population')
         attach_provenance(selected[stage],resolved[stage+'_provenance'])
-        raw.write_text_report(directory/f'processed/{stage.lower()}_original_smoke.csv',csv_text(selected[stage]),paths=paths)
+        if not reuse_inputs:
+            raw.write_text_report(directory/f'processed/{stage.lower()}_original_smoke.csv',csv_text(selected[stage]),paths=paths)
         subset_info[stage]={'rows':selected[stage],'source_view_sha256':raw.sha256_file(resolved[stage]),'original_population_labels':counts,
                             'selected_rows':len(selected[stage]),'selected_class_counts':dict(Counter(r['original_label'] for r in selected[stage])),
                             'selection':('All prepared original rows in source order; original prevalence; no resampling'
                                 if config['rows_per_class'][stage] is None else
                                 'Uniform within-original-label reservoir sampling seed42; sorted prepared-view row order; no scores/development outcomes')}
-        if config['version'] in (FULL_VERSION,WEIGHTED_VERSION):
+        if reuse_inputs:
+            subset_info[stage].pop('rows')
+            subset_info[stage]['existing_provenance_input']=config['inputs'][stage+'_provenance']
+        elif config['version'] in (FULL_VERSION,WEIGHTED_VERSION):
             # Reuse the atomic streaming writer rather than building a multi-GB JSON string.
             relative=f'processed/{stage.lower()}_original_row_manifest.csv.gz'
             fields=['prepared_row_index','hla','peptide',*PROVENANCE_FIELDS]+(['original_rand'] if stage=='IM' else [])
@@ -491,8 +496,10 @@ def worker(*,config_path,out,paths=None,files=None):
     if adapted:
         matched={'schema_version':1,'version':weighting.VERSION,'configuration_identity':weighting.matched_config_identity(config),
                  'code_commit':manifest['git']['commit_sha'],'versions':environment['versions'],'device':device}
-        if matched_reference is not None and any(matched[k]!=matched_reference[k] for k in matched):
-            raise ValueError('Matched A code, runtime, device or configuration differs')
+        from .bigmhc_baseline_compatibility import check_metadata
+        compatibility=check_metadata(matched,matched_reference,config,paths)
+        if compatibility is not None:
+            raw.write_report(directory/'reports/baseline_compatibility.json',compatibility,paths=paths)
         raw.write_report(directory/'reports/loss_weight_invariants.json',loss_adapter.evidence,paths=paths)
     with raw._read_file(resolved['reference']) as stream,io.TextIOWrapper(stream,encoding='utf-8-sig',newline='') as text:
         reference_report,_,reference=data._reference(enumerate(csv.reader(text,strict=True),1))
@@ -511,9 +518,10 @@ def worker(*,config_path,out,paths=None,files=None):
     with pinned_modules(resolved) as (BigMHC,Dataset):
         def dataset(path):return Dataset(Dataset.readPMHCs(str(path),allele=0,pepcol=1,tgtcol=2,hdrcnt=1,verbose=False),mhcenc=encodings)
         def training_dataset(stage):
-            native=dataset(directory/f'processed/{stage.lower()}_original_smoke.csv')
+            native=dataset(resolved[stage] if reuse_inputs else directory/f'processed/{stage.lower()}_original_smoke.csv')
             if not adapted:return native
-            return weighting.IdentityDataset(native,weighting.manifest_rows(directory/f'processed/{stage.lower()}_original_row_manifest.csv.gz'),
+            records=(r for r in weighting.manifest_rows(resolved[stage+'_provenance']) if r['retained']=='1') if reuse_inputs else weighting.manifest_rows(directory/f'processed/{stage.lower()}_original_row_manifest.csv.gz')
+            return weighting.IdentityDataset(native,records,
                 stage=stage,adapter=loss_adapter if stage=='EL' else None,archive_sha256=loss_adapter.manifest['archive_sha256'])
         model=on_device(BigMHC(),device);keys=list(model.state_dict())
         if adapted and any(p.dtype!=torch.float32 for p in model.parameters()):raise ValueError('Matched experiment requires FP32 parameters')

@@ -1,0 +1,193 @@
+{
+  "baseline_reuse": {
+    "commit": "02313b20da218dbcacdbb2cbee5f5d435b258a18",
+    "compatibility_report": null,
+    "protocol_commit": "a7a41ea179233088cfae1d8d91826ef9527ce6d0",
+    "reference": {
+      "area": "runs",
+      "relative_path": "task-2_17-abp-comparison/A/reports/matched_state.json",
+      "sha256": "bfcbdc71c98c732650214c7592e396e526094596329bd0e5aa016aa9823c5cb2"
+    }
+  },
+  "batch_size": 16,
+  "condition": "A",
+  "cpu_threads": 4,
+  "device": "cuda",
+  "epochs": {
+    "EL": 1,
+    "IM": 1
+  },
+  "expected_class_counts": {
+    "EL": {
+      "0": 1383509,
+      "1": 70069
+    },
+    "IM": {
+      "0": 2473,
+      "1": 955
+    }
+  },
+  "expected_rows": {
+    "EL": 1453578,
+    "IM": 3428
+  },
+  "inputs": {
+    "EL": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+      "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+    },
+    "EL_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+      "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+    },
+    "IM": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_original.csv",
+      "sha256": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61"
+    },
+    "IM_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_provenance.csv.gz",
+      "sha256": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21"
+    },
+    "development": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development.csv",
+      "sha256": "b4feb0c2765b99f6f845350c60be325895d6d33b184806fd2f2b28801687a2b1"
+    },
+    "development_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development_provenance.csv.gz",
+      "sha256": "2a8afa230dc1088d575858e9dda6bceeef8c735c5c46e7fa076ba2bca8b32ed5"
+    },
+    "experiment": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+      "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+    },
+    "inventory": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+      "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+    },
+    "parent_manifest": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+      "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+    },
+    "parent_receipt": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+      "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+    },
+    "positive_score_manifest": {
+      "area": "runs",
+      "relative_path": "task-2_13-el-stability-weight-adapter/reports/positive_score_manifest.json",
+      "sha256": "e79fb60b1c04f33889e9d3ecd6a7bd145255c156487cd4d4873a90c8ab715862"
+    },
+    "positive_scores": {
+      "area": "runs",
+      "relative_path": "task-2_13-el-stability-weight-adapter/processed/el_positive_teacher_scores.csv.gz",
+      "sha256": "ab0473b669f61792ff63a926185a5e737544209537c5de938b30e519a232e884"
+    },
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+    },
+    "source_LICENSE": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+    },
+    "source_README": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+    },
+    "source_bigmhc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+    },
+    "source_cli": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+    },
+    "source_dataset": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+    },
+    "source_encseq": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+    },
+    "source_mhcenc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+    },
+    "source_mhcuid": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+    },
+    "source_predict": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+    },
+    "source_train": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+    }
+  },
+  "label_policy": "original",
+  "learning_rate": 5e-05,
+  "loss_adapter": {
+    "matched_reference": null,
+    "mode": "A",
+    "protocol_version": "el_low_stability_positive_v1",
+    "schema_version": 1,
+    "seed": 42,
+    "strength": "0.5",
+    "training_authorized": true,
+    "version": "el_stability_loss_adapter_v1"
+  },
+  "matched_experiment": {
+    "EL_schedule": "Every ordered batch source-ID/label SHA256 must equal A before its optimizer update; 70069 updates",
+    "IM_schedule": "Same original IM data and native skip mask; 214 updates; child inherits own trained EL parent",
+    "RNG": "Compare Python/NumPy/Torch CPU/CUDA boundary hashes; P uses protocol-local HLA RNG only",
+    "authorization": "Task 2.19: approved fixed seed42 low-stability A/L/P; reuse Task 2.17 A after compatibility proof; train L/P once",
+    "conditions": [
+      "A",
+      "L",
+      "P"
+    ],
+    "development": "Same frozen 383 observations in every arm",
+    "initial_tensor_identity": "All 36 initial tensor SHA256s must equal fresh adapted A",
+    "optimizer": "Same complete AdamW defaults and updated-parameter list; original IM loss",
+    "precision": "FP32 only; no AMP or TF32",
+    "protocol_commit": "a7a41ea179233088cfae1d8d91826ef9527ce6d0",
+    "reference": "Pinned Task 2.17 A with reviewed compatibility receipt; all tensor/RNG/batch/optimizer gates remain",
+    "status": "task_2_19_approved_reuse_A_then_L_then_P"
+  },
+  "memory_bytes": 34359738368,
+  "num_workers": 0,
+  "persistent_workers": false,
+  "rows_per_class": {
+    "EL": null,
+    "IM": null
+  },
+  "schema_version": 1,
+  "seed": 42,
+  "source_commit": "199e890fa69a63646730bcecea0a520e08ca4f02",
+  "version": "bigmhc_el_weighted_v1",
+  "wall_seconds": 3600
+}

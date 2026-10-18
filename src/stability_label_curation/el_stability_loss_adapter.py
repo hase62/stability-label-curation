@@ -17,6 +17,7 @@ from . import scientific_gate0_preflight as readers
 from .paths import resolve_paths
 
 VERSION = 'el_stability_loss_adapter_v1'
+LOW_PROTOCOL = 'el_low_stability_positive_v1'
 CONFIG = 'configs/el_stability_weight_adapter_v1.json'
 RUN_ID = 'task-2_13-el-stability-weight-adapter'
 SIDECAR = 'processed/el_positive_teacher_scores.csv.gz'
@@ -50,12 +51,13 @@ class PositiveScore:
 
 class LossAdapter:
     """One immutable positive map and its weights; negatives are always unit weight."""
-    def __init__(self, rows: list[PositiveScore], manifest: dict, mode: str):
-        if mode not in {'A', 'B', 'P'}:
-            raise ValueError('EL loss mode must be A, B or P')
+    def __init__(self, rows: list[PositiveScore], manifest: dict, mode: str, *, protocol_version=design.VERSION):
+        low = protocol_version == LOW_PROTOCOL
+        if protocol_version not in {design.VERSION, LOW_PROTOCOL} or mode not in ({'A', 'L', 'P'} if low else {'A', 'B', 'P'}):
+            raise ValueError('EL loss mode does not belong to the selected protocol')
         if manifest.get('permutation_python') not in (None, platform.python_version()):
             raise ValueError('Use the protocol-pinned Python version for matched weight assignment')
-        self.mode, self.manifest = mode, manifest
+        self.mode, self.manifest, self.protocol_version = mode, manifest, protocol_version
         self.scores, self.weights, self.rational, groups = {}, {}, {}, defaultdict(list)
         last_prepared = last_source = 0
         for row in rows:
@@ -81,17 +83,25 @@ class LossAdapter:
         for hla, group in sorted(groups.items()):
             ids = [r.source_row_id for r in group]
             b = design.midrank_weights(r.predicted_half_life_hours for r in group)
+            if low:
+                b = [min(Fraction(1), w) for w in b]
             p = design.permuted_weights(ids, b, hla, 42)
-            weights = [Fraction(1)] * len(ids) if mode == 'A' else b if mode == 'B' else p
+            weights = [Fraction(1)] * len(ids) if mode == 'A' else b if mode in {'B', 'L'} else p
             rounded = [f32(w) for w in weights]
-            residual = sum(rounded) - len(ids)
+            residual = sum(rounded) - (float(sum(weights)) if low else len(ids))
             if abs(residual) > 1e-6 * max(1, len(ids)) or sorted(b) != sorted(p):
                 raise ValueError('Weight conservation or permutation invariant failed')
             self.rational.update(zip(ids, weights)); self.weights.update(zip(ids, rounded))
             lines = ''.join(f'{i}\t{w}\n' for i, w in sorted(zip(ids, weights)))
             self.evidence['assignment_sha256_by_HLA'][hla] = hashlib.sha256(lines.encode()).hexdigest()
-            self.evidence['by_HLA'][hla] = {**design.describe_weights(weights),
-                'FP32_total_residual': residual, 'B_P_identical_multiset': True,
+            if low:
+                from .el_low_stability_design import describe
+                description = describe(weights)
+            else:
+                description = design.describe_weights(weights)
+            self.evidence['by_HLA'][hla] = {**description,
+                'FP32_total_residual': residual,
+                ('L_P_identical_multiset' if low else 'B_P_identical_multiset'): True,
                 'small_positive_group_below10': len(ids) < 10}
 
     def validate_positive(self, identity, hla, peptide, prepared_index):
@@ -264,9 +274,10 @@ def manifest_rows(path):
 def validate_runtime_spec(spec: dict, condition: str):
     required = {'schema_version', 'version', 'mode', 'protocol_version', 'strength', 'seed',
                 'training_authorized', 'matched_reference'}
+    low = spec.get('protocol_version') == LOW_PROTOCOL
     if (set(spec) != required or spec['schema_version'] != 1 or spec['version'] != VERSION
-            or spec['mode'] not in {'A', 'B', 'P'} or spec['mode'] != condition
-            or spec['protocol_version'] != design.VERSION or spec['strength'] != '0.5'
+            or spec['mode'] not in ({'A', 'L', 'P'} if low else {'A', 'B', 'P'}) or spec['mode'] != condition
+            or spec['protocol_version'] not in {design.VERSION, LOW_PROTOCOL} or spec['strength'] != '0.5'
             or spec['seed'] != 42 or type(spec['training_authorized']) is not bool):
         raise ValueError('Runtime weighting specification differs from approved protocol')
     reference = spec['matched_reference']
@@ -290,7 +301,8 @@ def runtime_adapter(config, files):
     base = load_sidecar(files['positive_scores'], files['positive_score_manifest'])
     if base.manifest['original_EL_view_sha256'] != config['inputs']['EL']['sha256']:
         raise ValueError('Sidecar belongs to a different original EL population')
-    return LossAdapter(list(base.scores.values()), base.manifest, config['condition'])
+    return LossAdapter(list(base.scores.values()), base.manifest, config['condition'],
+                       protocol_version=config['loss_adapter']['protocol_version'])
 
 
 def matched_config_identity(config):
@@ -384,7 +396,7 @@ def prepare(*, out=None, verify_existing=False, paths=None):
     return result
 
 
-def synthetic_noop_evidence(*, paths=None, device="cpu"):
+def synthetic_noop_evidence(*, paths=None, device="cpu", protocol_version=design.VERSION):
     """Pinned synthetic forward/backward; CUDA also checks two matched AdamW steps.
 
     Optional existing tensor runtime; not called during sidecar preparation or on
@@ -426,15 +438,17 @@ def synthetic_noop_evidence(*, paths=None, device="cpu"):
             'original_peptide': peptide, 'original_label': label, 'derived_row_index': str(i)})
         if label == '1': positives.append(PositiveScore(str(i), str(i), identity, sha, hla, hla, peptide, label, str(i)))
     metadata = {'rows': 16, 'HLA_groups': 1, 'positive_counts_by_HLA': {hla:16}, 'supported_HLA': [hla], 'archive_sha256': archive}
+    modes = ('A', 'L', 'P') if protocol_version == LOW_PROTOCOL else ('A', 'B', 'P')
+    weighted_mode = modes[1]
     start = time.monotonic()
     with runner.pinned_modules(files) as (BigMHC, Dataset):
         def native():
             frame = pd.DataFrame({'mhc':[hla]*272, 'pep':peptides, 'tgt':[1.0]*16+[0.0]*256, 'len':[9]*272})
             return Dataset(frame, mhcenc={hla:torch.zeros(414, dtype=torch.int8)})
         schedules, final_rngs = {}, {}
-        for mode in ('legacy', 'A', 'B', 'P'):
+        for mode in ('legacy', *modes):
             random.seed(42); np.random.seed(42); torch.manual_seed(42)
-            ds = native() if mode == 'legacy' else IdentityDataset(native(), records, stage='EL', adapter=LossAdapter(positives,metadata,mode))
+            ds = native() if mode == 'legacy' else IdentityDataset(native(), records, stage='EL', adapter=LossAdapter(positives,metadata,mode,protocol_version=protocol_version))
             ds.makebats(16,shuffle=True,negfrac=.99)
             batches = list(torch.utils.data.DataLoader(ds,batch_size=None,shuffle=True,num_workers=0))
             if len(batches)!=16 or any(len(b.tgt)!=17 or int(b.tgt.sum())!=1 for b in batches):
@@ -448,12 +462,12 @@ def synthetic_noop_evidence(*, paths=None, device="cpu"):
                     if not all(torch.equal(a,b) for a,b in ((batch.mhc,mhc),(batch.pep,pep),(batch.tgt,tgt))):
                         raise ValueError('Adapter changed authentic encoded input/label sequence')
                 if mode=='A': test_batch=batches[0]
-        if schedules['A']!=schedules['B'] or schedules['A']!=schedules['P'] or len({digest(r) for r in final_rngs.values()})!=1:
+        if schedules['A']!=schedules[weighted_mode] or schedules['A']!=schedules['P'] or len({digest(r) for r in final_rngs.values()})!=1:
             raise ValueError('Adapter changed native sampling or RNG streams')
         initial_by_mode = {}
-        for mode in ('A', 'B', 'P'):
+        for mode in modes:
             random.seed(42); np.random.seed(42); torch.manual_seed(42)
-            LossAdapter(positives, metadata, mode)
+            LossAdapter(positives, metadata, mode, protocol_version=protocol_version)
             model = runner.on_device(BigMHC(), selected_device).train()
             initial_by_mode[mode] = runner.state_hashes(model)
         initial = initial_by_mode['A']
@@ -492,7 +506,7 @@ def synthetic_noop_evidence(*, paths=None, device="cpu"):
         model.load_state_dict(initial_state)
         if initial!=runner.state_hashes(model) or abs(losses[0]-losses[1])>1e-7+1e-6*abs(losses[0]):
             raise ValueError('No-op changed parameters or loss')
-    return {'schema_version':1,'fixture':'Synthetic 272 unique nine-mers: 16 positives + 256 negatives; zero receptor vector; not scientific observations',
+    return {'schema_version':1,'protocol_version':protocol_version,'condition_names':list(modes),'fixture':'Synthetic 272 unique nine-mers: 16 positives + 256 negatives; zero receptor vector; not scientific observations',
         'source_commit':runner.SOURCE_COMMIT,'source_inputs':inputs,'device':selected_device,'precision':'FP32',
         'adapter_source_sha256':raw.sha256_file(Path(__file__)),
         'runner_source_sha256':raw.sha256_file(Path(runner.__file__)),

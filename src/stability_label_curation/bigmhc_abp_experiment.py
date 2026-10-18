@@ -16,6 +16,8 @@ RUN_ID = 'task-2_17-abp-comparison'
 LEGACY_RUN_ID = 'task-2_14b-abp-gpu-experiment'
 STARTING_MAIN = '2ae58c234924c602863e470dd6873f14f45d0cfb'
 CONFIG = 'configs/bigmhc_abp_task2_14b.json'
+LOW_CONFIG = 'configs/bigmhc_low_stability_task2_19.json'
+LOW_RUN_ID = 'task-2_19-low-stability-alp-gpu'
 HISTORICAL = 'task-2_10-full-eligible-baseline-a'
 COMMON_FIELDS = ('seed', 'epochs', 'batch_size', 'learning_rate', 'device', 'cpu_threads',
                  'num_workers', 'persistent_workers', 'label_policy', 'rows_per_class',
@@ -29,8 +31,8 @@ def arm_run(out: str | Path, paths: StoragePaths, config: dict) -> tuple[Path, d
         return runner.teacher._run(directory, paths)
     if (directory.parent.parent != paths.project_runs_dir
             or not any(directory.parent.name == prefix or directory.parent.name.startswith(prefix + '-')
-                       for prefix in (RUN_ID, LEGACY_RUN_ID))
-            or directory.name != config['condition'] or directory.name not in {'A', 'B', 'P'}):
+                       for prefix in (RUN_ID, LEGACY_RUN_ID, LOW_RUN_ID))
+            or directory.name != config['condition'] or directory.name not in ({'L', 'P'} if config.get('loss_adapter', {}).get('protocol_version') == weights.LOW_PROTOCOL else {'A', 'B', 'P'})):
         raise ValueError('Unexpected matched arm output directory')
     _, parent = runner.teacher._run(directory.parent, paths)
     if parent['run_kind'] != 'bigmhc_matched_abp_experiment':
@@ -157,10 +159,11 @@ def compare_historical(current: Path, historical: Path) -> dict:
 
 
 def metric_contrasts(metrics: dict) -> dict:
+    weighted = 'L' if 'L' in metrics else 'B'
     return {contrast: {stage: {metric: metrics[left][stage][metric] - metrics[right][stage][metric]
                               for metric in ('AUPRC', 'AUROC')}
                        for stage in ('IM', 'EL_proxy')}
-            for contrast, left, right in (('B-A', 'B', 'A'), ('B-P', 'B', 'P'), ('P-A', 'P', 'A'))}
+            for contrast, left, right in ((weighted+'-A', weighted, 'A'), (weighted+'-P', weighted, 'P'), ('P-A', 'P', 'A'))}
 
 
 def per_hla_metrics(directory: Path) -> dict:
@@ -185,6 +188,8 @@ def per_hla_metrics(directory: Path) -> dict:
 
 def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = None, run_id: str = RUN_ID) -> dict:
     paths = paths or resolve_paths()
+    if run_id == LOW_RUN_ID:
+        return execute_low(noop_report=noop_report, test_log=test_log, paths=paths)
     config_path = paths.repository_root / CONFIG
     base = runner.load_config(config_path)
     runner.runs.validate_run_id(run_id)
@@ -279,6 +284,121 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
         outputs = {str(p.relative_to(parent)): runner.raw.sha256_file(p)
                    for p in sorted(parent.rglob('*')) if p.is_file()}
         write(parent / 'reports/output_manifest.json', {'sha256': outputs})
+    return result
+
+
+def execute_low(*, noop_report: Path, test_log: Path, paths: StoragePaths) -> dict:
+    """Task 2.19 only: authenticated reused A, then one L and one P worker."""
+    from .bigmhc_abp_preflight import validate
+    from .bigmhc_baseline_compatibility import BASELINE_RUN, REFERENCE
+    from .el_low_stability_design import describe
+    config_path = paths.repository_root / LOW_CONFIG
+    base = runner.load_config(config_path)
+    runner.cuda_visibility()
+    noop = runner.readers._json(noop_report)
+    required = ('loss_exactly_equal', 'gradients_exactly_equal', 'AdamW_updates_identical',
+                'native_encoded_tensors_and_labels_identical', 'model_sampler_RNG_states_identical',
+                'source_row_identity_collation_verified')
+    if (noop['device'] != 'cuda:0' or any(noop.get(k) is not True for k in required) or
+            noop['gradient_maximum_absolute_difference'] != 0 or
+            noop.get('protocol_version') != weights.LOW_PROTOCOL or
+            noop.get('condition_names') != ['A', 'L', 'P'] or
+            noop['adapter_source_sha256'] != runner.raw.sha256_file(Path(weights.__file__)) or
+            noop['runner_source_sha256'] != runner.raw.sha256_file(Path(runner.__file__))):
+        raise ValueError('Current CUDA A/L/P no-op equivalence gate failed')
+    tests = test_log.read_text()
+    if '\nOK' not in tests or '\nFAILED' in tests:
+        raise ValueError('Relevant tests must pass before training')
+    preflight = validate(config_path=config_path, paths=paths)
+    _, inputs = runner.resolve_inputs(base, paths)
+    baseline = paths.project_runs_dir / BASELINE_RUN
+    parent = runner.runs.create_run(paths=paths, run_id=LOW_RUN_ID, kind='bigmhc_matched_abp_experiment',
+        seed=42, config=config_path, inputs=[i['path'] for i in inputs] + [baseline/'reports/matched_state.json', noop_report, test_log],
+        argv=['bigmhc_abp_experiment', '--run-id', LOW_RUN_ID],
+        description='Task 2.19: reused Task 2.17 A; one approved low-stability L/P; frozen development only')
+    def write(path, value):
+        runner.raw.write_report(path, value, paths=paths)
+    write(parent/'reports/cuda_noop_equivalence.json', noop)
+    runner.raw.write_text_report(parent/'logs/pretraining_tests.log', tests, paths=paths)
+    write(parent/'reports/input_preflight.json', preflight)
+    proof = {**preflight['historical'],
+        'execution_commit': runner.readers._json(parent/'manifest.json')['git']['commit_sha'],
+        'CUDA_unit_weight_equivalence': True,
+        'cuda_noop_report_sha256': runner.raw.sha256_file(parent/'reports/cuda_noop_equivalence.json'),
+        'relevant_tests_sha256': runner.raw.sha256_file(parent/'logs/pretraining_tests.log'),
+        'baseline_artifacts_copied': False,
+        'source_row_cohorts_identical': True}
+    proof_path = parent/'reports/baseline_compatibility.json'
+    write(proof_path, proof)
+    write(parent/'reports/baseline_A_reference.json', {'status':'reused', 'run':BASELINE_RUN,
+        'matched_state':REFERENCE, 'compatibility_report':'reports/baseline_compatibility.json',
+        'checkpoint':'checkpoints/el', 'IM_overlay':'checkpoints/el/im',
+        'EL_predictions':'predictions/el_development.csv', 'IM_predictions':'predictions/im_development.csv'})
+    metrics = {'A': runner.readers._json(baseline/'reports/development_metrics.json')}
+    evidence = {'A': proof['artifact_verification']}
+    started = time.monotonic()
+    try:
+        for mode in ('L', 'P'):
+            remaining = 10800 - (time.monotonic() - started)
+            if remaining < 60:
+                raise RuntimeError('Total GPU experiment budget exhausted')
+            config = arm_configuration(base, mode, REFERENCE)
+            config['baseline_reuse']['compatibility_report'] = {'area':'runs',
+                'relative_path':str(proof_path.relative_to(paths.project_runs_dir)),
+                'sha256':runner.raw.sha256_file(proof_path)}
+            config['wall_seconds'] = min(base['wall_seconds'], int(remaining))
+            cp = parent/'reports'/f'configuration_{mode}.json'
+            write(cp, config)
+            resolved, identities = runner.resolve_inputs(config, paths)
+            manifest = runner.runs.build_manifest(paths=paths, run_id=mode, kind='bigmhc_matched_arm',
+                seed=42, config=cp, inputs=[i['path'] for i in identities] + [proof_path],
+                argv=['bigmhc_abp_experiment', mode], description=f'Task 2.19 approved {mode}; original labels')
+            arm = parent/mode
+            arm.mkdir()
+            for name in runner.runs.RUN_SUBDIRECTORIES:
+                (arm/name).mkdir()
+            write(arm/'manifest.json', manifest)
+            print(f'Starting approved arm {mode}; baseline A reused; remaining {remaining:.0f}s', flush=True)
+            runner.run(config_path=cp, out=arm, paths=paths)
+            evidence[mode] = verify_artifacts(arm)
+            matched = runner.readers._json(arm/'reports/matched_state.json')
+            reference = runner.readers._json(baseline/'reports/matched_state.json')
+            weights.check_reference(reference, initial=matched['initial_tensor_sha256'])
+            for stage in ('EL','IM'):
+                weights.check_reference(reference, stage=stage, rng=matched['rng_before_'+stage], training=matched[stage])
+            write(arm/'reports/exposure_fingerprints.json', {
+                'initial_36_tensor_digest': weights.digest(matched['initial_tensor_sha256']),
+                'stages': {stage: {'ordered_exposure_digest':weights.digest(matched[stage]['sampled_batch_sha256']),
+                    'batches':len(matched[stage]['sampled_batch_sha256']),
+                    'optimizer_steps':matched[stage]['optimization_steps'],
+                    'skip_mask_digest':weights.digest(matched[stage]['optimizer_skip_mask']),
+                    'RNG_boundary':matched['rng_before_'+stage]} for stage in ('EL','IM')},
+                'exactly_matches_reused_A': True})
+            weight_adapter = weights.runtime_adapter(config, resolved)
+            weight_summary = describe(list(weight_adapter.rational.values()))
+            weight_summary['FP32_total'] = sum(weight_adapter.weights.values())
+            weight_summary['FP32_residual'] = weight_summary['FP32_total'] - weight_summary['total_after']
+            write(arm/'reports/positive_weight_summary.json', weight_summary)
+            write(arm/'reports/per_HLA_development_metrics.json', per_hla_metrics(arm))
+            metrics[mode] = runner.readers._json(arm/'reports/development_metrics.json')
+            write(arm/'reports/condition_completed.json', {'status':'completed','condition':mode,
+                'artifact_verification':evidence[mode], 'matched_A':True, 'metrics':metrics[mode],
+                'weights':weight_summary})
+            print(f'Completed {mode}; checkpoints, predictions and matching verified', flush=True)
+        result = {'status':'completed', 'A_reused_from':BASELINE_RUN, 'metrics':metrics,
+            'paired_differences':metric_contrasts(metrics), 'artifact_verification':evidence,
+            'elapsed_seconds':time.monotonic()-started, 'total_budget_seconds':10800,
+            'protocol_deviations':[], 'failures':[], 'sealed_tests_opened':[],
+            'interpretation':'Post-Task-2.17 exploratory single seed and fixed permutation; predictive utility only; no biological label-reliability inference'}
+        write(parent/'reports/alp_results.json', result)
+    except Exception as error:
+        write(parent/'reports/experiment_blocker.json', {'status':'stopped','error':repr(error),
+            'completed_arms':list(metrics),'elapsed_seconds':time.monotonic()-started})
+        raise
+    finally:
+        outputs = {str(p.relative_to(parent)):runner.raw.sha256_file(p)
+                   for p in sorted(parent.rglob('*')) if p.is_file()}
+        write(parent/'reports/output_manifest.json', {'sha256':outputs})
     return result
 
 

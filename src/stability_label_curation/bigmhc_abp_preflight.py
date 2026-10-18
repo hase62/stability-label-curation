@@ -22,7 +22,10 @@ def planned_configurations(base: dict) -> dict[str, dict]:
     from .bigmhc_abp_experiment import arm_configuration, RUN_ID
     result = {'A': arm_configuration(base, 'A')}
     pending = {'area': 'runs', 'relative_path': f'{RUN_ID}/A/reports/matched_state.json', 'sha256': None}
-    for mode in ('B', 'P'):
+    low = base['loss_adapter']['protocol_version'] == weights.LOW_PROTOCOL
+    if low:
+        pending = base['baseline_reuse']['reference']
+    for mode in (('L', 'P') if low else ('B', 'P')):
         c = deepcopy(base)
         c['loss_adapter']['training_authorized'] = False
         result[mode] = arm_configuration(c, mode, pending)
@@ -32,6 +35,9 @@ def planned_configurations(base: dict) -> dict[str, dict]:
 
 
 def historical_prerequisites(paths: StoragePaths, config: dict) -> dict:
+    if config['loss_adapter']['protocol_version'] == weights.LOW_PROTOCOL:
+        from .bigmhc_baseline_compatibility import baseline_evidence
+        return baseline_evidence(config, paths)
     from .bigmhc_abp_experiment import HISTORICAL, COMMON_FIELDS, training_report, prediction_rows
     directory = paths.project_runs_dir / HISTORICAL
     # Historical evidence belongs to its recorded commit, not today's checkout.
@@ -87,12 +93,30 @@ def validate(*, config_path: str | Path, paths: StoragePaths | None = None,
     resolved, identities = runner.resolve_inputs(config, paths, files)
     historical = historical_prerequisites(paths, config)
     sidecar = weights.runtime_adapter(config, resolved)
-    modes = {mode: weights.LossAdapter(list(sidecar.scores.values()), sidecar.manifest, mode)
-             for mode in ('A', 'B', 'P')}
+    low = config['loss_adapter']['protocol_version'] == weights.LOW_PROTOCOL
+    modes = {mode: weights.LossAdapter(list(sidecar.scores.values()), sidecar.manifest, mode,
+                protocol_version=config['loss_adapter']['protocol_version'])
+             for mode in (('A', 'L', 'P') if low else ('A', 'B', 'P'))}
+    weighted_mode = 'L' if low else 'B'
     if set(modes['A'].weights.values()) != {1.0}:
         raise ValueError('A weights must be unit weights')
-    if modes['B'].evidence['by_HLA'] != modes['P'].evidence['by_HLA']:
-        raise ValueError('B/P per-HLA weight multiset invariants differ')
+    if modes[weighted_mode].evidence['by_HLA'] != modes['P'].evidence['by_HLA']:
+        raise ValueError('Weighted/permuted per-HLA weight invariants differ')
+    if low:
+        from .el_low_stability_design import describe, RUN_ID as design_run
+        expected = runner.readers._json(paths.project_runs_dir / design_run / 'weight_exposure.json')
+        for hla in sidecar.manifest['positive_counts_by_HLA']:
+            ids = [i for i, row in sidecar.scores.items() if row.resolved_hla == hla]
+            if (sorted(modes['L'].rational[i] for i in ids) != sorted(modes['P'].rational[i] for i in ids) or
+                    sorted(modes['L'].weights[i] for i in ids) != sorted(modes['P'].weights[i] for i in ids)):
+                raise ValueError('Exact L/P per-HLA rational/FP32 multiset mismatch')
+        for mode in ('L', 'P'):
+            actual = describe(list(modes[mode].rational.values()))
+            if actual != expected['overall']:
+                raise ValueError('Approved Task 2.18 weight invariants differ')
+            for hla, group in modes[mode].evidence['by_HLA'].items():
+                if any(group[k] != v for k, v in expected['by_HLA'][hla].items() if k not in {'negatives'}):
+                    raise ValueError('Approved per-HLA weight invariants differ')
     inventory = runner.readers._json(resolved['inventory'])
     allowed = set().union(*(v['by_HLA'] for v in inventory.values()))
     development = list(runner.input_rows(resolved['development'], allowed))
@@ -152,6 +176,11 @@ def validate(*, config_path: str | Path, paths: StoragePaths | None = None,
                               'original_rand_counts': dict(flags), 'ordered_source_ids_sha256': fingerprint.hexdigest(),
                               'sampling_performed': False}
             del bound, native
+    if low:
+        from .bigmhc_baseline_compatibility import BASELINE_RUN
+        saved = runner.readers._json(paths.project_runs_dir / BASELINE_RUN / 'reports/full_cohort_preflight.json')
+        if cohorts != saved['cohorts']:
+            raise ValueError('Original source-row cohort fingerprints differ from reused A')
     for identity in identities:
         if runner.raw.sha256_file(identity['path']) != identity['sha256']:
             raise ValueError('Immutable preflight input changed during validation')
@@ -167,7 +196,8 @@ def validate(*, config_path: str | Path, paths: StoragePaths | None = None,
                 for mode, c in configurations.items()},
             'historical': historical, 'optimizer_initializations': 0, 'optimizer_steps': 0,
             'model_checkpoints_produced': 0, 'development_observations_scored': 0,
-            'runtime_gate': 'B/P require the completed fresh A matched-state hash before training; checked by existing launcher',
+            'runtime_gate': ('L/P require pinned Task 2.17 A and current compatibility receipt' if low else
+                             'B/P require the completed fresh A matched-state hash before training; checked by existing launcher'),
             'sealed_payloads_opened': []}
 
 
