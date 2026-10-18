@@ -1,4 +1,4 @@
-"""Task 2.14B only: one exclusive, bounded A/B/P execution; no tuning or retries."""
+"""One exclusive, bounded preregistered A/B/P execution; no tuning or retries."""
 from collections import defaultdict
 from copy import deepcopy
 import csv
@@ -12,7 +12,9 @@ from . import bigmhc_gpu_worker as gpu
 from . import el_stability_loss_adapter as weights
 from .paths import StoragePaths, resolve_paths
 
-RUN_ID = 'task-2_14b-abp-gpu-experiment'
+RUN_ID = 'task-2_17-abp-comparison'
+LEGACY_RUN_ID = 'task-2_14b-abp-gpu-experiment'
+STARTING_MAIN = '2ae58c234924c602863e470dd6873f14f45d0cfb'
 CONFIG = 'configs/bigmhc_abp_task2_14b.json'
 HISTORICAL = 'task-2_10-full-eligible-baseline-a'
 COMMON_FIELDS = ('seed', 'epochs', 'batch_size', 'learning_rate', 'device', 'cpu_threads',
@@ -26,7 +28,8 @@ def arm_run(out: str | Path, paths: StoragePaths, config: dict) -> tuple[Path, d
     if directory.parent == paths.project_runs_dir:
         return runner.teacher._run(directory, paths)
     if (directory.parent.parent != paths.project_runs_dir
-            or not (directory.parent.name == RUN_ID or directory.parent.name.startswith(RUN_ID + '-'))
+            or not any(directory.parent.name == prefix or directory.parent.name.startswith(prefix + '-')
+                       for prefix in (RUN_ID, LEGACY_RUN_ID))
             or directory.name != config['condition'] or directory.name not in {'A', 'B', 'P'}):
         raise ValueError('Unexpected matched arm output directory')
     _, parent = runner.teacher._run(directory.parent, paths)
@@ -185,8 +188,8 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
     config_path = paths.repository_root / CONFIG
     base = runner.load_config(config_path)
     runner.runs.validate_run_id(run_id)
-    if run_id != RUN_ID and not run_id.startswith(RUN_ID + '-'):
-        raise ValueError('Matched experiment run ID must use the Task 2.14B prefix')
+    if not any(run_id == prefix or run_id.startswith(prefix + '-') for prefix in (RUN_ID, LEGACY_RUN_ID)):
+        raise ValueError('Matched experiment run ID must use an approved Task 2.14B/2.17 prefix')
     runner.cuda_visibility()
     noop = runner.readers._json(noop_report)
     required = ('loss_exactly_equal', 'gradients_exactly_equal', 'AdamW_updates_identical',
@@ -210,7 +213,7 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
     historical_verification = verify_artifacts(historical)
     parent = runner.runs.create_run(paths=paths, run_id=run_id, kind='bigmhc_matched_abp_experiment',
         seed=42, config=config_path, inputs=[item['path'] for item in inputs],
-        argv=['bigmhc_abp_experiment'], description='Task 2.14B; single-seed A/B/P; frozen development only')
+        argv=['bigmhc_abp_experiment'], description='Task 2.17; fresh single-seed A/B/P; frozen development only')
     def write(path: Path, value: dict) -> None:
         runner.raw.write_report(path, value, paths=paths)
     write(parent / 'reports/cuda_noop_equivalence.json', noop)
@@ -218,7 +221,7 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
     write(parent / 'reports/input_preflight.json', {'verification': verification,
         'full_cohort_preflight': preflight,
         'sidecar': sidecar.evidence, 'historical_artifacts': historical_verification,
-        'starting_GitHub_main': '0c3b5cf245c42803854c9139f4c4058cc36f7dbf'})
+        'starting_GitHub_main': STARTING_MAIN})
     metrics, evidence, reference = {}, {}, None
     started = time.monotonic()
     try:
@@ -233,7 +236,7 @@ def execute(*, noop_report: Path, test_log: Path, paths: StoragePaths | None = N
             resolved, identities = runner.resolve_inputs(config, paths)
             manifest = runner.runs.build_manifest(paths=paths, run_id=mode, kind='bigmhc_matched_arm',
                 seed=42, config=cp, inputs=[item['path'] for item in identities],
-                argv=['bigmhc_abp_experiment', mode], description=f'Task 2.14B mode {mode}; original labels')
+                argv=['bigmhc_abp_experiment', mode], description=f'Task 2.17 mode {mode}; original labels')
             arm = parent / mode
             arm.mkdir()
             for name in runner.runs.RUN_SUBDIRECTORIES:

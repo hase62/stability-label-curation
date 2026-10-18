@@ -528,10 +528,13 @@ def worker(*,config_path,out,paths=None,files=None):
             matched['rng_before_EL']=weighting.rng_identity(torch,np)
             weighting.check_reference(matched_reference,initial=initial,rng=matched['rng_before_EL'],stage='EL')
         def stage_epoch(stage, current_model, transfer, **kwargs):
+            import resource
             # Separate immutable receipts survive a later stage/encoding/reload failure.
             raw.write_report(directory/f'reports/{stage.lower()}_stage_started.json',
                 {'stage':stage,'status':'started','initial_state_tensor_sha256':state_hashes(current_model),
-                 'code_commit':manifest['git']['commit_sha'], 'condition':config['condition']},paths=paths)
+                 'code_commit':manifest['git']['commit_sha'], 'condition':config['condition'],
+                 'config_sha256':raw.sha256_file(config_path),
+                 'RNG_boundary':matched['rng_before_'+stage] if adapted else None},paths=paths)
             if device!='cpu':
                 torch.cuda.synchronize(0);torch.cuda.reset_peak_memory_stats(0)
             start=time.monotonic()
@@ -544,6 +547,7 @@ def worker(*,config_path,out,paths=None,files=None):
                      'elapsed_seconds':time.monotonic()-start},paths=paths)
                 raise
             training['elapsed_seconds']=time.monotonic()-start
+            training['peak_host_RSS_bytes_through_stage']=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024)
             training['GPU_memory']=({'peak_allocated_bytes':torch.cuda.max_memory_allocated(0),
                 'peak_reserved_bytes':torch.cuda.max_memory_reserved(0)} if device!='cpu' else None)
             raw.write_report(directory/f'reports/{stage.lower()}_stage_completed.json',
@@ -569,6 +573,7 @@ def worker(*,config_path,out,paths=None,files=None):
             {'status':'verified','checkpoint':'checkpoints/el','files':el_files,
              'initial_state_tensor_sha256':initial,'state_tensor_sha256':el_state,
              'strict_reload_identical':True,'code_commit':manifest['git']['commit_sha']},paths=paths)
+        write_predictions(directory/'predictions/el_development.csv',development,el_predictions,paths)
         del model
         if adapted:
             matched['rng_before_IM']=weighting.rng_identity(torch,np)
@@ -610,7 +615,6 @@ def worker(*,config_path,out,paths=None,files=None):
     if gpu_memory is not None:
         gpu_memory={key:max(gpu_memory[key],el_training['GPU_memory'][key],im_training['GPU_memory'][key])
                     for key in gpu_memory}
-    write_predictions(directory/'predictions/el_development.csv',development,el_predictions,paths)
     write_predictions(directory/'predictions/im_development.csv',development,im_predictions,paths)
     metrics={name:development_metrics([int(r['original_label']) for r in development],probabilities)
              for name,probabilities in (('EL_proxy',el_predictions),('IM',im_predictions))}
