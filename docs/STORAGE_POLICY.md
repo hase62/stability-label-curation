@@ -85,3 +85,5 @@ code; local inputs and outputs stay outside Git and are not synchronized by this
 
 This implementation uses the Python standard library and POSIX-compatible paths
 on macOS and Linux/WSL2. macOS execution alone does not empirically validate WSL2.
+
+Artifact transport uses the existing resolver and a controlled project-data cache; see [fresh-clone recovery](FRESH_CLONE_RECOVERY.md). Restoration preserves original data/run paths and never launches regeneration or training automatically.

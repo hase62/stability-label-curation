@@ -9,6 +9,8 @@ This predictive-utility proposal does not establish EL mislabeling or detection 
 
 The goal is to test whether an independent stability labeler trained on provenance-traceable measured human HLA-I stability data improves external generalization by removing or holding out high-confidence stability-inconsistent positive training examples. Stability is not added as an input feature, and the immunogenicity evaluator architecture and loss remain unchanged.
 
+Task 2.15M adds [repository-controlled artifact recovery](docs/FRESH_CLONE_RECOVERY.md) and a [reproducibility audit](docs/REPRODUCIBILITY_AUDIT.md). The GPU inputs and positive-score bundle can be restored with authenticated private access; historical checkpoint and provenance gaps remain.
+
 ## Local storage
 
 - `~/codex/data`: reproducible external source data.

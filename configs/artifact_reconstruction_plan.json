@@ -1,0 +1,2389 @@
+{
+  "classification_scope": "Groups may overlap (payload subsets vs complete historical directories). File/byte totals in generated inventory count physical files once. R2/R3 recipes are conditional on authenticated input restoration and authorization; no recipe is automatically executed.",
+  "global_gaps": [
+    "Historical manifests and downstream configs pin host-specific absolute paths and metadata hashes. New manifests are not byte-identical substitutes.",
+    "Frozen Teacher and CPU/GPU checkpoints have no known authorized remote checkpoint backup. Retraining cannot recreate the approved model SHA.",
+    "Private locator environment variables and private Git repository require authorized access; recovery is not unattended without these.",
+    "The full historical directory is not recoverable merely because a critical subset appears in a bundle."
+  ],
+  "group_classification_basis": "R1 exact payload download; R2 documented recomputation with existing parent inputs; R3 both; GAP missing full source/provenance/backup. Exact-byte backup coverage is reported separately.",
+  "groups": [
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/20261011T120445Z-727dc4c8fd2488eaa26466d0",
+      "group_id": "runs:20261011T120445Z-727dc4c8fd2488eaa26466d0",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 37a3c941e04d5255fed7c1d57d9ea883b5f55cf8",
+        "configuration": null,
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation runs create --kind infrastructure --seed 0 --run-id <new_run_id>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "37a3c941e04d5255fed7c1d57d9ea883b5f55cf8",
+        "recipe_id": "20261011T120445Z-727dc4c8fd2488eaa26466d0",
+        "required_inputs": [],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='infrastructure', seed=0, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 0,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/20261013T144500Z-839825ab9a07703396a8bc8e",
+      "group_id": "runs:20261013T144500Z-839825ab9a07703396a8bc8e",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> d211c9510b7d27ccb864265703c67ef67575a997",
+        "configuration": null,
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation dtu2016 inspect --json --report <new_run>/reports/raw_inventory.json",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "d211c9510b7d27ccb864265703c67ef67575a997",
+        "recipe_id": "20261013T144500Z-839825ab9a07703396a8bc8e",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "netmhcstabpan_2016/Stability.txt",
+            "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='data_acquisition_inventory', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/20261014T013031Z-68a4917a5da33c1706e22983",
+      "group_id": "runs:20261014T013031Z-68a4917a5da33c1706e22983",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> c9130a69f87c58ad3103724ad24d55bea0c8adf1",
+        "configuration": {
+          "repository_path": "configs/netmhcstabpan_2016_evidence.json",
+          "sha256": "6ee7a05db18770877a00ed1610507899e28fe9062845357832f84998515f2b2a"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation dtu2016 audit --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "c9130a69f87c58ad3103724ad24d55bea0c8adf1",
+        "recipe_id": "20261014T013031Z-68a4917a5da33c1706e22983",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "netmhcstabpan_2016/Stability.txt",
+            "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='data_source_audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "GAP",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/20261014T024051Z-0e6397135adbe9beb067b6be",
+      "group_id": "runs:20261014T024051Z-0e6397135adbe9beb067b6be",
+      "priority": "historical_analysis",
+      "reason": "Complete source audit requires a pinned SPEARMINT Git checkout, not only the four restored CSV/reference snapshots; exact metadata/checkout recovery is not automated.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> d17fb7662dd724d0ab093323719e6751313e71c3",
+        "configuration": {
+          "repository_path": "configs/external_repositories.lock.json",
+          "sha256": "3a8c16b4025e970f2a1ca49cc08d547c82c2b63e209514d94e4ba10769c7c031"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation spearmint audit --json --checkout <pinned_spearmint_checkout> --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "d17fb7662dd724d0ab093323719e6751313e71c3",
+        "recipe_id": "20261014T024051Z-0e6397135adbe9beb067b6be",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "netmhcstabpan_2016/Stability.txt",
+            "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/data/binding_stability/train.csv",
+            "sha256": "3ad79db3286688972b47ea96ba96129704367c1f016947a2ecc39c4872520793"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/data/binding_stability/val.csv",
+            "sha256": "49217866a5d084ecd74150609bd5f0cfb8f6a78ac772ded6f26e1ff427a79dd8"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/data/binding_stability/test.csv",
+            "sha256": "61d8ab1ae07e75fcf69b8175617ccf1bb43255498f0a8f37882568b2075c953f"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/refs/2field_hla_consensus_seqs.csv",
+            "sha256": "8969927707689d83656eef7c0f1b59b295e80ee7b202d55ee9904aaa9d947eae"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='source_overlap_audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "GAP",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-1_4-historical-netmhcstab-evidence",
+      "group_id": "runs:task-1_4-historical-netmhcstab-evidence",
+      "priority": "historical_analysis",
+      "reason": "Historical documentary PDF/HTML bytes lack a verified immutable external recovery source. Original 5509-row table was never recovered.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 0d5ba08abf428079d39ddb004d1749b5e1eb557d",
+        "configuration": {
+          "repository_path": "configs/netmhcstab_2013_evidence.json",
+          "sha256": "d67878c79af0ad43257e3e5719ff91f21f8ef9ef19eccf5c7dfc6fa01e9261b3"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation historical audit --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "0d5ba08abf428079d39ddb004d1749b5e1eb557d",
+        "recipe_id": "task-1_4-historical-netmhcstab-evidence",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "netmhcstabpan_2016/Stability.txt",
+            "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67"
+          },
+          {
+            "area": "data",
+            "relative_path": "tlstab_2024_secondary/cleaned_train_data.csv",
+            "sha256": "2d2c2a8ed0319ade9ec8657cbc4246d38924d0b21b33717b2ef7887e7f238fa7"
+          },
+          {
+            "area": "data",
+            "relative_path": "historical_netmhcstab_evidence/TLStab_2024.pdf",
+            "sha256": "8a54d93da56346445997e493b21e0f1c4360583e63a4ec84c931ae299f6286d0"
+          },
+          {
+            "area": "data",
+            "relative_path": "historical_netmhcstab_evidence/DTU_NetMHCstab_service.html",
+            "sha256": "7cc8c99dbf5f88801692df9b7e42e8d31c40fdd52d1477f9f3f247fae2c41d26"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='evidence-audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-1_5-jappe2020-source-inventory",
+      "group_id": "runs:task-1_5-jappe2020-source-inventory",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 13223d9cd692c8413f1e3795aacfee7159585d05",
+        "configuration": {
+          "repository_path": "configs/jappe_2020_artifacts.json",
+          "sha256": "4754f621afcd3e2ea8a8fd78f2db2ae041d55d5196870b4b314552aaa28eb709"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation jappe2020 inventory --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "13223d9cd692c8413f1e3795aacfee7159585d05",
+        "recipe_id": "task-1_5-jappe2020-source-inventory",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM6_ESM.xlsx",
+            "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM7_ESM.xlsx",
+            "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM8_ESM.xlsx",
+            "sha256": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM3_ESM.pdf",
+            "sha256": "cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='source-inventory', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-1_6-jappe2020-row-audit",
+      "group_id": "runs:task-1_6-jappe2020-row-audit",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 6c7c5b497a47ac44e2e84330b270393270f00885",
+        "configuration": {
+          "repository_path": "configs/jappe_2020_row_evidence.json",
+          "sha256": "9703adac8231751fa612c9f2408a71383e7c6d219ab53f514781ec9c7505bb49"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation jappe2020 audit --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "6c7c5b497a47ac44e2e84330b270393270f00885",
+        "recipe_id": "task-1_6-jappe2020-row-audit",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM6_ESM.xlsx",
+            "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM7_ESM.xlsx",
+            "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM8_ESM.xlsx",
+            "sha256": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM3_ESM.pdf",
+            "sha256": "cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='provenance-audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-1_7-jappe2020-figure-source-data",
+      "group_id": "runs:task-1_7-jappe2020-figure-source-data",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> ef04f8942fb5c64ce33d5bd86cca46b1491fb62d",
+        "configuration": {
+          "repository_path": "configs/jappe_2020_figure_evidence.json",
+          "sha256": "8a5434b52905475b6004cf30276711c6d96d121b06fd5e345d474d58afa8d7d5"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation jappe2020 figure-audit --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "ef04f8942fb5c64ce33d5bd86cca46b1491fb62d",
+        "recipe_id": "task-1_7-jappe2020-figure-source-data",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM11_ESM.xlsx",
+            "sha256": "fae10a4fcdb681cd1e925104406b6973861f5777e83b7dcbd42a79e0013c07a4"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_6-jappe2020-row-audit/reports/jappe_rows.jsonl",
+            "sha256": "a919be9050ed39643fcf251342a03295c3034e50ea17d20a4afe79dc0cdbd4d9"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_6-jappe2020-row-audit/reports/jappe_hlac_context_audit.json",
+            "sha256": "a5db00618dfa6b82781b4db6e1583c0b0933b31cb3489d34620df99da6e90c3f"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='source_audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-1_8-canonical-observation-registry",
+      "group_id": "runs:task-1_8-canonical-observation-registry",
+      "priority": "Teacher_reproduction",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> b3b7d060e83d76dbaa2c55b3aa4bbc72187135ad",
+        "configuration": {
+          "repository_path": "configs/observation_registry.lock.json",
+          "sha256": "7b484afb96970e301b0e2d57eae4d22b38e0420b5f4bf6d133309dcbb684f51e"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation registry build --output-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "b3b7d060e83d76dbaa2c55b3aa4bbc72187135ad",
+        "recipe_id": "task-1_8-canonical-observation-registry",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "netmhcstabpan_2016/Stability.txt",
+            "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/data/binding_stability/train.csv",
+            "sha256": "3ad79db3286688972b47ea96ba96129704367c1f016947a2ecc39c4872520793"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/data/binding_stability/val.csv",
+            "sha256": "49217866a5d084ecd74150609bd5f0cfb8f6a78ac772ded6f26e1ff427a79dd8"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/data/binding_stability/test.csv",
+            "sha256": "61d8ab1ae07e75fcf69b8175617ccf1bb43255498f0a8f37882568b2075c953f"
+          },
+          {
+            "area": "data",
+            "relative_path": "spearmint_stage2/refs/2field_hla_consensus_seqs.csv",
+            "sha256": "8969927707689d83656eef7c0f1b59b295e80ee7b202d55ee9904aaa9d947eae"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM6_ESM.xlsx",
+            "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM7_ESM.xlsx",
+            "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de"
+          },
+          {
+            "area": "data",
+            "relative_path": "jappe_2020/41467_2020_20166_MOESM8_ESM.xlsx",
+            "sha256": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_6-jappe2020-row-audit/reports/jappe_rows.jsonl",
+            "sha256": "a919be9050ed39643fcf251342a03295c3034e50ea17d20a4afe79dc0cdbd4d9"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='observation_registry', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-1_9-gate0-scientific-preflight",
+      "group_id": "runs:task-1_9-gate0-scientific-preflight",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 53ca0e8331cf92095ef07de67e67ca3e524a1d8a",
+        "configuration": {
+          "repository_path": "configs/gate0_preflight.json",
+          "sha256": "3e41f3feb77c50efa1466108aa7160df923194fa15f6be28a1c52c2e8aaf2efa"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation gate0 inspect --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "53ca0e8331cf92095ef07de67e67ca3e524a1d8a",
+        "recipe_id": "task-1_9-gate0-scientific-preflight",
+        "required_inputs": [
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/spearmint_stage2_aliases.jsonl",
+            "sha256": "6a07b46999dc9814dbeef5b457ef047dcdf18b26d7bd7726189c2eb27abd21e9"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/registry_validation_summary.json",
+            "sha256": "fbd2c397c6c12d7f2e783926176db7202aa2ea0d648b02e3035d88696b0387e9"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/source_lineage_matrix.json",
+            "sha256": "b5d3411af37ef60543168b46086b4203d063b90fdde6e87f83fd8996eeb2010f"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/source_evidence_manifest.json",
+            "sha256": "26be9e7f5f6611a642b1b0d2d6f68369d34fa0adfca48964c3582cf4a82c7fa1"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/manifest.json",
+            "sha256": "13ecca0a28aefd6418ef28bb1fbeec28e72b7fa3caae54eaa9a047eed4204270"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='scientific_preflight', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_0-el-im-hard-split-preflight",
+      "group_id": "runs:task-2_0-el-im-hard-split-preflight",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 5f883b75fc64d3dab92199a6693c707a29bf6ce4",
+        "configuration": {
+          "repository_path": "configs/phase2_el_im_protocol.json",
+          "sha256": "c5d37b5bd6b4f30abbc3a58c9dd32e0d8db29bce79735a6cf84680b62408af42"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation leakage inspect --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "5f883b75fc64d3dab92199a6693c707a29bf6ce4",
+        "recipe_id": "task-2_0-el-im-hard-split-preflight",
+        "required_inputs": [
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/source_evidence_manifest.json",
+            "sha256": "26be9e7f5f6611a642b1b0d2d6f68369d34fa0adfca48964c3582cf4a82c7fa1"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/manifest.json",
+            "sha256": "13ecca0a28aefd6418ef28bb1fbeec28e72b7fa3caae54eaa9a047eed4204270"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='scientific_preflight', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_1-bigmhc-code-provenance",
+      "group_id": "runs:task-2_1-bigmhc-code-provenance",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 4397737d6e60316d2c70b9f6b5ee8bb975e024fa",
+        "configuration": {
+          "repository_path": "configs/bigmhc_source_evidence.json",
+          "sha256": "f03139984d179fb42ca709204274c29d302ac532098f27f579252cf62486969f"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation bigmhc source-audit --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "4397737d6e60316d2c70b9f6b5ee8bb975e024fa",
+        "recipe_id": "task-2_1-bigmhc-code-provenance",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+            "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+            "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+            "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+            "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+            "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+            "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+            "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+            "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+            "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/repository_tree.json",
+            "sha256": "32648a0a1c82e045786c6f8a4431794880b3e0fdb140dc976ff86a202fbadc56"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/source_acquisition_receipt.json",
+            "sha256": "55dddcb0154e9d53e8c3fb8e84dc0fb9c6da3f0114d0d0805695faa7d92e2be8"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='source_audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_11-el-positive-reproducibility",
+      "group_id": "runs:task-2_11-el-positive-reproducibility",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 8e2f415ce6ed9dbf620b3ab1588232705affce68",
+        "configuration": {
+          "repository_path": "configs/el_positive_stability_analysis_v0.json",
+          "sha256": "b31b76992af095a5dd947ac7bd7834eff5bfc9e7e7f9a3c493b966fe71fea026"
+        },
+        "environment": "Python3.13.5; configs/requirements-el-positive-analysis-v0.txt (recorded installed metadata); figures optional",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation el-positive-analysis --config configs/el_positive_stability_analysis_v0.json --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "8e2f415ce6ed9dbf620b3ab1588232705affce68",
+        "recipe_id": "task-2_11-el-positive-reproducibility",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+            "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+            "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+            "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/publisher_file_metadata.json",
+            "sha256": "13cb69c6ddf722582fa96aa411ceed7db0e86d3426e04791a1a424b9aef298ce"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/manifest.json",
+            "sha256": "139ca9f4f9d658547cbba8bea538fe7ea7237481b5743d0b6242316e5091f3c8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+            "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+            "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+            "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='el_positive_stability_hypothesis', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_12-el-positive-weighting-preregistration",
+      "group_id": "runs:task-2_12-el-positive-weighting-preregistration",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 253921a7ff3e4b7d18e3062eb7e045dfe89be83e",
+        "configuration": {
+          "repository_path": "configs/el_positive_weighting_protocol_v1.json",
+          "sha256": "e96d3b89cd3ae6b5fee7bfde8c056a5ac2c5e53bee6033368c0ee33ea319d343"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation.el_positive_weighting_design --config configs/el_positive_weighting_protocol_v1.json --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "253921a7ff3e4b7d18e3062eb7e045dfe89be83e",
+        "recipe_id": "task-2_12-el-positive-weighting-preregistration",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+            "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+            "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+            "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/publisher_file_metadata.json",
+            "sha256": "13cb69c6ddf722582fa96aa411ceed7db0e86d3426e04791a1a424b9aef298ce"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/manifest.json",
+            "sha256": "139ca9f4f9d658547cbba8bea538fe7ea7237481b5743d0b6242316e5091f3c8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+            "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+            "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+            "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_coverage_alignment.json",
+            "sha256": "dc7317b09a561585b4273034d2eca7d8e179a376bd0ca83100844274790fce5a"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/manifest.json",
+            "sha256": "76bf2b2e1b171a9ae47f4454820d68a66c769ff324ef81fd08b44868535064e5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/execution_verification.json",
+            "sha256": "637c9a04f8c9c0f1e1458cf5deffbf7359de2de14aa4a23e81119131a47f0306"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_reliability.json",
+            "sha256": "a809bc33d6a98347218021125940c3e80b0dc97ff19dec5289131ba542038676"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='data-audit', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_13-el-stability-weight-adapter",
+      "group_id": "runs:task-2_13-el-stability-weight-adapter",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 0c3b5cf245c42803854c9139f4c4058cc36f7dbf",
+        "configuration": {
+          "repository_path": "configs/el_stability_weight_adapter_v1.json",
+          "sha256": "17161b524a83f3dacc4676e39ce536e9a5c24248c201df166166b18bd05f0d43"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation.el_stability_loss_adapter --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "0c3b5cf245c42803854c9139f4c4058cc36f7dbf",
+        "recipe_id": "task-2_13-el-stability-weight-adapter",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+            "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+            "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+            "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/publisher_file_metadata.json",
+            "sha256": "13cb69c6ddf722582fa96aa411ceed7db0e86d3426e04791a1a424b9aef298ce"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/manifest.json",
+            "sha256": "139ca9f4f9d658547cbba8bea538fe7ea7237481b5743d0b6242316e5091f3c8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+            "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+            "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+            "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_coverage_alignment.json",
+            "sha256": "dc7317b09a561585b4273034d2eca7d8e179a376bd0ca83100844274790fce5a"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/manifest.json",
+            "sha256": "76bf2b2e1b171a9ae47f4454820d68a66c769ff324ef81fd08b44868535064e5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/execution_verification.json",
+            "sha256": "637c9a04f8c9c0f1e1458cf5deffbf7359de2de14aa4a23e81119131a47f0306"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_reliability.json",
+            "sha256": "a809bc33d6a98347218021125940c3e80b0dc97ff19dec5289131ba542038676"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_12-el-positive-weighting-preregistration/reports/weighting_design_feasibility.json",
+            "sha256": "df6c8795cac616ba577e55e0b1ecaa1de4d1bc6a1ac56b0f5578921e1953eab3"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+            "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+            "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+            "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='adapter-preparation', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_2-bigmhc-v4-training-audit",
+      "group_id": "runs:task-2_2-bigmhc-v4-training-audit",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 5adfcd9d3ac951d12a39299da1b62273350aa9cf",
+        "configuration": {
+          "repository_path": "configs/bigmhc_v4_audit.json",
+          "sha256": "fde6861c3f3b5051c92a9175eb6be362f68053d4e00d731bebcb75e76b2df92a"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation bigmhc data-audit --json --reports-dir <new_run>/reports",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "5adfcd9d3ac951d12a39299da1b62273350aa9cf",
+        "recipe_id": "task-2_2-bigmhc-v4-training-audit",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/datasets.zip",
+            "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa"
+          },
+          {
+            "area": "data",
+            "relative_path": "netmhcstabpan_2016/Stability.txt",
+            "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/acquisition_receipt.json",
+            "sha256": "2b6bf3153e7768135a74b354d278cbaeae9bf0fa165d876141cd73907e68916b"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/publisher_file_metadata.json",
+            "sha256": "13cb69c6ddf722582fa96aa411ceed7db0e86d3426e04791a1a424b9aef298ce"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/reference_acquisition_receipt.json",
+            "sha256": "b25dafc243eab48834e33586f4a8b048c6cb086912fa61408f71a4fdeda7405d"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/pseudoseqs.csv",
+            "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='data_audit', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_3-first-stability-teacher",
+      "group_id": "runs:task-2_3-first-stability-teacher",
+      "priority": "Teacher_reproduction",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 081d4f7087f451e08791392c45c375fb9ac0dd6b",
+        "configuration": {
+          "repository_path": "configs/stability_teacher_v0.json",
+          "sha256": "b5d399fa00228ed58284ef0a10d4b0b151f093043b8fa5a1db72923b382086ba"
+        },
+        "environment": "configs/requirements-teacher-v0.txt",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation teacher train --config configs/stability_teacher_v0.json --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "081d4f7087f451e08791392c45c375fb9ac0dd6b",
+        "recipe_id": "task-2_3-first-stability-teacher",
+        "required_inputs": [
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/manifest.json",
+            "sha256": "13ecca0a28aefd6418ef28bb1fbeec28e72b7fa3caae54eaa9a047eed4204270"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/source_evidence_manifest.json",
+            "sha256": "26be9e7f5f6611a642b1b0d2d6f68369d34fa0adfca48964c3582cf4a82c7fa1"
+          }
+        ],
+        "requires_training": true,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='stability_teacher_training', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_4-el-im-pseudolabel-pilot",
+      "group_id": "runs:task-2_4-el-im-pseudolabel-pilot",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> d7cde2f470612a0101e6611a97d19000139d8747",
+        "configuration": {
+          "repository_path": "configs/pseudolabel_pilot_v0.json",
+          "sha256": "cb66f0d269ed95f66f210d5c614432f5fb07631fff7be4184c01a3e2c8a497a8"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation pseudolabel pilot --config configs/pseudolabel_pilot_v0.json --out <new_run>",
+        "historical_unapproved_label_views": true,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "d7cde2f470612a0101e6611a97d19000139d8747",
+        "recipe_id": "task-2_4-el-im-pseudolabel-pilot",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/datasets.zip",
+            "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='pseudolabel_pilot', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_5-bigmhc-pilot-preparation",
+      "group_id": "runs:task-2_5-bigmhc-pilot-preparation",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 4ea22284359ae812504ebce3e462412192f4806a",
+        "configuration": {
+          "repository_path": "configs/bigmhc_pilot_v0.json",
+          "sha256": "b878ba06ed34218bc860606a0b27a51ca8adcc2b9f65aae6cae97026e111c91d"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation pilot-prepare --config configs/bigmhc_pilot_v0.json --out <new_run>",
+        "historical_unapproved_label_views": true,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "4ea22284359ae812504ebce3e462412192f4806a",
+        "recipe_id": "task-2_5-bigmhc-pilot-preparation",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/datasets.zip",
+            "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+            "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/processed/el_train_pseudolabel_overrides.csv.gz",
+            "sha256": "1984c5fd46cdb1acc2bb0226b05d0951a2a4c5de7c841d09d00d0213818e1365"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+            "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/processed/im_train_pseudolabel_overrides.csv.gz",
+            "sha256": "0ec64effe91d1b82a3b8ff891a54ba470f50c4cb3a84bd7c0c7635ba84afce84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/im_train_teacher_scores.csv.gz",
+            "sha256": "0c79b17599ce07bb38bd919e9be7c53c85b2ac84042bc2b21e133f4d57153fed"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/pseudoseqs.csv",
+            "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+            "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+            "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+            "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='pilot_data_preparation', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_6-allele-stability-diagnostics",
+      "group_id": "runs:task-2_6-allele-stability-diagnostics",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 9f480bad5be3dc497f67bb6e710917763d2575f1",
+        "configuration": {
+          "repository_path": "configs/allele_stability_diagnostics_v0.json",
+          "sha256": "577dc652a602acc94680aaaf66a754e1fa953ea5b506d1ccec66781c48629d7c"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation allele-diagnostics --config configs/allele_stability_diagnostics_v0.json --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "9f480bad5be3dc497f67bb6e710917763d2575f1",
+        "recipe_id": "task-2_6-allele-stability-diagnostics",
+        "required_inputs": [
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+            "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/im_train_teacher_scores.csv.gz",
+            "sha256": "0c79b17599ce07bb38bd919e9be7c53c85b2ac84042bc2b21e133f4d57153fed"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_B0801_sanity.json",
+            "sha256": "ba244d6ea67972880e35697045b627a80c3960b45f15f37a06a52b257fee706b"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+            "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+            "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+            "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='allele_stability_diagnostics', seed=None, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": null,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_7-bigmhc-baseline-smoke",
+      "group_id": "runs:task-2_7-bigmhc-baseline-smoke",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> d7f5c45049aaf99d20b129cc93e3d00ab85da8e9",
+        "configuration": {
+          "repository_path": "configs/bigmhc_baseline_smoke_v0.json",
+          "sha256": "44168397ef5c39ceb2cc3407634666362b2f6b2592aedcc3961c1f46cde8fdde"
+        },
+        "environment": "configs/requirements-bigmhc-smoke-v0.txt",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation bigmhc-smoke --config configs/bigmhc_baseline_smoke_v0.json --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "d7f5c45049aaf99d20b129cc93e3d00ab85da8e9",
+        "recipe_id": "task-2_7-bigmhc-baseline-smoke",
+        "required_inputs": [
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+            "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+            "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_original.csv",
+            "sha256": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_provenance.csv.gz",
+            "sha256": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development.csv",
+            "sha256": "b4feb0c2765b99f6f845350c60be325895d6d33b184806fd2f2b28801687a2b1"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development_provenance.csv.gz",
+            "sha256": "2a8afa230dc1088d575858e9dda6bceeef8c735c5c46e7fa076ba2bca8b32ed5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/pseudoseqs.csv",
+            "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+            "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+            "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+            "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+            "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+            "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+            "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+            "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+            "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+            "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+          }
+        ],
+        "requires_training": true,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='bigmhc_baseline_smoke', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "runs/stability-label-curation/task-2_8-mac-gpu-worker-cpu-regression",
+      "group_id": "runs:task-2_8-mac-gpu-worker-cpu-regression",
+      "priority": "historical_analysis",
+      "reason": "Git-managed generator and input identities exist; replay is conditional on authentic parents. Exact historical run metadata has no remote backup.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 23af99668f05207584339ffba974e45fbc19264b",
+        "configuration": {
+          "repository_path": "configs/bigmhc_baseline_smoke_v0.json",
+          "sha256": "44168397ef5c39ceb2cc3407634666362b2f6b2592aedcc3961c1f46cde8fdde"
+        },
+        "environment": "configs/requirements-bigmhc-smoke-v0.txt",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation bigmhc-smoke --config configs/bigmhc_baseline_smoke_v0.json --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "23af99668f05207584339ffba974e45fbc19264b",
+        "recipe_id": "task-2_8-mac-gpu-worker-cpu-regression",
+        "required_inputs": [
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+            "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+            "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_original.csv",
+            "sha256": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_provenance.csv.gz",
+            "sha256": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development.csv",
+            "sha256": "b4feb0c2765b99f6f845350c60be325895d6d33b184806fd2f2b28801687a2b1"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_development_provenance.csv.gz",
+            "sha256": "2a8afa230dc1088d575858e9dda6bceeef8c735c5c46e7fa076ba2bca8b32ed5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/pseudoseqs.csv",
+            "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+            "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+            "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+            "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+            "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+            "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+            "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+            "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+            "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+            "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+          }
+        ],
+        "requires_training": true,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='bigmhc_worker_smoke', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "runtime_evidence": "Recorded runtime subset is historical Mac evidence, not a portable environment or Windows validation.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "recomputation_kind": "scientifically_comparable; deterministic payloads where supported, not byte-identical full directories",
+      "recorded_runtime": {
+        "cpu_architecture": "arm64",
+        "operating_system": "Darwin",
+        "python_version": "3.13.5"
+      },
+      "role": "precomputed_output"
+    },
+    {
+      "classification": "GAP",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "data/stability-label-curation/bigmhc_source",
+      "external_source_commit": "199e890fa69a63646730bcecea0a520e08ca4f02",
+      "group_id": "data:bigmhc_source",
+      "priority": "historical_analysis",
+      "producing_task": "Task2.1",
+      "reason": "Ten pinned implementation/license files are recoverable from GPU bundle; acquisition receipt and repository-tree snapshot have no exact remote backup.",
+      "recipe": null,
+      "recomputation_kind": "unavailable",
+      "role": "external_input",
+      "source_dataset_id": "bigmhc_v4",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "GAP",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "data/stability-label-curation/bigmhc_v4",
+      "external_source_commit": null,
+      "group_id": "data:bigmhc_v4",
+      "priority": "historical_analysis",
+      "producing_task": "Task2.2",
+      "reason": "datasets.zip and pseudoseqs.csv are recoverable; three historical publisher/acquisition metadata files have no exact backup or full Git-managed snapshot reproduction.",
+      "recipe": null,
+      "recomputation_kind": "unavailable",
+      "role": "external_input",
+      "source_dataset_id": "bigmhc_v4",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "R2",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "data/stability-label-curation/environments",
+      "external_source_commit": null,
+      "group_id": "data:environments",
+      "priority": "current_ABP_training",
+      "producing_task": "Tasks2.3/2.7/2.11",
+      "reason": "Platform-local environments must be rebuilt, not copied; byte-identical virtualenv restoration is neither supported nor required.",
+      "recipe": {
+        "automatic_execution": false,
+        "environment": "Python 3.13.5; choose CPU/CUDA wheels after host inspection; Task2.11 plotting used matplotlib 3.11.2 and numpy 2.5.4",
+        "environment_definitions": [
+          {
+            "name": "stability-teacher-v0-py313",
+            "python": "3.13.5",
+            "requirements": "configs/requirements-teacher-v0.txt",
+            "scope": "Historical Mac CPU; do not assume compatible CUDA wheels"
+          },
+          {
+            "name": "bigmhc-smoke-v0-py313",
+            "python": "3.13.5",
+            "requirements": "configs/requirements-bigmhc-smoke-v0.txt",
+            "scope": "Historical Mac CPU; do not assume compatible CUDA wheels"
+          },
+          {
+            "name": "el-positive-analysis-py313",
+            "python": "3.13.5",
+            "requirements": "configs/requirements-el-positive-analysis-v0.txt",
+            "scope": "Historical Mac CPU; do not assume compatible CUDA wheels"
+          }
+        ],
+        "execution_command": "For each environment: python3.13 -m venv <workspace_root>/data/stability-label-curation/environments/<name>; then run its bin/python -m pip install --only-binary=:all: -r <matching_requirements_file>",
+        "requires_training": false,
+        "verification": "Record pip freeze and platform, run relevant tests; existing Mac virtualenv paths/installed files are not portable."
+      },
+      "recomputation_kind": "functional_environment_only",
+      "role": "external_input",
+      "source_dataset_id": null,
+      "source_registry": null
+    },
+    {
+      "classification": "GAP",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "data/stability-label-curation/historical_netmhcstab_evidence",
+      "external_source_commit": null,
+      "group_id": "data:historical_netmhcstab_evidence",
+      "priority": "historical_analysis",
+      "producing_task": "Task1.4",
+      "reason": "Two documentary snapshots have no immutable byte-level backup.",
+      "recipe": null,
+      "recomputation_kind": "unavailable",
+      "role": "external_input",
+      "source_dataset_id": "netmhcstab_2013",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "R1",
+      "downstream_consumers": [],
+      "exact_byte_backup": true,
+      "expected_path_prefix": "data/stability-label-curation/jappe_2020",
+      "external_source_commit": null,
+      "group_id": "data:jappe_2020",
+      "priority": "historical_analysis",
+      "producing_task": "Tasks1.5/1.7",
+      "reason": "All source files have hash-pinned immutable retrieval definitions in artifact_registry.json; remote availability of these public sources was not retested in Task2.15M.",
+      "recipe": null,
+      "recomputation_kind": "none",
+      "role": "external_input",
+      "source_dataset_id": "jappe_2020",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "R1",
+      "downstream_consumers": [],
+      "exact_byte_backup": true,
+      "expected_path_prefix": "data/stability-label-curation/netmhcstabpan_2016",
+      "external_source_commit": null,
+      "group_id": "data:netmhcstabpan_2016",
+      "priority": "historical_analysis",
+      "producing_task": "Task1.1",
+      "reason": "All source files have hash-pinned immutable retrieval definitions in artifact_registry.json; remote availability of these public sources was not retested in Task2.15M.",
+      "recipe": null,
+      "recomputation_kind": "none",
+      "role": "external_input",
+      "source_dataset_id": "netmhcstabpan_2016",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "R1",
+      "downstream_consumers": [],
+      "exact_byte_backup": true,
+      "expected_path_prefix": "data/stability-label-curation/spearmint_stage2",
+      "external_source_commit": "d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5",
+      "group_id": "data:spearmint_stage2",
+      "priority": "historical_analysis",
+      "producing_task": "Task1.3",
+      "reason": "All source files have hash-pinned immutable retrieval definitions in artifact_registry.json; remote availability of these public sources was not retested in Task2.15M.",
+      "recipe": null,
+      "recomputation_kind": "none",
+      "role": "external_input",
+      "source_dataset_id": "spearmint_stability_audit",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "R1",
+      "downstream_consumers": [],
+      "exact_byte_backup": true,
+      "expected_path_prefix": "data/stability-label-curation/tlstab_2024_secondary",
+      "external_source_commit": "ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb",
+      "group_id": "data:tlstab_2024_secondary",
+      "priority": "historical_analysis",
+      "producing_task": "Task1.4",
+      "reason": "All source files have hash-pinned immutable retrieval definitions in artifact_registry.json; remote availability of these public sources was not retested in Task2.15M.",
+      "recipe": null,
+      "recomputation_kind": "none",
+      "role": "external_input",
+      "source_dataset_id": "tlstab_reference",
+      "source_registry": "configs/data_sources.toml"
+    },
+    {
+      "classification": "GAP",
+      "downstream_consumers": [],
+      "exact_byte_backup": false,
+      "expected_path_prefix": "data/stability-label-curation/tscape_2025",
+      "external_source_commit": null,
+      "group_id": "data:tscape_2025",
+      "priority": "historical_analysis",
+      "producing_task": "Task2.0",
+      "reason": "No original supplementary PDF acquired locally; task-provided reviewed secondary evidence is preserved in Git, not a verified local PDF.",
+      "recipe": null,
+      "recomputation_kind": "unavailable",
+      "role": "external_input",
+      "source_dataset_id": null,
+      "source_registry": null
+    },
+    {
+      "artifact_ids": [
+        "gpu-inputs-23af9966"
+      ],
+      "classification": "R1",
+      "exact_byte_backup": true,
+      "group_id": "payload:gpu-inputs-23af9966",
+      "priority": "current_ABP_training",
+      "reason": "Exact archive recovery of all 21 required baseline inputs.",
+      "recipe": null,
+      "role": "authenticated_transfer_payload"
+    },
+    {
+      "artifact_ids": [
+        "el-positive-scores-task2-13"
+      ],
+      "classification": "R3",
+      "exact_byte_backup": true,
+      "group_id": "payload:el-positive-scores-task2-13",
+      "priority": "current_ABP_training",
+      "reason": "Exact archive recovery; sidecar also has a deterministic generator given authenticated historical parent inputs.",
+      "recipe": {
+        "automatic_execution": false,
+        "checkout_command": "git worktree add --detach <replay_checkout> 0c3b5cf245c42803854c9139f4c4058cc36f7dbf",
+        "configuration": {
+          "repository_path": "configs/el_stability_weight_adapter_v1.json",
+          "sha256": "17161b524a83f3dacc4676e39ce536e9a5c24248c201df166166b18bd05f0d43"
+        },
+        "environment": "Python 3.13.5 standard library; optional plotting versions in run evidence for Task2.11",
+        "exact_historical_metadata_regeneration": false,
+        "execution_command": "python3 -m stability_label_curation.el_stability_loss_adapter --out <new_run>",
+        "historical_unapproved_label_views": false,
+        "lineage_rebinding": "Hash-pinned historical parents must be restored byte-for-byte, or a separately versioned descendant configuration must explicitly bind new parent hashes without changing source checksums, counts, seed, split or hyperparameters. This audit never relaxes pins.",
+        "output_layout": "runs/stability-label-curation/<new_run_id>/{processed,reports,checkpoints,predictions,logs}",
+        "producing_commit": "0c3b5cf245c42803854c9139f4c4058cc36f7dbf",
+        "recipe_id": "task-2_13-el-stability-weight-adapter",
+        "required_inputs": [
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+            "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_provenance.csv.gz",
+            "sha256": "7f62cf10edf825c1f12ed895f2a5bf20c13347a8ba48ddcafd6aa9b86091a656"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+            "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/predictions/el_train_teacher_scores.csv.gz",
+            "sha256": "15f1c586de261c18da91da1aa949d9a89651e82c1ac5ab2ba74f926a0ace685e"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_2-bigmhc-v4-training-audit/reports/bigmhc_dtu_compatibility.json",
+            "sha256": "30fa5f42f8815a14447162dbd91cad8e741179214a0a8d6c273c20e580914ac8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_train_val_partition.json",
+            "sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+            "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_training_inventory.json",
+            "sha256": "79db8b9e1d9cd87050e4f568d3355b89c40baa8902dbec7624f7f36d00ab04bc"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/manifest.json",
+            "sha256": "d171be35048c54470c1cd27c9bee4dcca0d8e38ce91c5f972c35d58048bba0bb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/execution_verification.json",
+            "sha256": "3f987b54d46022d743c873a71754534e852b3880ef02ed66211dc90d73ea69a2"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_v4/publisher_file_metadata.json",
+            "sha256": "13cb69c6ddf722582fa96aa411ceed7db0e86d3426e04791a1a424b9aef298ce"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-1_8-canonical-observation-registry/reports/canonical_observations.jsonl",
+            "sha256": "471fa7989e7665f722998fc1314d63ef87e8d4768846bec98638e6357de87eee"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/manifest.json",
+            "sha256": "139ca9f4f9d658547cbba8bea538fe7ea7237481b5743d0b6242316e5091f3c8"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/execution_verification.json",
+            "sha256": "00c3b9cfeda8c6575d7f41b55a5fdedeca2747ac7a378f6a8f178dcc59b145a2"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_4-el-im-pseudolabel-pilot/reports/pseudolabel_summary.json",
+            "sha256": "49044a4af10d8979fa85aa0c2516a11c7b5ac952deb05df321a4fddae538f7cb"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/checkpoints/teacher_model.json",
+            "sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/manifest.json",
+            "sha256": "054f20a7286e488bc0a2b23824e855fcd1d6476ec1f825e13d6ea1770f997d84"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/teacher_validation_metrics.json",
+            "sha256": "63adcbca4b1c143c014151e3c5d7422795cca72b6955901d9f9ddf259c9a02f6"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_3-first-stability-teacher/reports/execution_verification.json",
+            "sha256": "92eaf93c0a68256bc6d878b700f8531de598c72231e0b227cfaf8724b8541475"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_coverage_alignment.json",
+            "sha256": "dc7317b09a561585b4273034d2eca7d8e179a376bd0ca83100844274790fce5a"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/manifest.json",
+            "sha256": "76bf2b2e1b171a9ae47f4454820d68a66c769ff324ef81fd08b44868535064e5"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/execution_verification.json",
+            "sha256": "637c9a04f8c9c0f1e1458cf5deffbf7359de2de14aa4a23e81119131a47f0306"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_11-el-positive-reproducibility/reports/teacher_reliability.json",
+            "sha256": "a809bc33d6a98347218021125940c3e80b0dc97ff19dec5289131ba542038676"
+          },
+          {
+            "area": "runs",
+            "relative_path": "task-2_12-el-positive-weighting-preregistration/reports/weighting_design_feasibility.json",
+            "sha256": "df6c8795cac616ba577e55e0b1ecaa1de4d1bc6a1ac56b0f5578921e1953eab3"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+            "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+            "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+          },
+          {
+            "area": "data",
+            "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+            "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+          }
+        ],
+        "requires_training": false,
+        "run_creation": "Use run_manifest.create_run(paths=resolve_paths(), run_id=<new_run_id>, kind='adapter-preparation', seed=42, config=<configuration>, inputs=<all required input paths>, argv=<actual invocation>). Never overwrite a historical run.",
+        "seed": 42,
+        "verification": "Authenticate every required input; compare deterministic scientific reports where portable; validate new run manifest. New host/timestamps/provenance cannot have historical manifest hashes."
+      },
+      "role": "authenticated_transfer_payload"
+    },
+    {
+      "Windows_verification_pending": true,
+      "classification": "GAP",
+      "configuration": "configs/bigmhc_gpu_baseline_task2_9.json",
+      "downstream_consumers": [
+        "A/B/P comparisons; later analysis on Mac"
+      ],
+      "group_id": "windows:task-2_9-gpu-pilot",
+      "priority": "Baseline_A_reproduction",
+      "producing_commit": null,
+      "producing_commit_basis": "unknown pending Windows manifest",
+      "reason": "No Windows run/checkpoint/receipt copy or authenticated external checkpoint locator exists on this Mac; no weights/outcomes accessed.",
+      "recipe": {
+        "automatic_execution": false,
+        "execution_command": "CUDA_VISIBLE_DEVICES=0 python -m stability_label_curation bigmhc-worker run --config configs/bigmhc_gpu_baseline_task2_9.json --run-id <new_run_id>",
+        "recomputation_kind": "scientifically_comparable_only; not exact checkpoint recovery",
+        "required_artifacts": [
+          "gpu-inputs-23af9966"
+        ],
+        "requires_training": true
+      },
+      "role": "precomputed_output",
+      "seed": 42
+    },
+    {
+      "Windows_verification_pending": true,
+      "classification": "GAP",
+      "configuration": "configs/bigmhc_gpu_baseline_task2_10.json",
+      "downstream_consumers": [
+        "A/B/P comparisons; later analysis on Mac"
+      ],
+      "group_id": "windows:task-2_10-full-baseline-A",
+      "priority": "Baseline_A_reproduction",
+      "producing_commit": "63f01a6c6cd322fbc0997fd6dcc33b09b6237b0e",
+      "producing_commit_basis": "Approved user-reported Task2.10 identity; actual Windows manifest not inspected",
+      "reason": "No Windows run/checkpoint/receipt copy or authenticated external checkpoint locator exists on this Mac; no weights/outcomes accessed.",
+      "recipe": {
+        "automatic_execution": false,
+        "execution_command": "CUDA_VISIBLE_DEVICES=0 python -m stability_label_curation bigmhc-worker run --config configs/bigmhc_gpu_baseline_task2_10.json --run-id <new_run_id>",
+        "recomputation_kind": "scientifically_comparable_only; not exact checkpoint recovery",
+        "required_artifacts": [
+          "gpu-inputs-23af9966"
+        ],
+        "requires_training": true
+      },
+      "role": "precomputed_output",
+      "seed": 42
+    },
+    {
+      "Windows_verification_pending": true,
+      "classification": "GAP",
+      "configuration": null,
+      "downstream_consumers": [
+        "A/B/P comparisons; later analysis on Mac"
+      ],
+      "group_id": "windows:task-2_14B-matched-A",
+      "priority": "current_ABP_training",
+      "producing_commit": null,
+      "producing_commit_basis": "unknown pending Windows manifest",
+      "reason": "No Windows run/checkpoint/receipt copy or authenticated external checkpoint locator exists on this Mac; no weights/outcomes accessed.",
+      "recipe": {
+        "automatic_execution": false,
+        "execution_command": null,
+        "recomputation_kind": "scientifically_comparable_only; not exact checkpoint recovery",
+        "required_artifacts": [
+          "gpu-inputs-23af9966",
+          "el-positive-scores-task2-13"
+        ],
+        "requires_training": true
+      },
+      "role": "precomputed_output",
+      "seed": null
+    },
+    {
+      "Windows_verification_pending": true,
+      "classification": "GAP",
+      "configuration": null,
+      "downstream_consumers": [
+        "A/B/P comparisons; later analysis on Mac"
+      ],
+      "group_id": "windows:task-2_14C-stability-aware-ABP",
+      "priority": "current_ABP_training",
+      "producing_commit": null,
+      "producing_commit_basis": "unknown pending Windows manifest",
+      "reason": "No Windows run/checkpoint/receipt copy or authenticated external checkpoint locator exists on this Mac; no weights/outcomes accessed.",
+      "recipe": {
+        "automatic_execution": false,
+        "execution_command": null,
+        "recomputation_kind": "scientifically_comparable_only; not exact checkpoint recovery",
+        "required_artifacts": [
+          "gpu-inputs-23af9966",
+          "el-positive-scores-task2-13"
+        ],
+        "requires_training": true
+      },
+      "role": "precomputed_output",
+      "seed": null
+    },
+    {
+      "classification": "GAP",
+      "group_id": "unavailable:netmhcstab-2013-original-5509",
+      "priority": "historical_analysis",
+      "reason": "Original measurements were not recovered; no fake rows or zero-overlap result may substitute.",
+      "recipe": null,
+      "role": "unrecovered_historical_source"
+    },
+    {
+      "classification": "GAP",
+      "group_id": "future:independent-IM-evaluation",
+      "priority": "future_independent_evaluation",
+      "reason": "Independent cohort selection/provenance not finalized or acquired; sealed BigMHC evaluation outcomes remain unopened, not certified independent.",
+      "recipe": null,
+      "role": "future_evaluation_dependency"
+    }
+  ],
+  "project_name": "stability-label-curation",
+  "schema_version": 1
+}

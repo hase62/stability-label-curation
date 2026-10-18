@@ -1,0 +1,490 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "gpu-inputs-23af9966",
+      "checksum_evidence": {
+        "member_manifest": "configs/bigmhc_gpu_worker_transfer.json",
+        "receipt_sha256": "12e9cb2faedbc85d2b0cf9637658bdb8d948df1ca4e8a5e34e7d5e82cb14022b",
+        "source": "Historical packaging verification receipt, independently retained before this audit"
+      },
+      "dependencies": [],
+      "downstream_consumers": [
+        "Task2.10 Baseline A",
+        "Task2.13 A/B/P adapter",
+        "Windows Task2.14B/2.14C"
+      ],
+      "exact_restoration": true,
+      "expanded_size_bytes": 207979774,
+      "filename": "stability-label-curation-gpu-inputs-23af9966.tar.gz",
+      "format": "tar.gz",
+      "locator": {
+        "allowed_hosts": [
+          "www.dropbox.com",
+          "dl.dropboxusercontent.com",
+          "*.dropboxusercontent.com",
+          "*.dropbox.com"
+        ],
+        "environment_variable": "SLC_ARTIFACT_GPU_INPUTS_URL"
+      },
+      "member_count": 21,
+      "member_manifest": {
+        "repository_path": "configs/bigmhc_gpu_worker_transfer.json",
+        "sha256": "4a369fbfeaece04fb05f0d03e2df42a31c285d1b996b495582119c4972a66331"
+      },
+      "producing_commit": "23af99668f05207584339ffba974e45fbc19264b",
+      "producing_task": "Task 2.8 Mac handoff",
+      "regeneration_recipe": null,
+      "role": "external_input",
+      "sha256": "16c9beff7a85f65da2485ebbe5b986424114a9f39405d8acba4403ad83ab26bf",
+      "size_bytes": 165825262,
+      "version": "1"
+    },
+    {
+      "artifact_id": "el-positive-scores-task2-13",
+      "checksum_evidence": {
+        "hash_cross_reference": "configs/el_stability_weight_adapter_v1.json: inputs.positive_scores and inputs.positive_score_manifest",
+        "receipt_sha256": "bd0c6effaac76472aabe54c41330717a48418700fcdee4659a36f6a8c4bd3ae8",
+        "source": "Task2.13 authenticated sidecar transfer manifest"
+      },
+      "dependencies": [],
+      "downstream_consumers": [
+        "Windows Task2.14B/2.14C A/B/P"
+      ],
+      "exact_restoration": true,
+      "expanded_size_bytes": 7283744,
+      "filename": "stability-label-curation-el-positive-scores-task2_13.tar.gz",
+      "format": "tar.gz",
+      "locator": {
+        "allowed_hosts": [
+          "www.dropbox.com",
+          "dl.dropboxusercontent.com",
+          "*.dropboxusercontent.com",
+          "*.dropbox.com"
+        ],
+        "environment_variable": "SLC_ARTIFACT_EL_POSITIVE_SCORES_URL"
+      },
+      "member_count": 2,
+      "members": [
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_13-el-stability-weight-adapter/processed/el_positive_teacher_scores.csv.gz",
+          "area": "runs",
+          "relative_path": "task-2_13-el-stability-weight-adapter/processed/el_positive_teacher_scores.csv.gz",
+          "sha256": "ab0473b669f61792ff63a926185a5e737544209537c5de938b30e519a232e884",
+          "size_bytes": 7272684
+        },
+        {
+          "archive_path": "codex/runs/stability-label-curation/task-2_13-el-stability-weight-adapter/reports/positive_score_manifest.json",
+          "area": "runs",
+          "relative_path": "task-2_13-el-stability-weight-adapter/reports/positive_score_manifest.json",
+          "sha256": "e79fb60b1c04f33889e9d3ecd6a7bd145255c156487cd4d4873a90c8ab715862",
+          "size_bytes": 11060
+        }
+      ],
+      "producing_commit": "0c3b5cf245c42803854c9139f4c4058cc36f7dbf",
+      "producing_task": "Task2.13",
+      "regeneration_recipe": "el-positive-sidecar",
+      "role": "precomputed_output",
+      "runtime_dependencies": [
+        "gpu-inputs-23af9966"
+      ],
+      "sha256": "c4465d7ac048d278546c63057516b56a0ab28dfc96e63f47d705a48a11adff2e",
+      "size_bytes": 7279294,
+      "version": "1"
+    },
+    {
+      "artifact_id": "dtu-2016-raw",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 799880,
+      "filename": "Stability.txt",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "services.healthtech.dtu.dk"
+        ],
+        "url": "https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/Stability.txt"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/netmhcstabpan_2016/Stability.txt",
+          "area": "data",
+          "relative_path": "netmhcstabpan_2016/Stability.txt",
+          "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67",
+          "size_bytes": 799880
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.1; configs/data_sources.toml",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67",
+      "size_bytes": 799880,
+      "version": "1"
+    },
+    {
+      "artifact_id": "jappe-2020-supplementary-data-3",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 59092,
+      "filename": "41467_2020_20166_MOESM6_ESM.xlsx",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "media.springernature.com"
+        ],
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM6_ESM.xlsx"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/jappe_2020/41467_2020_20166_MOESM6_ESM.xlsx",
+          "area": "data",
+          "relative_path": "jappe_2020/41467_2020_20166_MOESM6_ESM.xlsx",
+          "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa",
+          "size_bytes": 59092
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.5; configs/jappe_2020_artifacts.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa",
+      "size_bytes": 59092,
+      "version": "1"
+    },
+    {
+      "artifact_id": "jappe-2020-supplementary-data-4",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 68951,
+      "filename": "41467_2020_20166_MOESM7_ESM.xlsx",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "media.springernature.com"
+        ],
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM7_ESM.xlsx"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/jappe_2020/41467_2020_20166_MOESM7_ESM.xlsx",
+          "area": "data",
+          "relative_path": "jappe_2020/41467_2020_20166_MOESM7_ESM.xlsx",
+          "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de",
+          "size_bytes": 68951
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.5; configs/jappe_2020_artifacts.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de",
+      "size_bytes": 68951,
+      "version": "1"
+    },
+    {
+      "artifact_id": "jappe-2020-supplementary-data-5",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 14722,
+      "filename": "41467_2020_20166_MOESM8_ESM.xlsx",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "media.springernature.com"
+        ],
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM8_ESM.xlsx"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/jappe_2020/41467_2020_20166_MOESM8_ESM.xlsx",
+          "area": "data",
+          "relative_path": "jappe_2020/41467_2020_20166_MOESM8_ESM.xlsx",
+          "sha256": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35",
+          "size_bytes": 14722
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.5; configs/jappe_2020_artifacts.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "1b8827a653862c03cc313798f01b140cd470eda09912a5448dbaa43c4e731f35",
+      "size_bytes": 14722,
+      "version": "1"
+    },
+    {
+      "artifact_id": "jappe-2020-descriptions",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 90589,
+      "filename": "41467_2020_20166_MOESM3_ESM.pdf",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "media.springernature.com"
+        ],
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM3_ESM.pdf"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/jappe_2020/41467_2020_20166_MOESM3_ESM.pdf",
+          "area": "data",
+          "relative_path": "jappe_2020/41467_2020_20166_MOESM3_ESM.pdf",
+          "sha256": "cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a",
+          "size_bytes": 90589
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.5; configs/jappe_2020_artifacts.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "cfa66ac399d065c250540d84512e82c83e09dbf22731a5a4451723840c0f828a",
+      "size_bytes": 90589,
+      "version": "1"
+    },
+    {
+      "artifact_id": "jappe-2020-figure-source",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 149509,
+      "filename": "41467_2020_20166_MOESM11_ESM.xlsx",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "media.springernature.com"
+        ],
+        "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM11_ESM.xlsx"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/jappe_2020/41467_2020_20166_MOESM11_ESM.xlsx",
+          "area": "data",
+          "relative_path": "jappe_2020/41467_2020_20166_MOESM11_ESM.xlsx",
+          "sha256": "fae10a4fcdb681cd1e925104406b6973861f5777e83b7dcbd42a79e0013c07a4",
+          "size_bytes": 149509
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.7; configs/jappe_2020_figure_evidence.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "fae10a4fcdb681cd1e925104406b6973861f5777e83b7dcbd42a79e0013c07a4",
+      "size_bytes": 149509,
+      "version": "1"
+    },
+    {
+      "artifact_id": "spearmint-stage2-train",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 8483129,
+      "filename": "train.csv",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "raw.githubusercontent.com"
+        ],
+        "url": "https://raw.githubusercontent.com/dhuvik/spearmint/d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5/data/binding_stability/train.csv"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/spearmint_stage2/data/binding_stability/train.csv",
+          "area": "data",
+          "relative_path": "spearmint_stage2/data/binding_stability/train.csv",
+          "sha256": "3ad79db3286688972b47ea96ba96129704367c1f016947a2ecc39c4872520793",
+          "size_bytes": 8483129
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.3; configs/external_repositories.lock.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "3ad79db3286688972b47ea96ba96129704367c1f016947a2ecc39c4872520793",
+      "size_bytes": 8483129,
+      "version": "1"
+    },
+    {
+      "artifact_id": "spearmint-stage2-val",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 1059966,
+      "filename": "val.csv",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "raw.githubusercontent.com"
+        ],
+        "url": "https://raw.githubusercontent.com/dhuvik/spearmint/d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5/data/binding_stability/val.csv"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/spearmint_stage2/data/binding_stability/val.csv",
+          "area": "data",
+          "relative_path": "spearmint_stage2/data/binding_stability/val.csv",
+          "sha256": "49217866a5d084ecd74150609bd5f0cfb8f6a78ac772ded6f26e1ff427a79dd8",
+          "size_bytes": 1059966
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.3; configs/external_repositories.lock.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "49217866a5d084ecd74150609bd5f0cfb8f6a78ac772ded6f26e1ff427a79dd8",
+      "size_bytes": 1059966,
+      "version": "1"
+    },
+    {
+      "artifact_id": "spearmint-stage2-test",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 1058281,
+      "filename": "test.csv",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "raw.githubusercontent.com"
+        ],
+        "url": "https://raw.githubusercontent.com/dhuvik/spearmint/d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5/data/binding_stability/test.csv"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/spearmint_stage2/data/binding_stability/test.csv",
+          "area": "data",
+          "relative_path": "spearmint_stage2/data/binding_stability/test.csv",
+          "sha256": "61d8ab1ae07e75fcf69b8175617ccf1bb43255498f0a8f37882568b2075c953f",
+          "size_bytes": 1058281
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.3; configs/external_repositories.lock.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "61d8ab1ae07e75fcf69b8175617ccf1bb43255498f0a8f37882568b2075c953f",
+      "size_bytes": 1058281,
+      "version": "1"
+    },
+    {
+      "artifact_id": "spearmint-stage2-reference",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 3876460,
+      "filename": "2field_hla_consensus_seqs.csv",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "raw.githubusercontent.com"
+        ],
+        "url": "https://raw.githubusercontent.com/dhuvik/spearmint/d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5/refs/2field_hla_consensus_seqs.csv"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/spearmint_stage2/refs/2field_hla_consensus_seqs.csv",
+          "area": "data",
+          "relative_path": "spearmint_stage2/refs/2field_hla_consensus_seqs.csv",
+          "sha256": "8969927707689d83656eef7c0f1b59b295e80ee7b202d55ee9904aaa9d947eae",
+          "size_bytes": 3876460
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.3; configs/external_repositories.lock.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "8969927707689d83656eef7c0f1b59b295e80ee7b202d55ee9904aaa9d947eae",
+      "size_bytes": 3876460,
+      "version": "1"
+    },
+    {
+      "artifact_id": "tlstab-secondary-scores",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 237419,
+      "filename": "cleaned_train_data.csv",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "raw.githubusercontent.com"
+        ],
+        "url": "https://raw.githubusercontent.com/KavrakiLab/TL-MHC/ec58087383f59f8afa9c1e8fbc8c5bb68e752ccb/TLStab/misc/datasets/training_data/cleaned_data/cleaned_train_data.csv"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/tlstab_2024_secondary/cleaned_train_data.csv",
+          "area": "data",
+          "relative_path": "tlstab_2024_secondary/cleaned_train_data.csv",
+          "sha256": "2d2c2a8ed0319ade9ec8657cbc4246d38924d0b21b33717b2ef7887e7f238fa7",
+          "size_bytes": 237419
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task1.4 secondary derived scores; never original measured stability",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "2d2c2a8ed0319ade9ec8657cbc4246d38924d0b21b33717b2ef7887e7f238fa7",
+      "size_bytes": 237419,
+      "version": "1"
+    },
+    {
+      "artifact_id": "bigmhc-v4-original-archive",
+      "dependencies": [],
+      "exact_restoration": true,
+      "expanded_size_bytes": 144274974,
+      "filename": "datasets.zip",
+      "format": "file",
+      "locator": {
+        "allowed_hosts": [
+          "data.mendeley.com",
+          "prod-dcd-datasets-public-files-eu-west-1.s3.eu-west-1.amazonaws.com",
+          "*.amazonaws.com"
+        ],
+        "url": "https://data.mendeley.com/public-files/datasets/dvmz6pkzvb/files/1da0314f-692d-4c39-b81f-fa2a7dba86bf/file_downloaded?version=4"
+      },
+      "member_count": 1,
+      "members": [
+        {
+          "archive_path": "codex/data/stability-label-curation/bigmhc_v4/datasets.zip",
+          "area": "data",
+          "relative_path": "bigmhc_v4/datasets.zip",
+          "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa",
+          "size_bytes": 144274974
+        }
+      ],
+      "producing_commit": null,
+      "producing_task": "Task2.2; configs/bigmhc_v4_audit.json",
+      "regeneration_recipe": null,
+      "remote_verification": "Previously authenticated acquisition; availability not retested in Task2.15M",
+      "role": "external_input",
+      "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa",
+      "size_bytes": 144274974,
+      "version": "1"
+    }
+  ],
+  "base_commit": "0c3b5cf245c42803854c9139f4c4058cc36f7dbf",
+  "member_prefix_mapping": {
+    "codex/data/stability-label-curation/": "data/stability-label-curation/",
+    "codex/runs/stability-label-curation/": "runs/stability-label-curation/"
+  },
+  "private_locator_policy": "Capability-bearing Dropbox links are supplied externally via environment variables; never logged or committed. Repository is private; data sharing still requires authorization.",
+  "project_name": "stability-label-curation",
+  "schema_version": 1,
+  "source_metadata_authority": "configs/data_sources.toml and existing source-specific locks; archive members must agree with their referenced manifests"
+}
