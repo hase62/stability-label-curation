@@ -313,7 +313,7 @@ def execute_low(*, noop_report: Path, test_log: Path, paths: StoragePaths) -> di
     _, inputs = runner.resolve_inputs(base, paths)
     baseline = paths.project_runs_dir / BASELINE_RUN
     parent = runner.runs.create_run(paths=paths, run_id=LOW_RUN_ID, kind='bigmhc_matched_abp_experiment',
-        seed=42, config=config_path, inputs=[i['path'] for i in inputs] + [baseline/'reports/matched_state.json', noop_report, test_log],
+        seed=42, config=config_path, inputs=[i['path'] for i in inputs] + [baseline/'reports/matched_state.json'],
         argv=['bigmhc_abp_experiment', '--run-id', LOW_RUN_ID],
         description='Task 2.19: reused Task 2.17 A; one approved low-stability L/P; frozen development only')
     def write(path, value):

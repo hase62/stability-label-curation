@@ -127,6 +127,25 @@ class LowStabilityTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'output directory'):
                 experiment.arm_run(paths.project_runs_dir/experiment.LOW_RUN_ID/condition,paths,config)
 
+    def test_temporary_gate_reports_are_outputs_not_project_input_artifacts(self):
+        noop=dict(device='cuda:0',gradient_maximum_absolute_difference=0,
+            protocol_version=weights.LOW_PROTOCOL,condition_names=['A','L','P'],
+            adapter_source_sha256='hash',runner_source_sha256='hash')
+        for key in ('loss_exactly_equal','gradients_exactly_equal','AdamW_updates_identical',
+                    'native_encoded_tensors_and_labels_identical','model_sampler_RNG_states_identical',
+                    'source_row_identity_collation_verified'):
+            noop[key]=True
+        paths=resolve_paths()
+        with patch.object(runner,'cuda_visibility'),patch.object(runner.readers,'_json',return_value=noop),patch.object(
+                runner.raw,'sha256_file',return_value='hash'),patch.object(
+                Path,'read_text',return_value='\nOK\n'),patch.object(preflight,'validate',return_value={}),patch.object(
+                runner,'load_config',return_value={}),patch.object(runner,'resolve_inputs',return_value=({},[])),patch.object(
+                runner.runs,'create_run',side_effect=RuntimeError('creation boundary')) as create:
+            with self.assertRaisesRegex(RuntimeError,'creation boundary'):
+                experiment.execute_low(noop_report=Path('/tmp/noop'),test_log=Path('/tmp/tests'),paths=paths)
+            self.assertEqual(create.call_args.kwargs['inputs'],
+                [paths.project_runs_dir/compatibility.BASELINE_RUN/'reports/matched_state.json'])
+
     def test_cuda_noop_failure_prevents_ALP_run_creation(self):
         with patch.object(runner.readers,'_json',return_value={'device':'cpu'}),patch.object(
                 runner,'load_config',return_value={}),patch.object(runner,'cuda_visibility'),patch.object(
