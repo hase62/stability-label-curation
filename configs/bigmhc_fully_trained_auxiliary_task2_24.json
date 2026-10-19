@@ -1,0 +1,169 @@
+{
+  "EL_epochs": 10,
+  "IM_epochs": 20,
+  "authorization": "Train S/P once each; A reused; independent benchmark sealed",
+  "auxiliary": {
+    "head": "linear_414_to_1_unbounded",
+    "head_seed": 22042,
+    "lambda_aux": 0.1,
+    "permutation_seed": 42,
+    "protocol_version": "hla_relative_stability_auxiliary_v1",
+    "representation": "condenser.att:output",
+    "representation_width": 414,
+    "training_authorized": true
+  },
+  "baseline": {
+    "checkpoint_map_sha256": "b92308ab3e35d02530867053ada7e29ee18076bf653df26458f5c3728a2be3a0",
+    "commit": "db54ac57464b6ad18e1ce8a6fc23e6dea321cb59",
+    "reports": {
+      "EL_completed.json": "eda173201ccd3662aac4e0061380486b1ac210dfae10645f24f061ca399dd5bd",
+      "EL_epoch_01.json": "f63744a6c2039453450e123addaae6502e7a38d18f73c6a4e23e6deae85f70d9",
+      "EL_epoch_02.json": "3d7cb3193f4a06d2e1d56b738c215f3df342c363049b2fd2b4c25f872710ba69",
+      "EL_epoch_03.json": "93a3d65d73d6d5c28bd2b98a2266c04ef2442944cde99cb13e1a6675893dcdc4",
+      "EL_epoch_04.json": "bdc6457700672fe836f17cde5f53164f43832058ff33ce7f1fdf709db9f7c077",
+      "EL_epoch_05.json": "a45cde7fac5d4a54c637807714d2a164bd7a248e4c841f008a9013c8192acbcd",
+      "EL_epoch_06.json": "9152f311ef13c220018faac81c2112719d7e88043a5f8d3df5f9df0d06f3dffa",
+      "EL_epoch_07.json": "c424eda3114942732d42d01f758167fd7680caf9445f9555c8857b4cbd3ed2df",
+      "EL_epoch_08.json": "f750eb6a1494d3d5ec67604961f5d3cbac269c78ff5d3d86ed11b449218de6e3",
+      "EL_epoch_09.json": "fe3d0c0cd4a069be9e1cf8f05c0a1f7516bd46666aebdb8ded15611b6710ebc4",
+      "EL_epoch_10.json": "cc182e32349c0b069fd93f82d53d3086d542b5af9646a5d26c5f0c88b3b6cc41",
+      "EL_epoch_selection.json": "f9262eeb6b787c6f81e72c46d7a2a795d12162ff200c3fca1425fc6b45fa86de",
+      "EL_started.json": "c3092614e4c71c612ba52ed9d063608840b4861f3e6fb29abd41018a3f8750bc",
+      "completion.json": "61e775a107b4b468f99ff187a9b29d1f84b376727e309afedd8a1cd0db13b467",
+      "execution_started.json": "372d736e1b09d695e71f1238c3ffa381bdec21e7f243998f267ffaf76930a56d",
+      "final_all_IM_completed.json": "a2f6c8312f365dd422b6a20a97f34cf987887033180037041e4d513d49b33fbe",
+      "final_all_IM_epoch_01.json": "c594c6796a70f6f2b3551f0822937cf234da3fc3008f92a977d8b49a7cb48a2b",
+      "final_all_IM_epoch_02.json": "101a5f07854d0bef846074957b5bf83dfe230efe109e6c7b42f26ec3694cdf3d",
+      "final_all_IM_epoch_03.json": "f5c49406d55db19ede526b38ea9453a2898401060dab06307b5da62307be4b29",
+      "final_all_IM_epoch_04.json": "d008c5f7fcb71f0df8390125091a6d9f31c4974a8d6974429690e6190800f085",
+      "final_all_IM_epoch_05.json": "feaf10113f3e4307e5708bdcb9295f599ed98b795a91b31c4da440a8d00b7b96",
+      "final_all_IM_epoch_06.json": "d1715df5cd947aa66e3db54add43561543fe48fca485ff3916579f0ca6344c99",
+      "final_all_IM_epoch_07.json": "a5656e8bc8fb40f895ee418ff5cd1c135900381b393efca3711936a589e950e9",
+      "final_all_IM_epoch_08.json": "2663309fbb07566a3bd4f807c53f6841cbae53336f1f5d850d213c75eef765cd",
+      "final_all_IM_epoch_09.json": "955ffc131fe896f91c455cff15c983b0546d7ffb0bd3800f01296dcb42945595",
+      "final_all_IM_epoch_10.json": "270b4df89c56e000308dba56874648744f8cb8bd68fcb4c8bab72d425c391f70",
+      "final_all_IM_epoch_11.json": "8367b245f53a96e7fd9003f00078e3c9b0899a30235721643088990baf47043a",
+      "final_all_IM_epoch_12.json": "eaf6fa6ebc7856cb5515b3dcc2a29e37c09fb01d56b303ea27eea389d07eef5c",
+      "final_all_IM_epoch_13.json": "d646fb38b1ec3de6c69d13c1dba7f595e980c982e18110af7fda345f4738cd11",
+      "final_all_IM_epoch_14.json": "389d4767e836bca11bba44f0836b6d3119ff42edc4e520eb0058e21260c66d3c",
+      "final_all_IM_epoch_15.json": "f70cae55412fc8a5dbbd3ad8ce3b9756de4694caecb51940c7ad37423c280a76",
+      "final_all_IM_epoch_16.json": "53baaf49aa3f341685b968bf70cf3b283ab881e951dce8cad0dd9665e4483e88",
+      "final_all_IM_epoch_17.json": "196d2854257fbf3533e941193efcc0acd3ba2912c4ee1810c4a12868e57fac7a",
+      "final_all_IM_epoch_18.json": "2200c4ed932fb371aaf54eb52f288bbc3bf4033671df5f9e374990af3b49bd46",
+      "final_all_IM_epoch_19.json": "cf96a40d377b3b5074d64bcf30c58baa55b5b88e69087dcbef4f1009f950c7fc",
+      "final_all_IM_epoch_20.json": "ce48241a204fefd9b77395170db21a5e638bac177e759ec6acb0041a9e15660a",
+      "final_all_IM_started.json": "2ddf8a3cdfb6267290aa8e4c7354db1de527d33e6a81e2a0cecea0196cd1a139",
+      "final_checkpoint.json": "d0d6ae609d54737562b32b86c6bcfa64dad52fe7c95f5d72aac172cedfef118b",
+      "initial_EL_state.json": "70f57e465559f9f041ff0f1f3e2634a6f077038a739a71c58d93584a49db6ccb",
+      "preflight.json": "af0d5e07f956bd40604fa18a70ba6e6004250e79561ff7205aaac8824f23626d"
+    },
+    "run_id": "task-2_23-el-multiepoch-baseline"
+  },
+  "batch_size": 16,
+  "cpu_threads": 4,
+  "device": "cuda",
+  "evaluation_authorized": false,
+  "inputs": {
+    "EL": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+      "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+    },
+    "EL_split": {
+      "area": "runs",
+      "relative_path": "task-2_23-el-multiepoch-baseline/processed/el_split_manifest_v1.csv.gz",
+      "sha256": "6b3a6a0c00f86c26e51b84a8df1dd7e81d545117baa871dabd0707edaf89ac00"
+    },
+    "IM": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_original.csv",
+      "sha256": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61"
+    },
+    "IM_provenance": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/im_train_provenance.csv.gz",
+      "sha256": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21"
+    },
+    "experiment": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+      "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+    },
+    "positive_score_manifest": {
+      "area": "runs",
+      "relative_path": "task-2_13-el-stability-weight-adapter/reports/positive_score_manifest.json",
+      "sha256": "e79fb60b1c04f33889e9d3ecd6a7bd145255c156487cd4d4873a90c8ab715862"
+    },
+    "positive_scores": {
+      "area": "runs",
+      "relative_path": "task-2_13-el-stability-weight-adapter/processed/el_positive_teacher_scores.csv.gz",
+      "sha256": "ab0473b669f61792ff63a926185a5e737544209537c5de938b30e519a232e884"
+    },
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+    },
+    "source_LICENSE": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+    },
+    "source_README": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+    },
+    "source_bigmhc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+    },
+    "source_cli": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+    },
+    "source_dataset": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+    },
+    "source_encseq": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+    },
+    "source_mhcenc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+    },
+    "source_mhcuid": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+    },
+    "source_predict": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+    },
+    "source_train": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+    }
+  },
+  "label_policy": "original",
+  "learning_rate": 5e-05,
+  "num_workers": 0,
+  "optimizer": "Native AdamW defaults lr5e-5; persistent within fit; fresh each IM restart",
+  "persistent_workers": false,
+  "precision": "CUDA FP32; deterministic; no AMP/TF32",
+  "rank_reference": "EL_training_positives_only",
+  "schema_version": 1,
+  "seed": 42,
+  "stability_supervision": true,
+  "task": "2.24"
+}

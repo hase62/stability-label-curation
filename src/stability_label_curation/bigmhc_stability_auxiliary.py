@@ -37,14 +37,18 @@ def permute(ids: list[str], ranks: list[Fraction], hla: str) -> list[Fraction]:
 
 class Targets:
     """Reuse authenticated score identities, never attach targets to negatives/IM."""
-    def __init__(self, sidecar: binding.LossAdapter, mode: str):
+    def __init__(self, sidecar: binding.LossAdapter, mode: str, *, source_ids: set[str] | None = None):
         if mode not in {'S', 'P'}:
             raise ValueError('Auxiliary mode must be S or P')
         self.mode, self.sidecar = mode, sidecar
+        if source_ids is not None and (not source_ids or not source_ids <= sidecar.scores.keys()):
+            raise ValueError('Missing/empty training-positive score identities')
         self.exact: dict[str, Fraction] = {}
         self.values: dict[str, float] = {}
         groups: dict[str, list] = defaultdict(list)
         for row in sidecar.scores.values():
+            if source_ids is not None and row.source_row_id not in source_ids:
+                continue
             groups[row.resolved_hla].append(row)
         self.evidence: dict[str, Any] = {'mode': mode, 'by_HLA': {}}
         for hla, rows in sorted(groups.items()):
@@ -65,7 +69,8 @@ class Targets:
                 'unchanged_from_S': sum(a == b for a, b in zip(ranks, assigned)),
                 'mean_exact': str(sum(assigned) / len(assigned))}
         self.evidence.update(positive_observations=len(self.values), HLA_groups=len(groups),
-                             negative_targets=0, IM_targets=0)
+                             negative_targets=0, IM_targets=0,
+                             rank_reference_population='full_positive_cohort' if source_ids is None else 'EL_training_positives_only')
 
     def anchor(self, identities: list[str], labels: list[int]) -> tuple[int, float]:
         if len(identities) != len(labels) or not labels or any(y not in (0, 1) for y in labels):
@@ -84,7 +89,7 @@ def compare_targets(s: Targets, p: Targets) -> dict:
     if set(s.values) != set(p.values) or set(s.values) != set(s.exact):
         raise ValueError('S/P FP32 source population mismatch')
     for hla, a in s.evidence['by_HLA'].items():
-        ids = [i for i, row in s.sidecar.scores.items() if row.resolved_hla == hla]
+        ids = [i for i, row in s.sidecar.scores.items() if row.resolved_hla == hla and i in s.exact]
         if (any(p.sidecar.scores[i] != s.sidecar.scores[i] for i in ids)
                 or sorted(s.exact[i] for i in ids) != sorted(p.exact[i] for i in ids)
                 or sorted(s.values[i] for i in ids) != sorted(p.values[i] for i in ids)):
@@ -146,7 +151,8 @@ def losses(torch: Any, logits: Any, labels: Any, prediction: Any = None,
 
 
 def train_el(torch: Any, model: Any, dataset: Any, config: dict, auxiliary: AuxiliaryHead,
-             targets: Targets, reference: dict, *, device: str = 'cpu', coefficient: float = 0.1) -> dict:
+             targets: Targets, reference: dict, *, device: str = 'cpu', coefficient: float = 0.1,
+             optimizer: Any = None) -> dict:
     """Native EL schedule, original AdamW group, appended head and fixed loss.
 
     IM delegates directly to runner.train_epoch. This dedicated EL loop avoids
@@ -159,7 +165,10 @@ def train_el(torch: Any, model: Any, dataset: Any, config: dict, auxiliary: Auxi
     runner.on_device(model, device).train()
     auxiliary.head.train()
     parameters = list(model.parameters()) + list(auxiliary.head.parameters())
-    optimizer = torch.optim.AdamW(parameters, lr=config['learning_rate'])
+    if optimizer is None:
+        optimizer = torch.optim.AdamW(parameters, lr=config['learning_rate'])
+    elif [id(p) for group in optimizer.param_groups for p in group['params']] != [id(p) for p in parameters]:
+        raise ValueError('Persistent auxiliary optimizer parameter order changed')
     if binding.digest(optimizer.defaults) != binding.digest(reference['optimizer_defaults']):
         raise ValueError('Original optimizer hyperparameters changed')
     names = [k for k, _ in model.named_parameters()]
@@ -168,6 +177,7 @@ def train_el(torch: Any, model: Any, dataset: Any, config: dict, auxiliary: Auxi
     dataset.makebats(config['batch_size'], shuffle=True, negfrac=0.99)
     loader = torch.utils.data.DataLoader(dataset, batch_size=None, shuffle=True, num_workers=0, persistent_workers=False)
     steps, hashes = [], []
+    first_head_gradient_norms = None
     if coefficient:
         auxiliary.capture()
     try:
@@ -191,6 +201,8 @@ def train_el(torch: Any, model: Any, dataset: Any, config: dict, auxiliary: Auxi
             total.backward()
             if coefficient and any(p.grad is None or not torch.isfinite(p.grad).all() for p in auxiliary.head.parameters()):
                 raise ValueError('Auxiliary head has missing/nonfinite gradients')
+            if coefficient and first_head_gradient_norms is None:
+                first_head_gradient_norms = {k: float(p.grad.norm()) for k, p in auxiliary.head.named_parameters()}
             optimizer.step()
             steps.append({'batch': index, 'rows': len(labels), 'positives': 1,
                           'BCE_loss': float(bce.detach()), 'auxiliary_MSE': float(mse.detach()) if mse is not None else 0.0,
@@ -217,5 +229,9 @@ def train_el(torch: Any, model: Any, dataset: Any, config: dict, auxiliary: Auxi
               'row_weighted_BCE_loss': sum(s['BCE_loss'] * s['rows'] for s in steps) / sum(s['rows'] for s in steps),
               'mean_auxiliary_MSE': sum(s['auxiliary_MSE'] for s in steps) / len(steps),
               'mean_total_loss': sum(s['total_loss'] for s in steps) / len(steps)}
+    result['auxiliary_gradient_evidence'] = {
+        'finite_head_gradient_checks': len(steps) if coefficient else 0,
+        'first_update_head_gradient_norms': first_head_gradient_norms,
+        'isolated_auxiliary_backbone_flow_checked_by_focused_synthetic_tests': True}
     binding.check_reference({'EL': reference}, stage='EL', training=result)
     return result
