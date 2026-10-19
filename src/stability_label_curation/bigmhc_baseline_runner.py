@@ -303,11 +303,14 @@ def state_hashes(model):
     return {k:hashlib.sha256(v.detach().cpu().contiguous().numpy().tobytes()).hexdigest() for k,v in model.state_dict().items()}
 
 
-def train_epoch(torch,model,dataset,config,transfer,device='cpu',*,loss_adapter=None,expected_batches=None):
+def train_epoch(torch,model,dataset,config,transfer,device='cpu',*,loss_adapter=None,expected_batches=None,optimizer=None):
     if transfer and loss_adapter is not None:raise ValueError('EL weights cannot modify IM transfer loss')
     on_device(model,device).train()
     parameters=[v for k,v in model.named_parameters() if not transfer or k in TRANSFER]
-    optimizer=torch.optim.AdamW(parameters,lr=config['learning_rate']);lossf=torch.nn.BCEWithLogitsLoss()
+    if optimizer is None:optimizer=torch.optim.AdamW(parameters,lr=config['learning_rate'])
+    elif [id(p) for group in optimizer.param_groups for p in group['params']] != [id(p) for p in parameters]:
+        raise ValueError('Persistent optimizer parameter order differs from native training')
+    lossf=torch.nn.BCEWithLogitsLoss()
     dataset.makebats(config['batch_size'],shuffle=True,negfrac=None if transfer else 0.99)
     loader=torch.utils.data.DataLoader(dataset,batch_size=None,shuffle=True,num_workers=0,persistent_workers=False)
     steps=[];skipped_log=[];skipped=0;rows=0;weighted=0.0;epoch_error=0.0
