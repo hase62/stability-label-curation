@@ -118,11 +118,13 @@ peptides, with the observation unit explicitly recorded (peptide–HLA assays).
 Secondary: AUROC, precision at predeclared K = **10, 20, 50**, and PPVn where
 applicable. K exceeding eligible cohort size is undefined, never replaced by a
 post-hoc K. Break top-K score ties deterministically by canonical peptide, HLA,
-then source-row identity. Define PPVn as precision within the top n predictions
-for each predeclared n in 1..N eligible rows, reporting the curve and its arithmetic
-mean over 1..N; explicitly distinguish this convention from precision at n equal
-to the number of positives. Freeze any publication-specific comparison convention
-before outcomes are released. Report EL-exposed and fully training-unseen strata
+then source-row identity. Define PPVn as precision within the top n predictions.
+Following the [publication's immunogenicity methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC10569228),
+report its curve and arithmetic mean over n = 1..P, where P is the positive count
+in the frozen eligible cohort (the range over which a perfect predictor has
+precision one). P only determines this predeclared metric's evaluation range;
+it does not change the fixed top-K values or model. With no positives, PPVn is
+undefined. Report EL-exposed and fully training-unseen strata
 when each has both classes and at least 20 observations; otherwise report counts
 and mark unstable/undefined metrics. No threshold or K is chosen using outcomes.
 
