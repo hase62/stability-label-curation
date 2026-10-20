@@ -5,6 +5,7 @@ All external inputs and generated artifacts use resolved project storage.
 """
 from __future__ import annotations
 
+import argparse
 from collections import Counter, defaultdict
 import csv
 from datetime import datetime, timezone
@@ -419,5 +420,187 @@ def curate(paths: StoragePaths) -> dict:
     return result
 
 
+def gzip_rows(path: Path) -> list[dict]:
+    with gzip.open(path, 'rt') as stream:
+        return [json.loads(line) for line in stream]
+
+
+def assess(paths: StoragePaths) -> dict:
+    """Sequence exposure and metadata support only; never read prediction scores."""
+    directory = paths.project_runs_dir / RUN
+    complete = json.loads((directory / 'reports/curation_complete.json').read_text())
+    for name, expected in complete['outputs'].items():
+        if sha256(directory / name) != expected:
+            raise ValueError('Curated detection artifact changed')
+    config = json.loads((paths.repository_root / CONFIG).read_text())
+    groups = json.loads((directory / 'reports/replicate_groups.json').read_text())
+    matrix_rows = {g['group_id']: gzip_rows(directory / 'matrices' / (g['group_id'].split(':', 1)[1]+'.jsonl.gz')) for g in groups}
+    base_rows = [r for g in groups if not g['instrument_diagnostic'] for r in matrix_rows[g['group_id']]]
+    comparable = [r for g in groups if not g['instrument_diagnostic'] and g['repeat_comparison_available'] for r in matrix_rows[g['group_id']]]
+    peptides = {r['peptide'] for r in base_rows}
+    exposures = {p: {} for p in peptides}
+    reference_dir = paths.project_runs_dir / 'task-2_26-third-party-hard-split'
+    freeze = json.loads((reference_dir / 'reports/benchmark_freeze.json').read_text())
+    if sha256(reference_dir / 'reports/benchmark_freeze.json') != '20e45f3740beebc39fd78581afd5da7ff49c59798bfcd505cd3ddfcf2c763557':
+        raise ValueError('Actual fitting/selection reference receipt changed')
+    references = {}
+    for reference in ('EL_fit', 'EL_selection', 'IM_fit', 'IM_historical_development', 'prior_Mendeley_published'):
+        name = f'references/{reference}.txt.gz'
+        file = reference_dir / name
+        if sha256(file) != freeze['immutable_artifact_hashes'][name]:
+            raise ValueError('Frozen sequence exposure reference changed')
+        with gzip.open(file, 'rt') as stream:
+            overlap = {line.strip() for line in stream if line.strip() in peptides}
+        for peptide in peptides:
+            exposures[peptide][reference] = peptide in overlap
+        references[reference] = {'sha256': sha256(file), 'unique_sequence_overlap': len(overlap),
+            'base_group_peptide_rows_overlapping': sum(r['peptide'] in overlap for r in base_rows),
+            'comparable_base_group_peptide_rows_overlapping': sum(r['peptide'] in overlap for r in comparable),
+            'interpretation': 'exact sequence exposure; no peptide-specific HLA restriction inferred'}
+    write_gzip_rows(directory / 'reports/peptide_sequence_exposure.jsonl.gz',
+                    (dict(peptide=p, reference_overlap=exposures[p]) for p in sorted(peptides)))
+    write_json(directory / 'reports/reference_overlap_summary.json', references)
+    # The deployed JSON is absent on this machine. An authenticated existing
+    # metadata receipt documents support for 49 canonical A/B alleles, without
+    # reading any saved stability score values or assuming it lists all models.
+    parent_config = json.loads((paths.repository_root / 'configs/bigmhc_fully_trained_auxiliary_task2_24.json').read_text())
+    receipt_item = parent_config['inputs']['positive_score_manifest']
+    receipt_file = paths.project_runs_dir / receipt_item['relative_path']
+    if sha256(receipt_file) != receipt_item['sha256']:
+        raise ValueError('Existing Teacher support metadata changed')
+    support_receipt = json.loads(receipt_file.read_text())
+    known = set(support_receipt['positive_counts_by_HLA'])
+    model_item = json.loads((paths.repository_root / 'configs/el_positive_stability_analysis_v0.json').read_text())['inputs']['teacher']
+    model_path = paths.project_runs_dir / model_item['relative_path']
+    if model_path.exists() and sha256(model_path) != model_item['sha256']:
+        raise ValueError('Teacher model identity differs')
+    alleles = sorted({a for values in config['sample_HLA_genotype'].values() for a in values})
+    statuses = {a: 'documented_supported_by_frozen_receipt' if a in known else
+                'outside_Teacher_HLA_A_B_scope' if a.startswith('HLA-C') else
+                'not_determined_from_available_support_receipt' for a in alleles}
+    support = {'Teacher_expected_identity': model_item, 'Teacher_file_available': model_path.exists(),
+               'support_metadata_relative_path': receipt_item['relative_path'], 'support_metadata_sha256': receipt_item['sha256'],
+               'documented_supported_alleles': len(known), 'candidate_allele_status': statuses,
+               'candidate_unique_alleles': len(alleles), 'candidate_status_counts': dict(Counter(statuses.values())),
+               'sample_HLA_genotypes': config['sample_HLA_genotype'],
+               'measured_peptide_specific_HLA_observations': 0, 'primary_within_HLA_stability_observations': 0,
+               'model_retrained_or_predictions_run': False,
+               'reason': 'All curated samples are multi-HLA; genotype does not establish restriction. Frozen Teacher JSON is absent on this machine.'}
+    write_json(directory / 'reports/HLA_and_Teacher_compatibility.json', support)
+    run_views = json.loads((directory / 'reports/run_views_and_reuse.json').read_text())
+    other_files = set()
+    for file in sorted((paths.project_data_dir / SOURCE / 'PXD013831').glob('files_page_*.json')):
+        if not file.name.endswith('.provenance.json'):
+            other_files.update(r['fileName'] for r in json.loads(file.read_text()))
+    inventory = json.loads((directory / 'reports/run_inventory.json').read_text())
+    repo_files = set()
+    for file in sorted((paths.project_data_dir / SOURCE / 'PXD006939').glob('files_page_*.json')):
+        if not file.name.endswith('.provenance.json'):
+            repo_files.update(r['fileName'] for r in json.loads(file.read_text()))
+    alignment = []
+    for raw_file, views in run_views['raw_run_views'].items():
+        alias = raw_file.replace('CD165spike_', 'CD165_')
+        alignment.append({'original_search_raw_file': raw_file, 'search_views': views,
+            'exact_PRIDE_filename_match': raw_file in repo_files,
+            'declared_name_alias': alias if raw_file not in repo_files and alias in repo_files else None,
+            'alias_basis': 'Original Table S2/search design uses CD165spike; deposited RAW names omit spike; no RAW bytes compared',
+            'exact_filename_also_in_PXD013831': raw_file in other_files})
+    write_json(directory / 'reports/repository_run_name_alignment.json', alignment)
+    result = {'status': 'detection_reproducibility_feasible; primary_allele_specific_stability_association_blocked',
+              'base_group_peptide_rows': len(base_rows), 'base_unique_peptides': len(peptides),
+              'comparable_base_group_peptide_rows': len(comparable),
+              'comparable_base_unique_peptides': len({r['peptide'] for r in comparable}),
+              'direct_detection_counts_comparable_base_groups': dict(sorted(Counter(r['n_detected_direct'] for r in comparable).items())),
+              'unique_class_I_runs': len(run_views['raw_run_views']),
+              'class_I_runs_with_exact_PRIDE_names': sum(r['exact_PRIDE_filename_match'] for r in alignment),
+              'source_run_name_aliases': sum(r['declared_name_alias'] is not None for r in alignment),
+              'exact_source_run_names_shared_with_PXD013831': sum(r['exact_filename_also_in_PXD013831'] for r in alignment),
+              'class_I_search_views_with_MSMS_counts': sum(r['original_summary']['MS/MS Identified'] != '' for r in inventory),
+              'reference_overlaps': references, 'Teacher_support_status': support['candidate_status_counts'],
+              'Teacher_available_on_this_machine': model_path.exists(), 'allele_specific_eligible': 0,
+              'predictions_or_association_executed': False}
+    write_json(directory / 'reports/technical_feasibility.json', result)
+    return result
+
+
+def verify_and_complete(paths: StoragePaths) -> dict:
+    """Focused source-to-matrix checks and clearly separate alternative views."""
+    directory = paths.project_runs_dir / RUN
+    config = json.loads((paths.repository_root / CONFIG).read_text())
+    complete = json.loads((directory / 'reports/curation_complete.json').read_text())
+    groups = json.loads((directory / 'reports/replicate_groups.json').read_text())
+    summaries = {r['group_id']: r for r in json.loads((directory / 'reports/detection_distributions.json').read_text())}
+    checked = 0
+    for block in config['member_roots']:
+        source = gzip_rows(directory / f'observations/{block}_9mers.jsonl.gz')
+        by_id = {r['source_id']: r for r in source}
+        for group in [g for g in groups if g['block'] == block]:
+            file = directory / 'matrices' / (group['group_id'].split(':', 1)[1]+'.jsonl.gz')
+            matrix = gzip_rows(file)
+            experiments = [e for unit in group['units'] for e in unit['experiments']]
+            expected = [r['source_id'] for r in source if any(r['identifications'][e] != 'not_identified' for e in experiments)]
+            if [r['source_id'] for r in matrix] != expected:
+                raise ValueError('Incomplete or reordered peptide union')
+            for row in matrix:
+                original = by_id[row['source_id']]
+                if row['peptide'] != original['peptide'] or row['n_available_replicates'] != len(group['units']):
+                    raise ValueError('Source association/denominator mismatch')
+                direct, reported = [], []
+                for unit in group['units']:
+                    states = [original['identifications'][e] for e in unit['experiments']]
+                    direct.append(int('direct_msms' in states))
+                    reported.append(int(any(s != 'not_identified' for s in states)))
+                if ([r['direct_msms'] for r in row['units']] != direct or
+                        [r['any_identification'] for r in row['units']] != reported or
+                        row['n_detected_direct'] != sum(direct) or row['n_detected_including_transfer'] != sum(reported) or
+                        row['allele_specific_restriction'] is not None):
+                    raise ValueError('Detection state, attribution or nested unit mismatch')
+            if dict(Counter(str(r['n_detected_direct']) for r in matrix if r['direct_union_member'])) != summaries[group['group_id']]['direct_count_distribution_direct_union']:
+                raise ValueError('Saved count distribution mismatch')
+            checked += len(matrix)
+        if block == 'plate_3_class_I':
+            design = tsv(paths.project_data_dir / SOURCE / 'PXD006939/search_members/plate_3_class_I/experimentalDesignTemplate.txt')
+            mapping = {r['Experiment']: r['Name']+'.raw' for r in design}
+            alternate = {'group_id': 'PXD006939:plate3_CD165_1e8_reprocessed_view', 'sample': 'CD165',
+                         'condition': 'same RAW files as plate1 CD165; alternative search view',
+                         'replicate_type': 'reprocessing view, not additional measurements',
+                         'n_available_replicates': 3, 'instrument_diagnostic': False,
+                         'repeat_comparison_available': True,
+                         'excluded_from_base_group_totals': True,
+                         'units': [{'unit_id': str(i), 'experiments': ['HLApI_CD165_1e8_'+str(i)],
+                                    'raw_files': [mapping['HLApI_CD165_1e8_'+str(i)]]} for i in (1, 2, 3)]}
+            matrix, summary = detection_matrix(source, alternate)
+            write_gzip_rows(directory / 'alternative_views/CD165_1e8_reprocessed_view.jsonl.gz', matrix)
+            write_json(directory / 'reports/alternative_reprocessing_view.json', {'group': alternate, 'summary': summary})
+    # Explicit chemical-identity warning for spiked preparations; original light
+    # counterparts are also reported, so these are flags, not fabricated labels.
+    spike = ['RYKEENNDHL', 'TEYDSRVKA', 'KQAEIVKRL', 'IYTSSVNRL', 'SEVTFALHSA', 'QEVDRIKEA',
+             'LEKQDWEHA', 'KVKDDVDKL', 'REYDGNIRQA', 'AERDFIHTA', 'KEWDEFQKA', 'QVISQAAVVHA',
+             'AESYYRHAA', 'SQAPAVNTL', 'KLKGKEAEL']
+    cd165 = gzip_rows(directory / 'matrices/plate1_CD165.jsonl.gz')
+    write_json(directory / 'reports/synthetic_standard_annotations.json', {
+        'source': 'original Supplemental Table S3; heavy and endogenous light counterparts',
+        'Table_S3_source_sha256': sha256(paths.project_data_dir / SOURCE / 'PXD006939/Table_S3.pdf'),
+        'standard_sequences': spike, 'canonical_9mer_standard_sequences': [p for p in spike if len(p) == 9],
+        'plate1_CD165_9mer_sequences_matching_standards': [r['peptide'] for r in cd165 if r['peptide'] in spike],
+        'applies_to': ['PXD006939:plate1_CD165', 'PXD006939:plate3_CD165_1e8_reprocessed_view'],
+        'chemical_identity': 'Base sequence cannot distinguish spiked heavy and endogenous light identifications; retain raw source and flag, do not relabel.'})
+    for name, expected in complete['outputs'].items():
+        if sha256(directory / name) != expected:
+            raise ValueError('Original curated outputs changed during completion')
+    result = {'status': 'passed', 'matrix_peptide_group_rows_checked': checked,
+              'original_21_matrices_preserved': True, 'alternative_reprocessing_view_saved_separately': True,
+              'original_order_complete_union_and_denominators_verified': True,
+              'HLA_I_only_and_no_inferred_restriction': True,
+              'stability_predictions_or_association_executed': False,
+              'code_sha256': sha256(Path(__file__)), 'configuration_sha256': sha256(paths.repository_root / CONFIG),
+              'utc': datetime.now(timezone.utc).isoformat()}
+    write_json(directory / 'reports/completion_verification.json', result)
+    return result
+
+
 if __name__ == '__main__':
-    print(json.dumps(curate(resolve_paths()), indent=2))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('stage', choices=('curate', 'assess', 'verify_and_complete'))
+    arguments = parser.parse_args()
+    print(json.dumps(globals()[arguments.stage](resolve_paths()), indent=2))
