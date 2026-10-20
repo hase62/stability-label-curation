@@ -1,0 +1,30 @@
+{
+  "task": "2.26",
+  "base_commit": "a4a068c079ebe6e32bfde0c5314e96877e1a3fe9",
+  "source_repository": "https://github.com/SRHgroup/IMPROVE_paper",
+  "source_commit": "c67094276b52358b5202ad9e5597acd87888ea1d",
+  "source_DOI": "10.3389/fimmu.2024.1360281",
+  "archive_relative_path": "improve_paper/data.zip",
+  "archive_bytes": 103626234,
+  "archive_git_blob_sha1": "a1b2375a8dcfcc24b8931d7cb5cb34e2953bb207",
+  "archive_sha256": "adf02eb5054a8aa4b6eccd3b6e0ff1200889d41ae05655fd6e55c5c347f720d9",
+  "member": "data/01_data/01_Validated_neoepitopes.txt",
+  "member_sha256": "b27854c98a34b6bb83af248979cc3ea121534fa2e8d9e97415654dc0c0a95c95",
+  "crosscheck_relative_path": "improve_paper/neoepitope_tabels/In_house_neoepitope_for_CV.tsv",
+  "crosscheck_git_blob_sha1": "d8ff8c21b48a501041a7948de9ad96bc63efe1a9",
+  "primary_minimum_hamming": 3,
+  "diagnostic_minimum_hamming": [2, 3, 4],
+  "reference_union": ["EL_fit", "IM_fit", "EL_selection", "IM_epoch_selection", "IM_historical_development"],
+  "prior_benchmark_exact_exclusion": "all valid 9-mers in the original 937-row Mendeley source; actual 275-row evaluation identities also reported separately",
+  "duplicate_policy": "Retain every released row and original patient/sample observation. Repeated peptides/pairs/patient complexes are descriptive. Quarantine all rows sharing an original identity with contradictory peptide/HLA/patient/study or outcomes; never select one label. Different patients with different outcomes remain distinct observations.",
+  "response_mapping": {"yes": 1, "1": 1, "no": 0, "0": 0},
+  "assay": "DNA-barcoded pMHC multimer T-cell recognition; authors' any-sample patient screen summary",
+  "study_DOIs": {
+    "bladder": "10.1038/s41467-022-29342-0",
+    "melanoma": "10.1172/JCI150535",
+    "Basket": "10.1101/2024.03.17.585416"
+  },
+  "model_inference_authorized": false,
+  "model_performance_authorized": false,
+  "training_authorized": false
+}
