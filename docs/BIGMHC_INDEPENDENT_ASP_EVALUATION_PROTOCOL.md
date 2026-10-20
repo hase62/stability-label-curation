@@ -163,3 +163,50 @@ previously adaptive developmental work constrain causal and general claims.
 Even a positive primary result needs uncertainty analysis and external
 replication. The future evaluation requires separate authorization after all
 three model identities and this complete protocol have been frozen.
+
+
+## Researcher-approved amendment — Task 2.25R, 2026-10-20
+
+This amendment supersedes only the mandatory original-assay/material-provenance
+crosswalk, assay-level observation/deduplication requirements, and quarantine
+based solely on unavailable study/assay/patient/specimen identifiers above.
+The researcher explicitly authorized this amendment in Task 2.25R to resume
+the evaluation blocked at commit `c4e827740090bae12fa06613a37a88280651d9b7`.
+The prior blocker report is retained as `BIGMHC_INDEPENDENT_NEOEPITOPE_TASK2_25_BLOCKED.md`.
+
+The authentic source remains Mendeley Version 4 `datasets.zip`, exact SHA256
+`0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa`,
+member `im_test.csv`. Use every eligible released observation, identified by
+this archive/member and original one-based data-row index, in source order.
+Do not collapse repeated peptide–HLA observations or infer original assay
+identity from peptide/HLA. An assay-level provenance crosswalk is not required.
+Study/assay/material independence cannot be fully verified; unavailable such
+identifiers are a limitation, not a reason to stop or exclude released rows.
+Any independently established source reuse remains reportable and subject to
+the original safeguard. Missing or ambiguous binary `tgt` labels remain excluded
+under the fixed outcome-quality rule, identically across A/S/P. Distinct released
+rows with different outcomes remain distinct; no undocumented same-assay identity
+or contradiction is inferred.
+
+Identity-only primary eligibility remains valid canonical 9-mer, exact supported
+human HLA-I encoding, exact global peptide absence from the actual Task 2.23
+EL training partition (including all negatives), and exact global peptide absence
+from all 3,428 final IM training observations. Secondary IM novelty permits EL
+training exposure but excludes IM-training peptides. Preserve all eligible
+original observations and report duplicate peptide/pair dependence. No sequence-
+similarity exclusion is introduced. Exact novelty is not a similarity hard split.
+
+A/S/P weights, final IM checkpoints, models, inference settings, endpoints,
+tied-score conventions, metrics, contrasts, and the 10,000-draw paired cluster
+bootstrap remain frozen. With patient identities unavailable, use the already
+specified shared-peptide clusters and report unmeasured patient dependence.
+References to assay-level point estimates henceforth mean released-observation
+point estimates. No additional evaluation condition or model selection is allowed.
+
+This amendment is made and committed **before accessing benchmark outcome values
+or published predictor values, and before generating A/S/P benchmark predictions**.
+Only the prior header/ZIP inspection and frozen-model reload have occurred.
+Commit and preserve this amendment before identity review and evaluation; retain
+both the original protocol hash and this amended document's hash in execution
+receipts. The unchanged original protocol remains authenticated against its
+Task 2.24 Git version and freeze manifest. All other safeguards remain in force.
