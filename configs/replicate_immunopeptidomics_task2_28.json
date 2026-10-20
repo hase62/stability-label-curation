@@ -1,0 +1,132 @@
+{
+  "task": "2.28",
+  "base_commit": "24659cfb830826673b5b0f834e7b14a5a7d1afd6",
+  "source_accession": "PXD006939",
+  "publication_DOI": "10.1074/mcp.TIR117.000383",
+  "archive_url": "https://ftp.pride.ebi.ac.uk/pride/data/archive/2017/12/PXD006939/search.zip",
+  "archive_bytes": 626695636,
+  "PRIDE_declared_archive_SHA1": "f2319bf637af1056c96bd1f0192923400e0374ae",
+  "member_roots": {
+    "plates_1_2": "search/Plates number 1 and 2, Tissues and cell lines/",
+    "plate_3_class_I": "search/Plate number 3 CD165 cells/CD165 class I/",
+    "plate_4_separate": "search/Plate number 4, IFNg peptidomics/matched separetly/",
+    "interplate": "search/Inter plate experiment/"
+  },
+  "HLA_typing_source": "PXD006939/Table_S1.pdf",
+  "replicate_definition_source": "PXD006939/Table_S2.pdf",
+  "sample_HLA_genotype": {
+    "CD165": [
+      "HLA-A*02:05",
+      "HLA-A*24:02",
+      "HLA-B*15:01",
+      "HLA-B*50:01",
+      "HLA-C*03:03",
+      "HLA-C*06:02"
+    ],
+    "CM647": [
+      "HLA-A*01:01",
+      "HLA-A*24:02",
+      "HLA-B*13:02",
+      "HLA-B*39:06",
+      "HLA-C*06:02",
+      "HLA-C*12:03"
+    ],
+    "PD42": [
+      "HLA-A*02:06",
+      "HLA-A*24:02",
+      "HLA-B*07:02",
+      "HLA-B*55:01",
+      "HLA-C*01:02",
+      "HLA-C*07:02"
+    ],
+    "RA957": [
+      "HLA-A*02:20",
+      "HLA-A*68:01",
+      "HLA-B*35:03",
+      "HLA-B*39:01",
+      "HLA-C*04:01",
+      "HLA-C*07:02"
+    ],
+    "TIL1": [
+      "HLA-A*02:01",
+      "HLA-A*02:01",
+      "HLA-B*18:01",
+      "HLA-B*38:01",
+      "HLA-C*05:01",
+      "HLA-C*05:01"
+    ],
+    "TIL3": [
+      "HLA-A*01:01",
+      "HLA-A*23:01",
+      "HLA-B*07:02",
+      "HLA-B*15:01",
+      "HLA-C*12:03",
+      "HLA-C*14:02"
+    ],
+    "3830-NJF": [
+      "HLA-A*02:01",
+      "HLA-A*03:01",
+      "HLA-B*07:02",
+      "HLA-B*07:02",
+      "HLA-C*07:02",
+      "HLA-C*07:02"
+    ],
+    "3849-BR": [
+      "HLA-A*01:01",
+      "HLA-A*31:01",
+      "HLA-B*38:01",
+      "HLA-B*44:02",
+      "HLA-C*05:01",
+      "HLA-C*12:03"
+    ],
+    "3912-BAM": [
+      "HLA-A*01:01",
+      "HLA-A*29:06",
+      "HLA-B*08:01",
+      "HLA-B*15:01",
+      "HLA-C*03:04",
+      "HLA-C*07:01"
+    ],
+    "3865-DM": [
+      "HLA-A*01:01",
+      "HLA-A*03:01",
+      "HLA-B*35:01",
+      "HLA-B*57:01",
+      "HLA-C*04:01",
+      "HLA-C*06:02"
+    ],
+    "UWB1.289": [
+      "HLA-A*03:01",
+      "HLA-A*68:01",
+      "HLA-B*07:02",
+      "HLA-B*07:02",
+      "HLA-C*03:32",
+      "HLA-C*07:02"
+    ],
+    "JY": [
+      "HLA-A*02:01",
+      "HLA-A*02:01",
+      "HLA-B*07:02",
+      "HLA-B*07:02",
+      "HLA-C*07:02",
+      "HLA-C*07:02"
+    ]
+  },
+  "HLA_transcription_notes": {
+    "RA957": "Table S1 prints B*39.01; dot normalized to colon without changing the allele digits.",
+    "CM647": "Table S2/body also spell this cell line CM467; exact run names and Table S1 use CM647.",
+    "all_samples": "Measured genotype/candidate set, not experimentally measured peptide-specific restriction or allele-expression quantification."
+  },
+  "identification_states": {
+    "By MS/MS": "direct_msms",
+    "By matching": "transferred",
+    "": "not_identified"
+  },
+  "peptide_normalization": "strip and uppercase; canonical amino acids, exact length 9; retain original sequence",
+  "row_filter": "exclude Reverse + and Potential contaminant +; retain original accepted identification flags, PEP and score; do not replace FDR with a PEP cutoff",
+  "modification_policy": "base-sequence detection; peptide table aggregates modification states; no claim of unmodified chemical identity",
+  "repeat_policy": "retain singletons separately; equal-condition units only; RA957 three preparation units each with two instrument injections plus three separate instrument diagnostics; reused CD165 1e8 search view retained but not additional replicate",
+  "stability_predictions_authorized": false,
+  "association_authorized": false,
+  "training_authorized": false
+}
