@@ -1,0 +1,20 @@
+{
+  "task": "2.25R",
+  "evaluation_authorized": true,
+  "training_authorized": false,
+  "amendment_commit": "357a4b7b99ce0ef0bbbf5a7010fed4713f1007f9",
+  "protocol_sha256": "794f6cb4a68e8f0cae9d9fba9cc706872141ed1a12c5a5badaf616716903c2f4",
+  "original_protocol_sha256": "cb386443d768fb168366299ae7125aeec7115dda4e81da2dce62d90b4b99d250",
+  "source_member": "im_test.csv",
+  "batch_size": 16,
+  "device": "cuda",
+  "seed": 42,
+  "cpu_threads": 4,
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 24242,
+  "bootstrap_cohort_order": ["primary", "IM_novel", "EL_exposed"],
+  "bootstrap_sampling": "In each of 10000 draws, sample each cohort's fixed number of peptide clusters with replacement in the specified cohort order using one Random(24242) stream; each cohort's identical sampled rows apply to A/S/P and all its endpoints.",
+  "top_k": [10, 20],
+  "sequence_similarity_exclusions": false,
+  "observation_unit": "original released row; retain repeated peptide-HLA identities"
+}

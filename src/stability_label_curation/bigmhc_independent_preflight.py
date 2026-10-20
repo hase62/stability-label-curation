@@ -9,6 +9,7 @@ import csv
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import zipfile
 
 from . import bigmhc_baseline_runner as runner
@@ -30,10 +31,15 @@ def file_map_digest(files: dict[str, str]) -> str:
     return hashlib.sha256(json.dumps(files, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def authenticate_models(paths: StoragePaths) -> tuple[dict, dict]:
+def authenticate_models(paths: StoragePaths, *, amendment_sha256: str | None = None) -> tuple[dict, dict]:
     """Authenticate only the frozen final IM models and shared inference inputs."""
-    if runner.raw.sha256_file(paths.repository_root / PROTOCOL) != PROTOCOL_SHA256:
+    expected_protocol = amendment_sha256 or PROTOCOL_SHA256
+    if runner.raw.sha256_file(paths.repository_root / PROTOCOL) != expected_protocol:
         raise ValueError('Locked protocol identity changed')
+    if amendment_sha256:
+        original = subprocess.check_output(['git', 'show', '87ca050:' + PROTOCOL], cwd=paths.repository_root)
+        if hashlib.sha256(original).hexdigest() != PROTOCOL_SHA256:
+            raise ValueError('Original pre-amendment protocol changed')
     config = json.loads((paths.repository_root / 'configs/bigmhc_fully_trained_auxiliary_task2_24.json').read_text())
     previous = paths.project_runs_dir / 'task-2_24-fully-trained-stability-auxiliary'
     frozen_path = previous / 'reports/frozen_models.json'
@@ -47,6 +53,10 @@ def authenticate_models(paths: StoragePaths) -> tuple[dict, dict]:
             or (frozen['EL_epochs'], frozen['IM_epochs']) != (10, 20)):
         raise ValueError('Invalid pre-benchmark scientific freeze')
     for name, digest in frozen['scientific_hashes'].items():
+        if amendment_sha256 and name == PROTOCOL:
+            if digest != PROTOCOL_SHA256:
+                raise ValueError('Original protocol freeze differs')
+            continue
         if runner.raw.sha256_file(paths.repository_root / name) != digest:
             raise ValueError('Frozen scientific configuration/code changed: ' + name)
     baseline = paths.project_runs_dir / 'task-2_23-el-multiepoch-baseline'
