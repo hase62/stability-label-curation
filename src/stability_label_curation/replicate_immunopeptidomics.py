@@ -361,6 +361,8 @@ def curate(paths: StoragePaths) -> dict:
     run_inventory, processing = [], {}
     repository_files = set()
     for file in sorted((paths.project_data_dir / SOURCE / 'PXD006939').glob('files_page_*.json')):
+        if file.name.endswith('.provenance.json'):
+            continue
         repository_files.update(r['fileName'] for r in json.loads(file.read_text()))
     for block, design in designs.items():
         summary = {r['Raw file']: r for r in tsv(source_dir / block / 'summary.txt') if r['Raw file']}
