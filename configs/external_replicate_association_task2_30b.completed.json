@@ -1,0 +1,15 @@
+{
+  "Teacher_study_inference_calls": 496,
+  "model_sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99",
+  "no_training_or_tuning": true,
+  "primary_n": 496,
+  "primary_predictions_sha256": "98de2de85c7f6d6ca9fbdce89ab3d11212234ac1ad33218b4251353d717a39a2",
+  "primary_rho": 0.09125203893737674,
+  "relative_path": "reports/completion_manifest.json",
+  "run_id": "task-2_30b-external-replicate-association",
+  "schema_version": 1,
+  "sensitivity_n": 483,
+  "sensitivity_rho": 0.09117896713054392,
+  "sha256": "40e5c39dfad4c9313bfa88c1125c025a269e846ffdd2db00185107dd205c7a26",
+  "status": "COMPLETE"
+}
