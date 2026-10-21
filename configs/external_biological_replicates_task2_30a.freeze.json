@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "run_id": "task-2_30a-external-biological-replicate-curation",
+  "relative_path": "reports/dataset_freeze.json",
+  "sha256": "4eb99cbc40b5bddac56dc680703fd6ee6319eb7cc2578fed0b2a73660cb57a7d",
+  "primary_index_n": 496,
+  "primary_manifest_sha256": "37d5247b7533243d4083142b9ec3dd4645eb8bcc344293908763cfb94bac5cd2",
+  "Teacher_inference_or_association_performed": false
+}

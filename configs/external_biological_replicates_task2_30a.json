@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "approved_base_commit": "e4b224b36fa91a7d720018afd65467c4035035a6",
+  "source": "MSV000099922",
+  "publication_DOI": "10.1016/j.mcpro.2026.101578",
+  "condition": "JY DeltaBC, W6/32, retained classical HLA-A*02:01",
+  "hla": "HLA-A*02:01",
+  "ordered_runs": [
+    {"raw_file": "Seq84886_HF", "clone": "DeltaBC1", "technical": "Exp1", "role": "index", "published_count_column": "Y"},
+    {"raw_file": "Seq84886_3-4_HF", "clone": "DeltaBC1", "technical": "Exp2", "role": "index", "published_count_column": "AG"},
+    {"raw_file": "Seq84887_HF", "clone": "DeltaBC2", "technical": "Exp1", "role": "followup", "published_count_column": "AA"},
+    {"raw_file": "Seq84887_3-4_HF", "clone": "DeltaBC2", "technical": "Exp2", "role": "followup", "published_count_column": "AI"}
+  ],
+  "index_rule": "First numbered edited clone (DeltaBC1), union of both its nested technical measurements, selected from experimental metadata, never detection richness or Teacher scores",
+  "followup_outcome": "Binary direct detection in DeltaBC2 in either of its two technical measurements; retain both nested technical indicators separately",
+  "eligible_peptides": "Source-accepted, unmodified canonical uppercase 9mers with original run-specific MS/MS evidence; no predicted HLA-affinity filter",
+  "direct_types": ["MSMS", "MULTI-MSMS", "MULTI-SECPEP"],
+  "confidence_policy": "Preserve original source PSM acceptance and confidence; exclude reverse/contaminant flags; require published run membership and original MS/MS count and IDs. No new PEP cutoff or recalibration",
+  "duplicate_policy": "Keep every original evidence row and ID; one presence per peptide per original run; sum intensity once per unique unmodified direct evidence-feature ID",
+  "index_intensity": "Arithmetic mean of positive available per-run summed unmodified direct evidence-feature intensities across the two index-clone runs; zero/nonfinite/missing treated as unavailable, never as peptide absence",
+  "future_intensity_adjustment": "Secondary linear regression of binary biological followup detection on within-HLA Teacher rank and centered log2 index intensity, with a missing-intensity indicator if needed; no new covariates selected from results",
+  "future_sensitivity": "Exclude exact/one-substitution neighbors of any actual Teacher fitting peptide across HLA, minimum Hamming distance >=2; training and validation exposure reported separately",
+  "minimum_for_coefficient": "At least 2 peptides and nonconstant predictor and outcome; N<30 or minority outcome count<10 flagged sparse; never change fixed cohort or index to meet counts",
+  "independent_comparison_groups": 1,
+  "future_biological_CI": "Undefined with one dependence component; no peptide-independent bootstrap substitute",
+  "Teacher_predictions_authorized_in_this_task": false,
+  "stability_associations_authorized_in_this_task": false
+}
