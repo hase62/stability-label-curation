@@ -1,0 +1,40 @@
+{
+  "A_EL_checkpoint_map_sha256": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+  "W_P_final_checkpoints": {
+    "P": {
+      "checkpoint": "checkpoints/P_EL_epoch_10",
+      "epoch": 10,
+      "file_map_sha256": "53cb323e3e81137713a80a443cd40b8d7c574f6af31525ea3ff6f5d62d4294a9",
+      "optimizer_steps": 630530,
+      "strict_reload_equal": true
+    },
+    "W": {
+      "checkpoint": "checkpoints/W_EL_epoch_10",
+      "epoch": 10,
+      "file_map_sha256": "a6b24dad431f50f170e1945f7fe9ad366bee323890b9055830cd5e56078a6892",
+      "optimizer_steps": 630530,
+      "strict_reload_equal": true
+    }
+  },
+  "no_IM_or_Teacher_training": true,
+  "no_outcome_driven_hyperparameter_changes": true,
+  "positive_n": 7006,
+  "primary_AP": {
+    "A": 0.8800377430103999,
+    "P": 0.8820574267974685,
+    "W": 0.8787625285463306
+  },
+  "primary_AP_contrasts": {
+    "P-A": 0.002019683787068516,
+    "W-A": -0.0012752144640693075,
+    "W-P": -0.0032948982511378233
+  },
+  "relative_path": "reports/output_manifest.json",
+  "run_id": "task-2_31-el-stability-positive-upweighting",
+  "schema_version": 1,
+  "scientific_files": 171,
+  "sha256": "d95d7e4a01966ce9d1ebe87c2f71aa149313ef609e98b596e1fdfcb05453ca79",
+  "status": "COMPLETE",
+  "training_implementation_commit": "a440d4cbda81fb6ac6dbf6781086ce8dca36d6d6",
+  "validation_n": 145371
+}
