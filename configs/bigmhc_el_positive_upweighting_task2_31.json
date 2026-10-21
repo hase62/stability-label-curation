@@ -1,0 +1,125 @@
+{
+  "EL_epochs": 10,
+  "IM_training_authorized": false,
+  "baseline_receipts": {
+    "predictions/EL_epoch_10.csv": "43ec1a31b4620de9f7870ba2bb6ddb45e5b564a1ae73512e4ad343b4e198a51e",
+    "reports/EL_epoch_01.json": "f63744a6c2039453450e123addaae6502e7a38d18f73c6a4e23e6deae85f70d9",
+    "reports/EL_epoch_02.json": "3d7cb3193f4a06d2e1d56b738c215f3df342c363049b2fd2b4c25f872710ba69",
+    "reports/EL_epoch_03.json": "93a3d65d73d6d5c28bd2b98a2266c04ef2442944cde99cb13e1a6675893dcdc4",
+    "reports/EL_epoch_04.json": "bdc6457700672fe836f17cde5f53164f43832058ff33ce7f1fdf709db9f7c077",
+    "reports/EL_epoch_05.json": "a45cde7fac5d4a54c637807714d2a164bd7a248e4c841f008a9013c8192acbcd",
+    "reports/EL_epoch_06.json": "9152f311ef13c220018faac81c2112719d7e88043a5f8d3df5f9df0d06f3dffa",
+    "reports/EL_epoch_07.json": "c424eda3114942732d42d01f758167fd7680caf9445f9555c8857b4cbd3ed2df",
+    "reports/EL_epoch_08.json": "f750eb6a1494d3d5ec67604961f5d3cbac269c78ff5d3d86ed11b449218de6e3",
+    "reports/EL_epoch_09.json": "fe3d0c0cd4a069be9e1cf8f05c0a1f7516bd46666aebdb8ded15611b6710ebc4",
+    "reports/EL_epoch_10.json": "cc182e32349c0b069fd93f82d53d3086d542b5af9646a5d26c5f0c88b3b6cc41",
+    "reports/EL_epoch_selection.json": "f9262eeb6b787c6f81e72c46d7a2a795d12162ff200c3fca1425fc6b45fa86de",
+    "reports/EL_metrics_10.json": "79a046fdbcb16702732b3c5ae1006f9d4f8ad71f6d3d21efeb330045cc9e96c5",
+    "reports/EL_started.json": "c3092614e4c71c612ba52ed9d063608840b4861f3e6fb29abd41018a3f8750bc",
+    "reports/execution_started.json": "372d736e1b09d695e71f1238c3ffa381bdec21e7f243998f267ffaf76930a56d",
+    "reports/initial_EL_state.json": "70f57e465559f9f041ff0f1f3e2634a6f077038a739a71c58d93584a49db6ccb",
+    "reports/preflight.json": "af0d5e07f956bd40604fa18a70ba6e6004250e79561ff7205aaac8824f23626d"
+  },
+  "baseline_run_id": "task-2_23-el-multiepoch-baseline",
+  "batch_size": 16,
+  "bootstrap_draws": 1000,
+  "bootstrap_seed": 23142,
+  "coefficient": "0.5",
+  "cpu_threads": 4,
+  "device": "cuda",
+  "inputs": {
+    "EL": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/processed/el_train_original.csv",
+      "sha256": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf"
+    },
+    "EL_split": {
+      "area": "runs",
+      "relative_path": "task-2_23-el-multiepoch-baseline/processed/el_split_manifest_v1.csv.gz",
+      "sha256": "6b3a6a0c00f86c26e51b84a8df1dd7e81d545117baa871dabd0707edaf89ac00"
+    },
+    "experiment": {
+      "area": "runs",
+      "relative_path": "task-2_5-bigmhc-pilot-preparation/reports/pilot_experiment_manifest.json",
+      "sha256": "b54cde94e3e031e17e8a098062cc0d156abae3df12ad8fca22e3e4b83cab6736"
+    },
+    "positive_score_manifest": {
+      "area": "runs",
+      "relative_path": "task-2_13-el-stability-weight-adapter/reports/positive_score_manifest.json",
+      "sha256": "e79fb60b1c04f33889e9d3ecd6a7bd145255c156487cd4d4873a90c8ab715862"
+    },
+    "positive_scores": {
+      "area": "runs",
+      "relative_path": "task-2_13-el-stability-weight-adapter/processed/el_positive_teacher_scores.csv.gz",
+      "sha256": "ab0473b669f61792ff63a926185a5e737544209537c5de938b30e519a232e884"
+    },
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+    },
+    "source_LICENSE": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+    },
+    "source_README": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+    },
+    "source_bigmhc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+    },
+    "source_cli": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+    },
+    "source_dataset": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+    },
+    "source_encseq": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+    },
+    "source_mhcenc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+    },
+    "source_mhcuid": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+    },
+    "source_predict": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+    },
+    "source_train": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+    }
+  },
+  "label_policy": "original",
+  "learning_rate": 5e-05,
+  "model_sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99",
+  "num_workers": 0,
+  "persistent_workers": false,
+  "positive_weight_rule": "max(1,1+0.5*(training_HLA_midrank-0.5))",
+  "precision": "CUDA FP32; deterministic; no AMP/TF32",
+  "rank_diagnostics": "Validation positive training-reference ECDF midrank: lower r<=0.5 vs upper r>0.5; negatives unchanged. Report mean pooled prediction percentile, mean probability and positive BCE descriptively; no subgroup selection.",
+  "recall_at_fixed_FPR": "unavailable: no existing BigMHC EL operating-point implementation; no convention introduced",
+  "run_id": "task-2_31-el-stability-positive-upweighting",
+  "schema_version": 1,
+  "seed": 42,
+  "task": "2.31"
+}
