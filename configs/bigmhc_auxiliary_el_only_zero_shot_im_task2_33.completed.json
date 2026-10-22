@@ -1,0 +1,24 @@
+{
+  "EL_models": {
+    "A": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+    "P": "3d36692a4514154790a478a783ec665b9cf8d421d4a1268bbdd5917a4a3811c1",
+    "S": "48550b057e2ccd1fef2f0ad8a181f34de074da8400bfb8cc74ca67a8f038c089"
+  },
+  "IM_training_calibration_or_tuning": false,
+  "aligned_logit_probability_pairs": 24165,
+  "completion_verification_status": "PASS",
+  "focused_tests": 12,
+  "initial_output_directory_failure_before_study_scoring_preserved": true,
+  "new_study_inference_passes": 4,
+  "paired_component_draws": 20000,
+  "pre_inference_protocol_commit": "4ed62306af626598c7819e2c051316bb2ddce1fa",
+  "preflight_status": "PASS",
+  "relative_path": "reports/output_manifest.json",
+  "reused_A_prediction_files": 2,
+  "run_id": "task-2_33-auxiliary-el-only-zero-shot-im",
+  "scientific_files": 46,
+  "scientific_report_repository_sha256": "2c6c8bbdba2094c9bd0eca3002eb5ae40e7ed02dd764e3bf9d3b26cb7a4a4364",
+  "sha256": "4d406813c3caf5dbaf956ce6877e8460e9e704c197e54db7308ddb5efe6ca7ee",
+  "status": "COMPLETE",
+  "task": "2.33"
+}
