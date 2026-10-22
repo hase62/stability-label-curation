@@ -1,0 +1,40 @@
+{
+  "AP": {
+    "IMPROVE": {
+      "A": 0.03638362130144917,
+      "P": 0.03604068959075655,
+      "W": 0.03417089015419916
+    },
+    "neoepitope": {
+      "A": 0.2564378062905638,
+      "P": 0.21776514233858985,
+      "W": 0.22265066613706244
+    }
+  },
+  "AP_contrasts": {
+    "IMPROVE": {
+      "P-A": -0.0003429317106926205,
+      "W-A": -0.0022127311472500064,
+      "W-P": -0.0018697994365573858
+    },
+    "neoepitope": {
+      "P-A": -0.03867266395197394,
+      "W-A": -0.033787140153501344,
+      "W-P": 0.004885523798472596
+    }
+  },
+  "IM_training_or_calibration": false,
+  "cohort_sizes": {
+    "IMPROVE": 7788,
+    "neoepitope": 267
+  },
+  "completed_primary_results_preserved_across_IO_fix": true,
+  "model_type": "three unchanged complete EL epoch-10 checkpoints; no IM transfer",
+  "prediction_passes": 6,
+  "relative_path": "reports/output_manifest.json",
+  "run_id": "task-2_32-el-only-zero-shot-im",
+  "schema_version": 1,
+  "scientific_files": 46,
+  "sha256": "e040730097c92b23546533aa3bc8a60739301b6c386c3007bb75778786ccf4c1",
+  "status": "COMPLETE"
+}
