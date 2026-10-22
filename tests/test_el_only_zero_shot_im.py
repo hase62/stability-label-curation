@@ -4,6 +4,10 @@ from copy import deepcopy
 import inspect
 import math
 import random
+import gzip
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
 import numpy as np
@@ -22,6 +26,18 @@ def examples():
 
 
 class StatisticalTests(unittest.TestCase):
+    def test_cluster_evidence_file_writes_all_draws_with_same_paired_rows(self):
+        rows = examples(); rankings = {a: WeightedRanking(rows, a) for a in study.ARMS}
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary)/'draws.jsonl.gz'
+            result = study.bootstrap(rows, rankings, 'component', 262742, 12, path)
+            with gzip.open(path, 'rt') as stream:
+                draws = [json.loads(line) for line in stream]
+            self.assertEqual(result['draws_executed'], 12)
+            self.assertEqual(len(draws), 12)
+            self.assertTrue(all(sum(d['component_multiplicities']) == 2 for d in draws))
+            self.assertTrue(all(d['contrasts']['W-A']['prevalence'] == 0 for d in draws))
+
     def test_exact_tied_AP_AUROC_matches_hand_example(self):
         rows = examples()
         actual = WeightedRanking(rows, 'W').metrics(np.ones(4, dtype=np.int64), top_k=True)

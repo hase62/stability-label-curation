@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 import csv
 from datetime import datetime, timezone
+import gzip
 import hashlib
 import io
 import json
@@ -90,7 +91,13 @@ def require(paths: StoragePaths, name: str) -> tuple[Path, dict]:
     directory = paths.project_runs_dir/RUN
     receipt = json.loads((directory/f'reports/{name}.json').read_text())
     if receipt['scientific_hashes'] != software_hashes(paths):
-        raise ValueError('Scientific code/protocol changed after freeze')
+        repair_path = directory/'reports/technical_io_repair.json'
+        if not repair_path.exists():
+            raise ValueError('Scientific code/protocol changed after freeze')
+        repair = json.loads(repair_path.read_text())
+        if (receipt['scientific_hashes'] != repair['previous_scientific_hashes']
+                or software_hashes(paths) != repair['corrected_scientific_hashes']):
+            raise ValueError('Code differs from the narrowly recorded I/O repair')
     return directory, receipt
 
 
@@ -394,7 +401,7 @@ def join_predictions(rows: list[dict], predictions: list[dict]) -> None:
             raise ValueError('Prediction/source-row/HLA identity mismatch')
 
 
-def evaluate(paths: StoragePaths) -> dict:
+def evaluate(paths: StoragePaths, *, resume_after_io_failure: bool = False) -> dict:
     import numpy as np
     directory, config, proof = frozen_inputs(paths)
     _, receipt = require(paths, 'predictions_frozen')
@@ -402,9 +409,25 @@ def evaluate(paths: StoragePaths) -> dict:
         raise ValueError('All predictions must be fixed before comparisons')
     for name, item in receipt['predictions'].items():
         assert_sha(directory/f'predictions/{name}.jsonl', item['sha256'])
-    directory, start = begin(paths, 'evaluation')
+    if resume_after_io_failure:
+        repair = json.loads((directory/'reports/technical_io_repair.json').read_text())
+        for name, expected in repair['completed_outputs_preserved'].items():
+            assert_sha(directory/name, expected)
+        if (directory/'evaluation/IMPROVE_patient_component_draws.jsonl.gz').exists():
+            raise ValueError('Resampling already started; this repair cannot repeat it')
+    directory, start = begin(paths, 'evaluation_resumed' if resume_after_io_failure else 'evaluation')
     points, uncertainty = {}, {}
     for name in DATASETS:
+        if resume_after_io_failure and name == 'IMPROVE':
+            # The first attempt saved these points before its first bootstrap draw.
+            # Reuse them unchanged; never rescore or recalculate the primary points.
+            points[name] = json.loads((directory/'evaluation/IMPROVE_point_metrics.json').read_text())
+            joined = read_rows(directory/'evaluation/IMPROVE_joined.jsonl')
+            rankings = {arm: WeightedRanking(joined, arm) for arm in ARMS}
+            uncertainty[name] = {'patient_peptide': bootstrap(joined, rankings, 'patient_peptide_component', config['patient_component_seed'], config['bootstrap_draws'], directory/'evaluation/IMPROVE_patient_component_draws.jsonl.gz'),
+                                 'study_peptide': bootstrap(joined, rankings, 'study_peptide_component', config['study_component_seed'], config['bootstrap_draws'])}
+            write_json(directory/f'evaluation/{name}_paired_uncertainty.json', uncertainty[name])
+            continue
         identities = read_rows(directory/f'cohorts/{name}_identities.jsonl')
         labels = read_rows(directory/f'cohorts/{name}_outcomes.jsonl')
         if [r['source_id'] for r in identities] != [r['source_id'] for r in labels]:
@@ -470,11 +493,12 @@ def evaluate(paths: StoragePaths) -> dict:
 
 
 def main() -> None:
-    if len(sys.argv)!=2 or sys.argv[1] not in ('preflight','inference','evaluate'):
-        raise SystemExit('preflight | inference | evaluate')
+    if len(sys.argv)!=2 or sys.argv[1] not in ('preflight','inference','evaluate','resume-evaluation'):
+        raise SystemExit('preflight | inference | evaluate | resume-evaluation')
     paths = resolve_paths()
     try:
-        print(json.dumps(globals()[sys.argv[1]](paths), allow_nan=False, sort_keys=True), flush=True)
+        result = evaluate(paths, resume_after_io_failure=True) if sys.argv[1] == 'resume-evaluation' else globals()[sys.argv[1]](paths)
+        print(json.dumps(result, allow_nan=False, sort_keys=True), flush=True)
     except Exception as exc:
         directory = paths.project_runs_dir/RUN
         if directory.exists():
