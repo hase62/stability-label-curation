@@ -1,0 +1,137 @@
+{
+  "A_predictions_reused": true,
+  "auxiliary_manifest_sha256": "8ff57d7ebbead95c2ac9d18dd1d509d2092c1b6eb10140fc314517c0727df84a",
+  "auxiliary_run": "task-2_24-fully-trained-stability-auxiliary",
+  "batch_size": 16,
+  "bootstrap_cohort_streams": "Separate dataset/cluster streams, only authorized primary populations; no >=2/>=4 or IM-novel resampling. Same rules/seeds, not identical old multi-cohort draw sequences.",
+  "bootstrap_draws": 10000,
+  "cohorts": {
+    "IMPROVE": {
+      "freeze": "reports/benchmark_freeze.json",
+      "freeze_sha256": "20e45f3740beebc39fd78581afd5da7ff49c59798bfcd505cd3ddfcf2c763557",
+      "hla": 36,
+      "identities": "cohorts/hamming_ge_3_identities.jsonl",
+      "identities_sha256": "bd555e21e3ce16ea0aafe9b4dbc8f5ed88548cc366d07c8160ba222ba9fb74ed",
+      "n": 7788,
+      "outcomes": "cohorts/hamming_ge_3_outcomes.jsonl",
+      "outcomes_sha256": "64ed767d65e4e5f9895b1062f9ff160054d1d29b9b460d7bd3e8037279e31709",
+      "patient_components": 38,
+      "patients": 70,
+      "positives": 227,
+      "run_id": "task-2_26-third-party-hard-split",
+      "studies": 3,
+      "study_components": 1,
+      "unique_peptides": 6576
+    },
+    "neoepitope": {
+      "freeze": "reports/eligibility_frozen.json",
+      "freeze_sha256": "663c7dedb42432e1efaebbd151daa9fc8ed4d263430e652505fd83244e72d79a",
+      "hla": 46,
+      "identities": "cohorts/primary.jsonl",
+      "identities_sha256": "c910f6913d669b3d48c85019cff04f56c0bed72a594060a465c0e1bd47912d48",
+      "n": 267,
+      "patients": null,
+      "peptide_components": 265,
+      "positives": 57,
+      "run_id": "task-2_25-independent-neoepitope-evaluation/resumed",
+      "studies": null,
+      "unique_peptides": 265
+    }
+  },
+  "cpu_threads": 4,
+  "device": "cuda",
+  "inputs": {
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+    },
+    "source_LICENSE": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+    },
+    "source_README": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+    },
+    "source_bigmhc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+    },
+    "source_cli": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+    },
+    "source_dataset": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+    },
+    "source_encseq": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+    },
+    "source_mhcenc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+    },
+    "source_mhcuid": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+    },
+    "source_predict": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+    },
+    "source_train": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+    }
+  },
+  "lambda_aux": 0.1,
+  "models": {
+    "A": {
+      "checkpoint": "checkpoints/EL_epoch_10",
+      "file_map_sha256": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+      "receipt": "reports/A_EL_checkpoint.json",
+      "run_id": "task-2_23-el-multiepoch-baseline"
+    },
+    "P": {
+      "checkpoint": "checkpoints/P_EL_epoch_10",
+      "file_map_sha256": "3d36692a4514154790a478a783ec665b9cf8d421d4a1268bbdd5917a4a3811c1",
+      "receipt": "reports/P_EL_checkpoint.json",
+      "run_id": "task-2_24-fully-trained-stability-auxiliary"
+    },
+    "S": {
+      "checkpoint": "checkpoints/S_EL_epoch_10",
+      "file_map_sha256": "48550b057e2ccd1fef2f0ad8a181f34de074da8400bfb8cc74ca67a8f038c089",
+      "receipt": "reports/S_EL_checkpoint.json",
+      "run_id": "task-2_24-fully-trained-stability-auxiliary"
+    }
+  },
+  "patient_component_seed": 262742,
+  "peptide_cluster_seed": 24242,
+  "per_HLA_min_n": 20,
+  "per_HLA_min_negative": 5,
+  "per_HLA_min_positive": 5,
+  "previous_manifest_sha256": "e040730097c92b23546533aa3bc8a60739301b6c386c3007bb75778786ccf4c1",
+  "previous_run": "task-2_32-el-only-zero-shot-im",
+  "primary_dataset": "IMPROVE",
+  "raw_logit_saved": true,
+  "run_id": "task-2_33-auxiliary-el-only-zero-shot-im",
+  "schema_version": 1,
+  "score": "native_FP32_sigmoid_EL_logit",
+  "seed": 42,
+  "study_component_seed": 262743,
+  "task": "2.33",
+  "training_authorized": false
+}
