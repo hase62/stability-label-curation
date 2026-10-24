@@ -1,0 +1,57 @@
+{
+  "IM_supervision_tuning_calibration_or_outcome_driven_selection": false,
+  "aligned_logit_score_pairs": 80550,
+  "all_twenty_score_files_frozen": true,
+  "baseline_EL_file_map_sha256": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+  "checkpoint_probe_metadata_repair_before_IM_scoring": true,
+  "completed_D_123_preserved_without_retraining": true,
+  "decoys": 11360,
+  "fit_heads_sha256": {
+    "D_123": "cc59e2249b850a127ec0a4a2c07d7387ed65125710ad19d393fa37b2348bb4a3",
+    "D_456": "d092cb72dd8eff51efee0ae12c0150e7b524897211d5c6699e1bf921a302b58b",
+    "D_789": "3cdcbc94716ea644d8638ae0bbe79e274cc40d33fabf6f58a707f111d4f7b32c",
+    "P_123": "7985777f60d426db4f948581a1367d113dfdcb344bd1a3b6d2b38fd67463fe86",
+    "P_456": "2e54533e68e0b67db732d1ceba91cd496e17a64ca17847a2ab10f4d8b92c57b8",
+    "P_789": "1ac04f07e607a2bdc17a5bf02f269f3c69bec1b3db1a4d3007215fffc7c0b69a",
+    "T_123": "d2e34f140325cd2cacd0cf8c23bdaf69386bd2f515e1e98b9fc1d1425fddb638",
+    "T_456": "a99dd9a3a7deb55b845d106660f500e2ac37c25430ecf8ce8f70f52465eb0fbf",
+    "T_789": "ea4194c2329a0a070b40de030f645e61a609514b59773eaa900688120b3ac328"
+  },
+  "fits": 9,
+  "initial_tests": 16,
+  "measured_ligands": 710,
+  "only_trainable_scalars": 415,
+  "original_first_live_probe_and_exact_fit_elapsed_unavailable": true,
+  "paired_bootstrap_draws": 30000,
+  "passes_per_fit": 20,
+  "post_repair_tests": 17,
+  "primary_exploratory_AP_interval": {
+    "invalid_draws": 1,
+    "lower_95": -0.05994542382145207,
+    "unreliable": true,
+    "upper_95": 0.004954235358008188,
+    "usable_draws": 9999
+  },
+  "primary_mean_T_minus_P_AP": -0.009394353685352826,
+  "relative_path": "reports/output_manifest.json",
+  "run_id": "task-2_37-a02-measured-tm-direct-transfer",
+  "scientific_decision": "No demonstrated primary AP benefit; no confirmatory AP-superiority advancement",
+  "scientific_files": 287,
+  "scientific_report_repository_sha256": "7f74268e14cbabce43cc6b7e7c945fddeaafa7ef5026c4977808f3d1d0221f6b",
+  "seeds": [
+    123,
+    456,
+    789
+  ],
+  "sha256": "3cdad1d63bf47c779b1cd8ee32b3fef7025f3cc64374572ac87ddaff463c2d71",
+  "status": "COMPLETE",
+  "task": "2.37",
+  "total_updates": 34020,
+  "trainable_keys": [
+    "condenser.out.weight",
+    "condenser.out.bias"
+  ],
+  "training_rows": 12070,
+  "two_HLA_NO_GO_unchanged": true,
+  "updates_per_fit": 3780
+}
