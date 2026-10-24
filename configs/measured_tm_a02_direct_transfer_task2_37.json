@@ -1,0 +1,111 @@
+{
+  "HLA": "HLA-A*02:01",
+  "base_commit": "f8e972ef340dab4d697c66debb7c61cb3dc19183",
+  "baseline_file_map_sha256": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+  "batch_size": 64,
+  "bootstrap_draws": 10000,
+  "bootstrap_seeds": {
+    "IMPROVE_A02": 237001,
+    "IMPROVE_full": 262742,
+    "neoepitope": 24242
+  },
+  "cpu_threads": 4,
+  "decoy_weight": 1,
+  "decoys": 11360,
+  "device": "cuda",
+  "evaluation_batch_size": 16,
+  "include_neoepitope": true,
+  "inputs": {
+    "reference": {
+      "area": "data",
+      "relative_path": "bigmhc_v4/pseudoseqs.csv",
+      "sha256": "cd1fa24fb4c9fc0ee592a3d753458c4e3abed0d5cc4ca76e325aa274df8e900a"
+    },
+    "source_LICENSE": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+      "sha256": "0de14b419ace8d300daa04b9e2faa09712b0206fc3c55e00f6ac4226e6bb78ac"
+    },
+    "source_README": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/README.md",
+      "sha256": "bb97813fbe86ec211a435dec9b950783cf9338b81d6012325b142b2057c79818"
+    },
+    "source_bigmhc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/bigmhc.py",
+      "sha256": "d3db4ac31abc478c7427295826ac2788d9cafc06e8e301fd2feb53fedb85fc8f"
+    },
+    "source_cli": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/cli.py",
+      "sha256": "73be4bcfdc1d6a5e8e063e9e26e10f55206942eb265146268ac34e1d370eceac"
+    },
+    "source_dataset": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/dataset.py",
+      "sha256": "64de083639fc85700e6d459e81205553d29b6d45fea459367a2cc740ad702a22"
+    },
+    "source_encseq": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/encseq.py",
+      "sha256": "ad39102ee0b08f46bf55e94cb30e631aa3e55e6413908ab8b972d2e451aa507d"
+    },
+    "source_mhcenc": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcenc.py",
+      "sha256": "6928c214981cac3cd1235da00fc26d38f7bd87ca3d76b04c89630be2077a97b2"
+    },
+    "source_mhcuid": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/mhcuid.py",
+      "sha256": "a108eb5b4ebd4b52fa8f2bfbfd64d5fe2a396a07eeea24e0cb76f1dd8a37da11"
+    },
+    "source_predict": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/predict.py",
+      "sha256": "609172ed3c34bca585d9877ee35a37cf83a21c124aebb5c4ed1b1b5267acdcb7"
+    },
+    "source_train": {
+      "area": "data",
+      "relative_path": "bigmhc_source/199e890fa69a63646730bcecea0a520e08ca4f02/src/train.py",
+      "sha256": "ca190e855237b7b72d544b71642aba9b9a653bd16d0fbe669162e98360c84412"
+    }
+  },
+  "learned_feature_cache": false,
+  "loss_denominator": "sum_sample_weights",
+  "measured": 710,
+  "measured_weight": 16,
+  "optimizer": {
+    "amsgrad": false,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "foreach": false,
+    "fused": false,
+    "lr": 0.001,
+    "weight_decay": 0.01
+  },
+  "passes": 20,
+  "per_HLA_adequacy": {
+    "n": 20,
+    "negative": 5,
+    "positive": 5
+  },
+  "permutation_seed_offset": 2370000,
+  "primary": "IMPROVE_A02 AP seed-mean T-P",
+  "run_id": "task-2_37-a02-measured-tm-direct-transfer",
+  "score": "native_FP32_sigmoid_logit_higher_is_positive",
+  "seed": 123,
+  "seeds": [
+    123,
+    456,
+    789
+  ],
+  "task": "2.37",
+  "task2_32_manifest_sha256": "e040730097c92b23546533aa3bc8a60739301b6c386c3007bb75778786ccf4c1",
+  "task2_35_manifest_sha256": "e3f6702a2900393372dc5ba99c031bcba44130dbbc02a0c2679ce9113f742e73",
+  "training_authorized": true
+}
