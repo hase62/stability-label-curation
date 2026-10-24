@@ -1,0 +1,25 @@
+{
+  "baseline_file_map_sha256": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+  "fits": 9,
+  "passes_per_fit": 20,
+  "prepared_preflight_and_test_receipts_sha256": {
+    "focused_tests": "27f701104dc5ebd4bdbd5c9d4c446c556f8186cc00f48515028d57ea89d8477c",
+    "preflight": "08c7ce8ffc2f2066503f28768fe14f7ad49789b88fa642816847e9a3f2d94701",
+    "prepared": "ff9f22da0730f1ce7097fd223cba45df7075fb17ad81e0a2c28ca72de26468cb"
+  },
+  "relative_path": "reports/pre_training_seal.json",
+  "run_id": "task-2_37-a02-measured-tm-direct-transfer",
+  "seeds": [
+    123,
+    456,
+    789
+  ],
+  "sha256": "6fbfe9d8da80d8e41b33026c11c23baab33dab34bf50f2acc9953938cd645ee6",
+  "source_counts": {
+    "decoys": 11360,
+    "measured": 710
+  },
+  "status": "READY",
+  "trainable_scalars": 415,
+  "updates_per_fit": 3780
+}
