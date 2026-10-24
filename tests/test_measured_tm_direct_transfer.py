@@ -78,6 +78,15 @@ class TargetAndLossTests(unittest.TestCase):
 
 
 class FreezingAndIdentityTests(unittest.TestCase):
+    def test_reload_probe_aligns_gradient_metadata_without_changing_tensor_values(self):
+        original=Toy();study.freeze_output_only(original)
+        restored=Toy();restored.load_state_dict(original.state_dict(),strict=True)
+        self.assertNotEqual([p.requires_grad for p in original.parameters()],[p.requires_grad for p in restored.parameters()])
+        before=study.runner.state_hashes(restored);study.freeze_output_only(restored)
+        self.assertEqual(before,study.runner.state_hashes(restored))
+        self.assertEqual([p.requires_grad for p in original.parameters()],[p.requires_grad for p in restored.parameters()])
+        self.assertIn('freeze_output_only(restored)',inspect.getsource(study.train))
+
     def test_synthetic_output_only_gradients_parameters_and_BN_dropout_frozen(self):
         model=Toy();before=study.runner.state_hashes(model);freeze=study.freeze_output_only(model)
         self.assertEqual(freeze['trainable_scalar_count'],415)

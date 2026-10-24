@@ -75,7 +75,11 @@ def begin(paths: StoragePaths, stage: str) -> tuple[Path,float]:
 
 def require(paths: StoragePaths, name: str) -> tuple[Path,dict]:
     d=paths.project_runs_dir/RUN;value=json.loads((d/f'reports/{name}.json').read_text())
-    if value['scientific_hashes']!=science(paths):raise ValueError('Frozen code/protocol changed')
+    if value['scientific_hashes']!=science(paths):
+        repair=json.loads((d/'reports/technical_reload_repair.json').read_text())
+        if (value['scientific_hashes']!=repair['previous_scientific_hashes']
+                or science(paths)!=repair['corrected_scientific_hashes']):
+            raise ValueError('Code differs from the recorded checkpoint-metadata repair')
     return d,value
 
 
@@ -309,12 +313,16 @@ def preflight(paths: StoragePaths) -> dict:
     write_json(d/'reports/preflight.json',result);return result
 
 
-def train(paths: StoragePaths) -> dict:
+def train(paths: StoragePaths, *, resume: bool=False) -> dict:
     d,cfg,_=inputs(paths);_,check=require(paths,'preflight')
-    tests=json.loads((d/'reports/focused_tests.json').read_text())
+    tests=json.loads((d/('reports/focused_tests_reloadfix.json' if resume else 'reports/focused_tests.json')).read_text())
     if tests['status']!='PASS' or tests['scientific_hashes']!=science(paths):raise ValueError('Focused tests missing/stale')
     assert_sha(d/'inputs/training_encoded.pt',check['encoded_input_hashes']['training'])
-    d,start=begin(paths,'train');ref,files,keys=baseline(paths,cfg)
+    repair=None
+    if resume:
+        repair=json.loads((d/'reports/technical_reload_repair.json').read_text())
+        for name,expected in repair['preserved_artifacts'].items():assert_sha(d/name,expected)
+    d,start=begin(paths,'train_resumed' if resume else 'train');ref,files,keys=baseline(paths,cfg)
     import torch
     import numpy as np
     device=runtime(torch,np,cfg)
@@ -325,7 +333,16 @@ def train(paths: StoragePaths) -> dict:
         for seed in SEEDS:
             targets=json.loads((d/f'inputs/targets_{seed}.json').read_text());schedule=json.loads((d/f'inputs/orders_{seed}.json').read_text())
             for arm in ADAPTED:
-                label=f'{arm}_{seed}';random.seed(seed);np.random.seed(seed);torch.manual_seed(seed);torch.cuda.manual_seed_all(seed)
+                label=f'{arm}_{seed}'
+                if repair and label==repair['recovered_fit']:
+                    recovered=json.loads((d/f'checkpoints/{label}/identity.json').read_text())
+                    assert_sha(d/recovered['head_relative_path'],recovered['head_sha256'])
+                    if recovered['initial_state']!=ref['state'] or recovered['updates']!=3780:
+                        raise ValueError('Recovered completed fit does not match the frozen experiment')
+                    completed[label]=recovered
+                    print('preserved completed fit without retraining',label,flush=True)
+                    continue
+                random.seed(seed);np.random.seed(seed);torch.manual_seed(seed);torch.cuda.manual_seed_all(seed)
                 model=runner.load_checkpoint(torch,BigMHC,ref['directory'],keys,device=device,lineage=None);freeze_output_only(model)
                 initial=runner.state_hashes(model)
                 if initial!=ref['state']:raise ValueError('D/P/T common initialization mismatch')
@@ -359,7 +376,7 @@ def train(paths: StoragePaths) -> dict:
                 path=d/f'checkpoints/{label}/output.pt';save_tensors(torch,path,head)
                 with torch.no_grad():before,_=model(encoded['mhc'][:16],encoded['pep'][:16])
                 restored=runner.load_checkpoint(torch,BigMHC,ref['directory'],keys,device=device,lineage=None)
-                replace_output(torch,restored,torch.load(path,map_location=device,weights_only=True));restored.eval()
+                replace_output(torch,restored,torch.load(path,map_location=device,weights_only=True));freeze_output_only(restored)
                 with torch.no_grad():after,_=restored(encoded['mhc'][:16],encoded['pep'][:16])
                 if runner.state_hashes(restored)!=state or not torch.equal(before,after):raise ValueError('Adapted checkpoint reload mismatch')
                 scalar_changes={k:int(torch.count_nonzero(initial_output[k].cpu()!=head[k])) for k in OUTPUT_KEYS}
@@ -422,13 +439,14 @@ def inference(paths: StoragePaths) -> dict:
 
 
 def main() -> None:
-    if len(sys.argv)!=2 or sys.argv[1] not in ('prepare','preflight','train','inference','evaluate'):
-        raise SystemExit('prepare | preflight | train | inference | evaluate')
+    if len(sys.argv)!=2 or sys.argv[1] not in ('prepare','preflight','train','resume-train','inference','evaluate'):
+        raise SystemExit('prepare | preflight | train | resume-train | inference | evaluate')
     paths=resolve_paths()
     try:
         if sys.argv[1]=='evaluate':
             from .measured_tm_direct_transfer_evaluation import evaluate
             result=evaluate(paths)
+        elif sys.argv[1]=='resume-train':result=train(paths,resume=True)
         else:result=globals()[sys.argv[1]](paths)
         print(json.dumps(result,allow_nan=False,sort_keys=True),flush=True)
     except Exception as exc:
