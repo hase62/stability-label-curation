@@ -1,0 +1,82 @@
+{
+  "HLA_reference_file_sha256": "6cf3923071642a20bc600887701cd72714f7249e622f754ed65d4ff23b50968a",
+  "RNG": "random.Random.choices",
+  "artifact_sha256": {
+    "frozen_scores.jsonl": "0d2fe405bec9c249e4d55eba29bbeb3614c7c4048fcfda1359f36c904a13d451",
+    "fusion_scores.jsonl": "3709c485adf566d544b471d8cf4a3d2b2a401a039bd076e7dcc0aacf98a2fbe5",
+    "input_receipt.json": "944d11067fb1431a15f657dbd1e80b1bedb02ef90f3992d8c4a7f600b9799a0b",
+    "label_free_score_relationships.json": "103d72997beaab9fe480edae6c8428b26574d508a1626cce4013b8decae995f2",
+    "mix_execution.json": "d849220149e6c55a2b04bd70259e9741e0c2d073cd1499163c4207b303412f0a",
+    "mix_native.jsonl": "c7420d76bbb6263c5c999dcc9bbef18521f07b9a1f35bca72c679bc94fc8d86a",
+    "rank_scores.jsonl": "0586d97f488357ed1b2e9a2ae00f7346a2849c9a01b7a0e368dc521e9b7ae5b2",
+    "sensitivity_excluded_row_keys.json": "ed1273de35f82f3f058ea115c11e7fe224a6575e1e689e8ec0d9ee4df82a0f67",
+    "spearmint_execution.json": "2682c516662c1d1eb268b41ecbcdc96ca58f517f190f84453f5d18535fb069ed",
+    "spearmint_native.jsonl": "994e3677885da4cd96faa0042e866fd5ad5a45b681554b6a0cb0d7404cc4e3e3"
+  },
+  "bootstrap_attempts": 10000,
+  "bootstrap_seed": 24040,
+  "common_manifest_sha256": "d8e47c8178b038677ac5de503b0e536bd559794dd143a9124f70ea364ecbb126",
+  "failed_predictions": 0,
+  "focused_tests_passed": 26,
+  "fusion_weights": [
+    0.5,
+    0.5
+  ],
+  "identity_manifest_sha256": "3d34aa3e1ab42fb31b05ce447cbd8c1f8484335a10f7a964bfb0dedd1278fff1",
+  "labels_opened": false,
+  "model_artifacts": {
+    "mix": {
+      "archive_sha256": "ebd8f2b6e582909d4dc8cb2ab7da19f867b5cd3b3cf7502917ca12fecc4bc1b9",
+      "lengths": [
+        8,
+        14
+      ],
+      "license": "academic non-commercial research only; no redistribution",
+      "orientation": "higher",
+      "rank": "%Rank_{exact_designated_allele}; lower is better",
+      "revision": "0a7f9b9e20d1cf02236f4a0a90d16735be879b38",
+      "score": "Score_{exact_designated_allele}",
+      "tag": "v3.0"
+    },
+    "spearmint": {
+      "assay": "SPA",
+      "assay_index": 0,
+      "dependencies": {
+        "safetensors": "0.6.2",
+        "transformers": "4.57.1"
+      },
+      "license": "MIT",
+      "orientation": "higher",
+      "revision": "93e8e3e640e49e5a373f0dc432b122df19e4b969",
+      "score": "log1p(half_life_hours)",
+      "source_revision": "d548dee9b04dd0e3a9d7a50a593d2c030e31d2a5",
+      "stage": 3,
+      "temperature_C": 37.0,
+      "weights_bytes": 3259432552,
+      "weights_sha256": "5b842af0c8b41fdf7a0ab329fe2bc76b92de0bf559dcede1501493fdf68cff8f"
+    }
+  },
+  "ordered_keys_sha256": "8118663ebf5c23de8f36a7a7c15aa0247a0609e04ade927657528d2986f6fee9",
+  "prediction_freeze_sha256": "e67c82c78790dedd1a3914ab70c14142c2eeb9fd7fa856d0d9a1b1e5909b4675",
+  "primary": "AP(fusion_rank_50_50)-AP(mix_el_rank)",
+  "rank_reference": "original full common coverage, fixed during resampling",
+  "rows": 7788,
+  "scientific_hashes": {
+    "configs/modern_frozen_im_task240.json": "a96ecec5556d03b8b6c72a7fa83e91779ef08c063894bb49be21e4ad41595aed",
+    "configs/modern_models_task239.json": "a1abf2cc9495d3a27244f119c2b5a434872c00a328fdfaf5a0943f1b69ad3c8e",
+    "configs/task239_hla_reference_checksums.json": "b3bd579cdeeda4e2d220ebe07839adb793263f6e1cdf44ee48506dcb27d4ddb3",
+    "configs/task239_mixmhcpred.lock.txt": "988bca176c2ebf9adbb435866a7822e6bcd373f0b7af70607f5b2d243a180b28",
+    "configs/task239_spearmint.lock.txt": "7d11c4c4d0fc74c4e2f3ca53a3ff9bfc8e5c6985cdc88ba37f403385f2155729",
+    "docs/FROZEN_MODERN_EL_STABILITY_EVALUATION_TASK2_40_PROTOCOL.md": "8a8d0004d5b7d9a1bc82b7d09a4c77a5fc73fcf1c811bf91a85a23ec9d3e534f",
+    "scripts/task240_frozen_evaluation.py": "b442dd6009bf49cafcb221cb9b494c339fba87a836c00a15a694f0f6c5b26337",
+    "src/stability_label_curation/bigmhc_independent_evaluation.py": "7208b0607744aa4d3ecac11b6527b6e4dbede9288bdb8cb4826985053a3c160a",
+    "src/stability_label_curation/modern_frozen_evaluation.py": "f1687620a2dad7bf9a98098f2e5d12c3f890857013b4ee386b3207c406011773",
+    "src/stability_label_curation/modern_frozen_scoring.py": "863f34202b1991b847e8fcc7d34efb0c0ca8771095e19b87388b52862f93400e",
+    "src/stability_label_curation/modern_model_preflight.py": "a5d662914e7dce42f836ccc44e31d9f2f799963ed7647f1340cb9862e830b1c0",
+    "src/stability_label_curation/third_party_evaluation.py": "2fa3ed7f299ff1ceab746dde83a00b2e775cdc7c71a6e69a1695c93102e4b354",
+    "tests/test_modern_frozen_evaluation.py": "6c3c57e1038445f20485eca834e5c116e952cb0402379746f6b712407f58c194"
+  },
+  "score_code_commit": "a22833977d0bb6cba3d463580676126aa5b4ca41",
+  "status": "FROZEN_BEFORE_OUTCOME_ACCESS",
+  "task": "2.40"
+}
