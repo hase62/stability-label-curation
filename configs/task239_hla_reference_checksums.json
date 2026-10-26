@@ -1,0 +1,290 @@
+{
+  "HLA-A*01:01": {
+    "ipd_accession": "HLA:HLA00001",
+    "ipd_designation": "A*01:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "af7d8d5c2b428a0df898fb4088112ca840b8861adef36b25770fdee5d00952b3"
+  },
+  "HLA-A*02:01": {
+    "ipd_accession": "HLA:HLA00005",
+    "ipd_designation": "A*02:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "a77c8fd26c1e0b5d0034384309cd3600fb1e3f8775e1979363d5db3a185be675"
+  },
+  "HLA-A*02:05": {
+    "ipd_accession": "HLA:HLA00010",
+    "ipd_designation": "A*02:05:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "8abab14eeedbb2ae48604ab540a2ba813311ca7b19c12093ec581e7a834d1e59"
+  },
+  "HLA-A*03:01": {
+    "ipd_accession": "HLA:HLA00037",
+    "ipd_designation": "A*03:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "7b02f3d954c7c3f2e4745b0e62dbcfaf734b97c45b3e54edc23b1a72d30ca8ad"
+  },
+  "HLA-A*11:01": {
+    "ipd_accession": "HLA:HLA00043",
+    "ipd_designation": "A*11:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "ca7cb6a64ed350ee677984cc7b94f8f5b596c9d24204d54a28b993e49239a760"
+  },
+  "HLA-A*24:02": {
+    "ipd_accession": "HLA:HLA00050",
+    "ipd_designation": "A*24:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "c81b89f2fa937b065da829d4a7feebeb04887dd72ca3cfeef5fb41bf006dd9e8"
+  },
+  "HLA-A*26:01": {
+    "ipd_accession": "HLA:HLA00073",
+    "ipd_designation": "A*26:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "b7bfa82ea958f15e709a735351c158514b7c95a521bb54fff42725d7377586db"
+  },
+  "HLA-A*30:01": {
+    "ipd_accession": "HLA:HLA00089",
+    "ipd_designation": "A*30:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "daeb58b0611a6020bdb771697812b5d5222cf2c218ab06c3f9edfb5d91f02875"
+  },
+  "HLA-A*30:02": {
+    "ipd_accession": "HLA:HLA00090",
+    "ipd_designation": "A*30:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "f6c3625fc539859934b83791dbcd345a8ec86b79d7129247e247421b77c5df17"
+  },
+  "HLA-A*31:01": {
+    "ipd_accession": "HLA:HLA00097",
+    "ipd_designation": "A*31:01:02:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "9abd8812f513835124a60e7acd83cd385774052119042835f9517f440cc42f5e"
+  },
+  "HLA-A*32:01": {
+    "ipd_accession": "HLA:HLA00101",
+    "ipd_designation": "A*32:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "ee5027e29c94b259aa3bc21b7c31365f61da3a72607b41a437462b95ded81321"
+  },
+  "HLA-A*68:01": {
+    "ipd_accession": "HLA:HLA00115",
+    "ipd_designation": "A*68:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 365,
+    "sha256": "3b4967e5a3c5043957af9ed9ba06b502e45e234223ba825c8d6e907ad3b36f73"
+  },
+  "HLA-B*07:02": {
+    "ipd_accession": "HLA:HLA00132",
+    "ipd_designation": "B*07:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "5de81f208e7148a6c5163dc26042423d3e3fdd21b2eb3c95625b3a80f58583fb"
+  },
+  "HLA-B*08:01": {
+    "ipd_accession": "HLA:HLA00146",
+    "ipd_designation": "B*08:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "d0fe4adc69b5f35427613d38bf79e0aa757be6bb5b016d9c381be1c64ce08e04"
+  },
+  "HLA-B*13:02": {
+    "ipd_accession": "HLA:HLA00153",
+    "ipd_designation": "B*13:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "b2852e38b333a12fc79be1923eda2d3b3830d7ebbcfb0ab377e166b965d6e7ad"
+  },
+  "HLA-B*15:01": {
+    "ipd_accession": "HLA:HLA00162",
+    "ipd_designation": "B*15:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "f47d16cc814db245677ba64a9141e4d4b6dcd6bc7ba07988aa86a0efabec6dcc"
+  },
+  "HLA-B*18:01": {
+    "ipd_accession": "HLA:HLA00213",
+    "ipd_designation": "B*18:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "058246867c07e2b7933e5469347fd74007d4fcc44f154bae651f52e64455fb1d"
+  },
+  "HLA-B*27:05": {
+    "ipd_accession": "HLA:HLA00225",
+    "ipd_designation": "B*27:05:02:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "7ede4ca8c727889a7efae023b4d6d9dc0a5f966592aa4f7058368471007bc97b"
+  },
+  "HLA-B*35:01": {
+    "ipd_accession": "HLA:HLA00237",
+    "ipd_designation": "B*35:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "9dee82b0b59cb9305a826ee0c94a08c53ae3a0363e461dbb05b3b52925e85e05"
+  },
+  "HLA-B*35:03": {
+    "ipd_accession": "HLA:HLA00239",
+    "ipd_designation": "B*35:03:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "805e8cc0f0909c0fa0deef00b813c43c93802db28df83f8803850a96af2d6b9f"
+  },
+  "HLA-B*37:01": {
+    "ipd_accession": "HLA:HLA00265",
+    "ipd_designation": "B*37:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "a9212baa099a664a4f29cfada195d525a492cade64e1a51bb0c3db64f46b9686"
+  },
+  "HLA-B*38:01": {
+    "ipd_accession": "HLA:HLA00267",
+    "ipd_designation": "B*38:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "fdc2530bb44bd7d9be695abdc06d73688d723da12f9420a38ca6855af6973802"
+  },
+  "HLA-B*40:01": {
+    "ipd_accession": "HLA:HLA00291",
+    "ipd_designation": "B*40:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "a7b52c21379de8054bcac5704b0ebd2236ad6d59f429904f6393e03f78256f67"
+  },
+  "HLA-B*40:02": {
+    "ipd_accession": "HLA:HLA00293",
+    "ipd_designation": "B*40:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "6eb476cff1fdc885fc9bc29b3fcc0ae014c513d5af11f6fe524c8cdd3967035b"
+  },
+  "HLA-B*44:02": {
+    "ipd_accession": "HLA:HLA00318",
+    "ipd_designation": "B*44:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "b08a4a5fd4fcdd57f237e41b8caaa4f009df02c6d9f4873b6cfdbf7c489e32c6"
+  },
+  "HLA-B*44:03": {
+    "ipd_accession": "HLA:HLA00319",
+    "ipd_designation": "B*44:03:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "f22b32b3bdc8d0a80a878a645dc080e407de6cf1759bd6e546a34b65fd08b8f1"
+  },
+  "HLA-B*44:05": {
+    "ipd_accession": "HLA:HLA00322",
+    "ipd_designation": "B*44:05:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "33cd3d868b27132a1478caa9a8748caf3ddd15c5781124d0496091590523ae5d"
+  },
+  "HLA-B*51:01": {
+    "ipd_accession": "HLA:HLA00344",
+    "ipd_designation": "B*51:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "98e1a09e4ef8051d057d43879c9ddb75b6072daf912e88b7cf6a031db58dce3c"
+  },
+  "HLA-B*57:01": {
+    "ipd_accession": "HLA:HLA00381",
+    "ipd_designation": "B*57:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 362,
+    "sha256": "149aa42d82ac6358139502127661cbda487eeac47f8c2fcbba2dffc495dee3d6"
+  },
+  "HLA-C*02:02": {
+    "ipd_accession": "HLA:HLA00404",
+    "ipd_designation": "C*02:02:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "bfc8760fb779f39d41d248e2c26e2ab336d47e6a66dab88da15e6a12f8dae764"
+  },
+  "HLA-C*03:04": {
+    "ipd_accession": "HLA:HLA00413",
+    "ipd_designation": "C*03:04:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "d59362958b91846620b016fc8461d20c7e8808e49b9d1cf590ca8e9cbb87cc1d"
+  },
+  "HLA-C*04:01": {
+    "ipd_accession": "HLA:HLA00420",
+    "ipd_designation": "C*04:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "3ff1c65dcbc9ff61658293d3bfc1868ea06673a33d39274e8b080e1a7a009bcc"
+  },
+  "HLA-C*05:01": {
+    "ipd_accession": "HLA:HLA00427",
+    "ipd_designation": "C*05:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "2ea4d58bf5ac8c4f5b22fa29bc0733681381d29dd69e41bddbfc72d27429b5e0"
+  },
+  "HLA-C*06:02": {
+    "ipd_accession": "HLA:HLA00430",
+    "ipd_designation": "C*06:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "3f564aa5fd4f5d40e81fff401a05df1e7e61d7962507537940cef38784e80e2e"
+  },
+  "HLA-C*07:01": {
+    "ipd_accession": "HLA:HLA00433",
+    "ipd_designation": "C*07:01:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "7a01b76aef23387c9b63fea870547a25ba911c9f9af419ab1f96e03b2fb3d87d"
+  },
+  "HLA-C*07:02": {
+    "ipd_accession": "HLA:HLA00434",
+    "ipd_designation": "C*07:02:01:01",
+    "ipd_release": "3.64.0",
+    "ipd_revision": "bdc6233a79b1d0323140c25ef6e2e6d4e7187c26",
+    "length": 366,
+    "sha256": "6d5608f642bd514d853549aaae9e2264053c13b9e2b23e01e86373d1a0f79fdd"
+  }
+}

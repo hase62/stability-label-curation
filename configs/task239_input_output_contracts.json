@@ -1,0 +1,35 @@
+{
+  "mixmhcpred_v3": {
+    "input": "canonical peptide, one per line; exact designated HLA via -a; group by HLA and retain row mapping",
+    "supported_peptide_length": [8, 14],
+    "output_format": "tab-separated with # comment lines",
+    "peptide_column": "Peptide",
+    "primary_score_column": "Score_{exact_designated_allele}",
+    "rank_column": "%Rank_{exact_designated_allele}",
+    "prohibited_primary_columns": ["Score_bestAllele", "%Rank_bestAllele"],
+    "score_direction": "higher native score; lower published percentile rank",
+    "upstream_rounding_decimals": 6,
+    "row_policy": "exact row count and peptide order, preserve repeated original observations"
+  },
+  "spearmint_stage3": {
+    "tokenizer": "original SpearmintTokenizer in pinned modeling_spearmint.py",
+    "tokenizer_sha256": "82a1175dd79706988ea9ef7fa59619883c058d984890e99f9216845fedf82413",
+    "sequence_contract": "canonical peptide plus full MHC-I heavy chain including signal/TM/tail; original per-chain CLS/EOS tokens",
+    "chains": {"shape": ["batch", "padded_sequence_length"], "dtype": "int64"},
+    "chain_ids": {"shape": ["batch", "padded_sequence_length"], "dtype": "int32", "peptide_chain": 0, "MHC_chain": 1},
+    "assay_idxs": {"shape": ["batch"], "dtype": "int64", "value": 0, "assay": "SPA"},
+    "temp_floats": {"shape": ["batch"], "dtype": "float32", "value": 37.0, "units": "degrees Celsius, unstandardized upstream input"},
+    "labels_argument": "must not be supplied for inference",
+    "output": {"key": "logits", "shape": ["batch", 1], "dtype": "float32", "units": "predicted log1p(half-life hours)", "direction": "higher"},
+    "batch_size": 4,
+    "postprocessing": "none; no clipping or calibration; no claim of measured half-life or surface persistence"
+  },
+  "fixed_rank_fusion": {
+    "inputs": "native higher-is-better EL and stability scores aligned to exactly the same original observations",
+    "within_HLA_rank": "(number_less + 0.5 * number_equal) / number_of_observations_in_HLA",
+    "observation_multiplicity": "preserved",
+    "fusion": "0.5 * EL_rank + 0.5 * stability_rank",
+    "EL_only_comparator": "the same EL_rank",
+    "Task239_execution": "synthetic tests only; not executed on benchmark predictions"
+  }
+}
