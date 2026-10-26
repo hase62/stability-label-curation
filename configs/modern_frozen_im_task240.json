@@ -1,0 +1,54 @@
+{
+  "HLA_analysis": "all alleles descriptive, no new support gate; undefined if missing class",
+  "Neoepitope": "excluded from this task",
+  "P_at_K": "10/20; fractional boundary-tie inclusion from Task239",
+  "base_commit": "eb681b8504dc3ce73c1471e8cb14c411618a6bf2",
+  "bootstrap_RNG": "random.Random.choices sorted original unit keys",
+  "bootstrap_attempts": 10000,
+  "bootstrap_seed": 24040,
+  "confidence_interval": "linear percentile 2.5/97.5 over valid paired differences; no reroll",
+  "evaluation_outcomes": {
+    "freeze": "reports/benchmark_freeze.json",
+    "freeze_sha256": "20e45f3740beebc39fd78581afd5da7ff49c59798bfcd505cd3ddfcf2c763557",
+    "outcomes": "cohorts/hamming_ge_3_outcomes.jsonl",
+    "outcomes_sha256": "64ed767d65e4e5f9895b1062f9ff160054d1d29b9b460d7bd3e8037279e31709",
+    "run_id": "task-2_26-third-party-hard-split"
+  },
+  "fusion_weights": [
+    0.5,
+    0.5
+  ],
+  "no_calibration": true,
+  "no_training": true,
+  "ordered_keys_sha256": "8118663ebf5c23de8f36a7a7c15aa0247a0609e04ade927657528d2986f6fee9",
+  "parent_artifacts": {
+    "IMPROVE_label_blind_identities.jsonl": "3d34aa3e1ab42fb31b05ce447cbd8c1f8484335a10f7a964bfb0dedd1278fff1",
+    "common_coverage_row_keys.json": "d8e47c8178b038677ac5de503b0e536bd559794dd143a9124f70ea364ecbb126",
+    "environment.json": "6f626eb41567393cad3ac086e9a5d48ec017c60c8c0deb16f982a9ff1c31ce7f",
+    "exposure_flags.jsonl": "9a1a5d2f9886baa599c233ef67ea0d0a7672e9fb3379497991b28cede9df5385",
+    "hla_full_length_references.json": "6cf3923071642a20bc600887701cd72714f7249e622f754ed65d4ff23b50968a",
+    "security_review.json": "45bae442d8b982e1a1dc555838fa148b67890380ee6a4fbad0fe5694617f410e"
+  },
+  "parent_receipt_sha256": "12fa1335c9237b56546149cc598e9699269f33a343eb3058f5eab382cc1149fc",
+  "primary": "AP(fusion_rank_50_50)-AP(mix_el_rank)",
+  "primary_population": "original full IMPROVE common coverage; 7788 rows",
+  "rank_reference": "original full common-coverage observations, retain multiplicity; Task239 exact midrank",
+  "scientific_files": [
+    "src/stability_label_curation/modern_frozen_scoring.py",
+    "src/stability_label_curation/modern_frozen_evaluation.py",
+    "src/stability_label_curation/modern_model_preflight.py",
+    "src/stability_label_curation/third_party_evaluation.py",
+    "src/stability_label_curation/bigmhc_independent_evaluation.py",
+    "scripts/task240_frozen_evaluation.py",
+    "tests/test_modern_frozen_evaluation.py",
+    "configs/modern_frozen_im_task240.json",
+    "configs/modern_models_task239.json",
+    "configs/task239_mixmhcpred.lock.txt",
+    "configs/task239_spearmint.lock.txt",
+    "configs/task239_hla_reference_checksums.json",
+    "docs/FROZEN_MODERN_EL_STABILITY_EVALUATION_TASK2_40_PROTOCOL.md"
+  ],
+  "score_reproducibility_subset": "first four original observations, no outcome access",
+  "sensitivity_key_hash": "78b19d8b4d1c13830be2cb4ba8304b1d653611a72a6079abeff698b29feef375",
+  "task": "2.40"
+}
