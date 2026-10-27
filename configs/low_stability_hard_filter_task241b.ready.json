@@ -1,0 +1,29 @@
+{
+  "A_reused": true,
+  "IM_outcomes_opened": false,
+  "excluded_per_arm": 6279,
+  "initialization_and_native_GPU_prediction_probes_bitwise_equal": true,
+  "preflight_sha256": "1d1fb997208794c1ba984257d91ded461db32256926e9ab52bffc343e44ae192",
+  "protocol_commit": "a44adefd7105f8ca0200652c93f9b20ff5a512ab",
+  "retained_negative": 1245143,
+  "retained_positive": 56774,
+  "scientific_hashes": {
+    "configs/bigmhc_el_positive_upweighting_task2_31.json": "e1bf197bd06205a16f459ece02a93573e6a02ef4287c467b401c0bf9604f5e39",
+    "configs/low_stability_hard_filter_task241b.json": "f1d3be0cd5624e2f4ff9b7bc4c70303a42af62c326049d08e09cbb0a02aefdad",
+    "docs/LOW_STABILITY_HARD_FILTER_TASK2_41B_PROTOCOL.md": "1464c0bb4d5df2051e476d96177383aadae671449f2d7fdeca07120fa2ad9626",
+    "src/stability_label_curation/bigmhc_baseline_runner.py": "83dfc88a7d7ff77c6d65ba550732a36fb78c6bac9cdbe1c29501d9d1f546f410",
+    "src/stability_label_curation/bigmhc_el_multiepoch.py": "d70fd73537a7f4399eb1982f1b6cd8529d892f03de883968e47ea10d7cf9c850",
+    "src/stability_label_curation/bigmhc_el_positive_upweighting.py": "99092a49effd90468f2f6e6b337d9716f9503e48121507bd8f4d94a85866651b",
+    "src/stability_label_curation/bigmhc_fully_trained_auxiliary.py": "abe0c85ce5b2475c2e252dfcd28e5227a4ebb59020f256635db9b3f4ce1694be",
+    "src/stability_label_curation/bigmhc_multiepoch.py": "e6373292b68744bc5eede9d553bfd11a7acec1cd9bcc205904b5c7ad2a4285df",
+    "src/stability_label_curation/el_only_zero_shot_im.py": "f137ec36f9aa606a2a9dc7d1fd6a35e01b41fa7e133dced59f4e6f2c79befaf3",
+    "src/stability_label_curation/el_stability_loss_adapter.py": "7b4d0bc68ae8c4962ce2f023437dc6f72530cb81ced3e3fb7f0163600c066c9a",
+    "src/stability_label_curation/hard_filter_evaluation.py": "11a124743bf781e24689503698356ccff980e6bcfb7f2cdbfe1417539b338932",
+    "src/stability_label_curation/low_stability_hard_filter.py": "1f6877a298e34f59d025c0f6931ec2b71b8a90f67e9b726687e3d4a82fb95007",
+    "src/stability_label_curation/modern_model_preflight.py": "a5d662914e7dce42f836ccc44e31d9f2f799963ed7647f1340cb9862e830b1c0",
+    "src/stability_label_curation/paths.py": "b0d3f74f5cd35a5f6cc508d77820d306d9d940b238da709e7122ea4b26bfcebd",
+    "src/stability_label_curation/third_party_evaluation.py": "2fa3ed7f299ff1ceab746dde83a00b2e775cdc7c71a6e69a1695c93102e4b354",
+    "tests/test_low_stability_hard_filter.py": "74de6c0c61f7427f2437a91f4c0c50cd54a3bf391363f5a36339b2dfa6f17985"
+  },
+  "status": "PREFLIGHT_PASS_READY_FOR_FROZEN_SIX_FITS"
+}
