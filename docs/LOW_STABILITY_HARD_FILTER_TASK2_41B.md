@@ -2,10 +2,41 @@
 
 HはAおよびランダム除外平均を上回らず、この固定条件でlow-Stab hard filteringの追加的利点は確認できない。
 
+## 研究質問への回答
+
+1. **Q1 — 元のELモデルよりIM APは改善したか:** 改善しなかった。
+   H−A = `-0.002066903571453123`、paired 95%区間
+   `[-0.005843671420977932, 0.002592436603671932]`。
+2. **Q2 — 同数のランダム除外より有利か:** 平均では有利でなかった。
+   H−mean R = `-0.002764432789941873`、95%区間
+   `[-0.005246464248022815, 0.0001748346357326157]`。
+   Hは5対照中R2だけを上回った。両主要区間とも0を含むため、
+   安定性に固有の有益性も、確定的な有害性も示さない。
+3. **Q3 — EL validation:** Hのpooled APはAより`0.002665555444188006`低く、
+   AUROCも`0.0011404878178508104`低かった。R平均APは
+   `0.8812533560191504`で、H−R平均は`-0.0038811684529385104`。
+   一方macro HLA APはA `0.8241491229223719`からH
+   `0.8374837635092507`へ上昇しており、全指標が一様に悪化したわけではない。
+   固定0.5でのEL陽性recallはA `0.7936054810162718`、H
+   `0.7857550670853554`。陰性specificityはそれぞれ
+   `0.9914284681819825`、`0.9915946951902577`。
+4. **Q4 — 一般的な陽性削減でも生じる変化か:** ランダム除外のIM APは
+   `0.033194675120779324`–`0.03889662031315463`で、Hはこの範囲内。
+   R2はAを下回り、他4対照は上回った。R平均−Aは
+   `0.0006975292184887502`であり、単純な削減が一律に性能を下げるとは言えない。
+   Hの低下を一般的な削減だけに帰属することも、安定性に固有の害と断定することもできない。
+5. **Q5 — 論文に記載できる結論:** 固定Teacher、HLA別下位10%除外、
+   同一初期化/学習seed、10 EL epochという条件では、元データ保持および
+   HLA×長さ一致ランダム除外に対するzero-shot IM AP改善は確認されなかった。
+   これは再利用IMPROVE上の探索的な否定的結果であり、低安定性EL陽性が
+   誤ラベルであること、安定性が一般に無価値であること、別の除外率やモデルでも
+   同じ結果になることを示さない。この結果を根拠に削除を標準採用せず、追加探索は開始しない。
+
 ## 固定した設計とpreflight
 
 - Branch: `task/2.41b-low-stability-hard-filtering`。Base: `7ccf81de8ccb6bd1340c34f17b320ce4e0dbee06`。
 - Protocol/implementation commit: `a44adef`。Preflight-ready commit: `e541999`。
+- 全予測freeze・IMラベル結合前commit: `a5d20fbe0d98fd500a6a50dc4044dc4e87119e45`。
 - 実行環境: Z790 WSL2 / RTX 4090、既存bigmhc-gpu環境。新規13件と既存native EL関連14件、計27 focused tests PASS。
 - A: Task 2.23 EL epoch 10（IMモデルではない）。File-map SHA256: `d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1`。再学習なし。
 - 保存済みAのEL validationおよびIMPROVE予測を、元のsource bindingと固定先頭16行のGPU forward一致で認証して再利用。IMではlogitとFP32 sigmoidがbitwise一致。
@@ -34,6 +65,16 @@ HはAおよびランダム除外平均を上回らず、この固定条件でlow
 | R5 | 10 | 567740 | `dbcb4234bbfc5896e7cf61597a9aabbaf7e7d203ab5afd5bc78d9bb1260831f9` | 69352.95914784807 | 1963739136 | 3140898816 |
 
 学習wall time（6群全体）: 69378.50580048561 seconds。全epochのnative step loss、BCE、batch identity hash、RNG、validation値はrun下`reports/{arm}_EL_epoch_{epoch}.json`と`{arm}_EL_metrics_{epoch}.json`に保存。
+
+約19.27時間。実行途中にCodex daemonが再起動し、元の監視親processのみが
+失われた。6つの元学習processと後続処理は生存し、optimizer再開・再学習は
+一度も行っていない。`2854445`で既存PIDを観測する監視だけを復旧した。
+元親processの終了コードは取得不能であり、0だったとは記録していない。
+代わりに全6群の10 epoch完了receipt、567,740更新、36 tensor、strict reload、
+最終checkpoint file hashesを照合して完了を認証した。
+`reports/supervisor_recovery.json`と`supervisor_completed.json`に証拠を保存。
+最初のepochでは全群のRNG開始/終了状態とclass exposuresも完全一致した
+（`reports/epoch1_matched_geometry.json`）。
 
 ## IMPROVE zero-shot IM結果
 
@@ -134,6 +175,15 @@ Bootstrap: 10000 attempts、seed 262742、38 components、paired整数multiplici
 | HLA-C*07:02 | 275 | 14 | 0.05514664529240518 | 0.07329250209330251 | 0.07823028117616512 | 0.018145856800897336 | -0.004937779082862609 |
 
 単一classのAP/AUROCはundefined。小さいHLA群も記述のみで、好都合なHLAをprimaryに昇格していない。全HLA×長さの除外数、EL陽性score変化、IM score変化は`aggregate.json/exclusion_prediction_diagnostics`。
+
+両classがある30 HLA中、H−A APが正の群は16、H−R平均が正の群は12。
+一貫した有利な方向とは言えない。これらは小標本を含む記述であり、HLA別の
+有意性や最良HLAの選択を主張しない。6 HLAでは単一classのためAP/AUROCがundefined。
+学習HLA×長さと対応する診断では、EL validation陽性の平均score変化が
+負26層・正20層、IM平均score変化が負13層・正9層であった。
+削除数とscore変化の全対応は保存したが、削除数による因果的説明や
+追加の関連検定は行っていない。IM評価にあるが学習の削除層に対応しないHLAも
+評価から除外しておらず、その予測変化には共有model parameterの変化が関わり得る。
 
 ## 研究上の結論・限界
 
