@@ -1,0 +1,69 @@
+{
+  "recovery_run_id": "hla-extended-epoch-recovery-20261103",
+  "branch": "task/hla-extended-epoch-recovery-20261103",
+  "source_commit": "97637c290bd59b3e811992b370c85e3b4ccb63cb",
+  "source_run_id": "hla-extended-epoch-training-20261102",
+  "source_preflight_sha256": "ee322b2c371605c17507219736589350fabb94dd5533b55ec1bd172484bfb850",
+  "maximum_concurrency": 4,
+  "scientific_protocol": "Verbatim original config, data, native training functions and prediction functions; storage/certification/orchestration only are replaced.",
+  "failed_pairs_authorized_to_refit": [
+    [
+      "A",
+      123
+    ],
+    [
+      "A",
+      456
+    ],
+    [
+      "W",
+      42
+    ],
+    [
+      "L",
+      42
+    ]
+  ],
+  "previously_unstarted_pairs": [
+    [
+      "W",
+      123
+    ],
+    [
+      "L",
+      123
+    ],
+    [
+      "W",
+      456
+    ],
+    [
+      "L",
+      456
+    ]
+  ],
+  "failure_policy": "One attempt per fit; on unknown error stop queue and terminate only this supervisor-owned worker process groups; preserve partial evidence; never auto retry.",
+  "labels_access_policy": "Outcome files are byte-authenticated as metadata; only copied/identity-validated during final handoff after all 36 score files freeze. Never passed to fitting or scoring.",
+  "label_manifest": {
+    "path": "task-2_32-el-only-zero-shot-im/reports/output_manifest.json",
+    "sha256": "e040730097c92b23546533aa3bc8a60739301b6c386c3007bb75778786ccf4c1"
+  },
+  "label_sources": {
+    "IMPROVE": {
+      "path": "task-2_32-el-only-zero-shot-im/cohorts/IMPROVE_outcomes.jsonl",
+      "sha256": "64ed767d65e4e5f9895b1062f9ff160054d1d29b9b460d7bd3e8037279e31709"
+    },
+    "Neo": {
+      "path": "task-2_32-el-only-zero-shot-im/cohorts/neoepitope_outcomes.jsonl",
+      "sha256": "b109ac92fa243466503dfbd159ed8cce2d8036e128478f9c7509922745c263c4"
+    }
+  },
+  "implementation_files": [
+    "src/stability_label_curation/hla_epoch_recovery.py",
+    "src/stability_label_curation/hla_recovery_export.py",
+    "tests/test_hla_epoch_recovery.py",
+    "configs/hla_epoch_recovery.json",
+    "docs/HLA_EXTENDED_RECOVERY_PROTOCOL.md"
+  ],
+  "focused_test_run_id": "hla-extended-recovery-focused-tests-20261103"
+}
