@@ -1,0 +1,117 @@
+{
+  "run_id": "hla-extended-epoch-training-20261102",
+  "task": "HLA extended epoch validation",
+  "seed_selection_reason": "Prospectively retain original seed42 plus two fixed additional paired seeds123,456; no external outcomes consulted.",
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "arms": [
+    "A",
+    "W",
+    "L"
+  ],
+  "EL_epochs": 10,
+  "IM_epochs": 20,
+  "checkpoint_selection": "final fixed EL10 and IM20; no early stopping or metric selection",
+  "coefficient": "0.5",
+  "W_rule": "1+0.5*(r-0.5)",
+  "L_rule": "min(1,1+0.5*(r-0.5))",
+  "rank_rule": "r=(strictly_below+tied_count/2)/n; per HLA, 63053 training positives only",
+  "negative_weight": 1,
+  "loss": "mean(weight * BCEWithLogitsLoss(reduction=none)) over original batch rows; NOT sum of weights",
+  "optimizer": "persistent native AdamW lr5e-5 betas0.9,0.999 eps1e-8 weight_decay0.01; reset between EL and IM; no scheduler",
+  "batch_size": 16,
+  "sampler": "native one-positive plus16-negative EL; native IM all-negative skip",
+  "initialization": "authentic fresh BigMHC defaults per paired seed, reset per stage; A42 reused after hash/runtime/source verification",
+  "precision": "deterministic CUDA FP32; no AMP/TF32",
+  "maximum_concurrency": 4,
+  "jobs": [
+    [
+      "A",
+      123
+    ],
+    [
+      "W",
+      42
+    ],
+    [
+      "L",
+      42
+    ],
+    [
+      "A",
+      456
+    ],
+    [
+      "W",
+      123
+    ],
+    [
+      "L",
+      123
+    ],
+    [
+      "W",
+      456
+    ],
+    [
+      "L",
+      456
+    ]
+  ],
+  "external_IM_metrics_authorized_in_this_implementation": false,
+  "evaluation_handoff": "Saved EL-only and IM-adapted native sigmoid scores; Mac L2 computes IM AP/AUROC/paired differences and uncertainty; no new metrics here.",
+  "A_checkpoint_map_sha256": {
+    "EL": "d8e3d7d3ac5d08d7f420e00b8032fa875b8b6fec1cd9da6b36d35bca0bec04d1",
+    "IM": "b92308ab3e35d02530867053ada7e29ee18076bf653df26458f5c3728a2be3a0"
+  },
+  "cohorts": {
+    "IMPROVE": {
+      "path": "task-2_32-el-only-zero-shot-im/cohorts/IMPROVE_identities.jsonl",
+      "sha256": "33fbad5f142a93d0803b39800fa3dcb71437320c4134e92594080830b6f26986",
+      "n": 7788
+    },
+    "Neo": {
+      "path": "task-2_32-el-only-zero-shot-im/cohorts/neoepitope_identities.jsonl",
+      "sha256": "1927116dc37d0cce108f2ebe852e59562fd35a3a4938644e5f7f54faf8efe71a",
+      "n": 267
+    }
+  },
+  "audit_code": [
+    "src/stability_label_curation/bigmhc_baseline_runner.py",
+    "src/stability_label_curation/el_stability_loss_adapter.py",
+    "src/stability_label_curation/el_positive_weighting_design.py",
+    "src/stability_label_curation/el_low_stability_design.py",
+    "src/stability_label_curation/bigmhc_stability_auxiliary.py",
+    "src/stability_label_curation/bigmhc_auxiliary_experiment.py",
+    "src/stability_label_curation/bigmhc_fully_trained_auxiliary.py",
+    "src/stability_label_curation/bigmhc_el_multiepoch.py",
+    "src/stability_label_curation/bigmhc_el_positive_upweighting.py",
+    "src/stability_label_curation/measured_tm_direct_transfer.py",
+    "src/stability_label_curation/low_stability_hard_filter.py"
+  ],
+  "scientific_files": [
+    "configs/hla_extended_epoch_training.json",
+    "docs/HLA_EXTENDED_EPOCH_PROTOCOL.md",
+    "src/stability_label_curation/hla_extended_epochs.py",
+    "tests/test_hla_extended_epochs.py",
+    "configs/bigmhc_el_positive_upweighting_task2_31.json",
+    "configs/bigmhc_fully_trained_auxiliary_task2_24.json",
+    "src/stability_label_curation/bigmhc_multiepoch.py",
+    "src/stability_label_curation/el_only_zero_shot_im.py",
+    "src/stability_label_curation/paths.py",
+    "src/stability_label_curation/bigmhc_baseline_runner.py",
+    "src/stability_label_curation/el_stability_loss_adapter.py",
+    "src/stability_label_curation/el_positive_weighting_design.py",
+    "src/stability_label_curation/el_low_stability_design.py",
+    "src/stability_label_curation/bigmhc_stability_auxiliary.py",
+    "src/stability_label_curation/bigmhc_auxiliary_experiment.py",
+    "src/stability_label_curation/bigmhc_fully_trained_auxiliary.py",
+    "src/stability_label_curation/bigmhc_el_multiepoch.py",
+    "src/stability_label_curation/bigmhc_el_positive_upweighting.py",
+    "src/stability_label_curation/measured_tm_direct_transfer.py",
+    "src/stability_label_curation/low_stability_hard_filter.py"
+  ]
+}
