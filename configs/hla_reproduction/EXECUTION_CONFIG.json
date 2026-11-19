@@ -1,0 +1,232 @@
+{
+  "arm_roles": {
+    "A": "unweighted positive reference",
+    "L": "original low-stability downweighting",
+    "L_const": "constant positive weight per HLA equal to original HLA-specific L mean",
+    "L_perm": "same permutation as W_two_perm; original HLA-wise L distribution",
+    "W_two": "original within-HLA stability weighting",
+    "W_two_perm": "same HLA-wise W_two distribution with rank-to-row correspondence shuffled"
+  },
+  "arms": [
+    "A",
+    "W_two",
+    "L",
+    "W_two_perm",
+    "L_perm",
+    "L_const"
+  ],
+  "control_definition": {
+    "L": "min(1,1+0.5*(r-0.5))",
+    "W_L_shared_permutation": true,
+    "W_two": "1+0.5*(r-0.5)",
+    "constant_mean_matching": "exact HLA-specific original L mean before FP32 cast; record actual FP32 mean-rounding discrepancy",
+    "midrank": "(strictly_below + 0.5*tie_count)/n_HLA",
+    "no_shuffle_until_significant_or_changed": true,
+    "permutation_namespace": "HLA_MAIN_EL20_IM30_CONTROL_V1",
+    "permutation_seed": "SHA256(namespace|training_seed|HLA), interpreted as an integer for a local random.Random instance",
+    "permutation_unit": "positive rows within each HLA; fixed across all epochs; duplicates remain observations; report duplicate peptide-HLA cases",
+    "reference": "all 63053 original EL-training positive observations, 49 HLA groups"
+  },
+  "current_author_designated_manuscript": "v12",
+  "decision_date_JST": "2026-11-09",
+  "evaluation": {
+    "IM20": "save checkpoint and training metrics for traceability; not a competing primary endpoint",
+    "bootstrap": {
+      "CI": "unadjusted fixed-model conditional percentile interval; no future-seed or unknown patient uncertainty",
+      "draws": 10000,
+      "invalid_draw_handling": "original kernel; document counts; never alter grouping or replace draws based on outcomes",
+      "point_estimate": "arithmetic mean of paired seed-specific metric differences, not an ensemble score metric",
+      "seed": 262742,
+      "shared_across": "all 36 arm/seed/stage score vectors within each cohort",
+      "units": "original authenticated components"
+    },
+    "contrasts": [
+      "W_two-A",
+      "L-A",
+      "W_two-W_two_perm",
+      "L-L_perm",
+      "L-L_const"
+    ],
+    "descriptive_top_k": [
+      10,
+      20
+    ],
+    "largest_component_sensitivity": "predeclared secondary IMPROVE analysis, remove original largest 2475-row component (62 positives), retain original remaining 37 component IDs; do not pick mask by effect",
+    "primary": "non-interpolated AP",
+    "score": "saved positive_probability, higher is positive; no score-direction fitting",
+    "secondary": "tie-aware AUROC",
+    "stage_endpoints": [
+      "EL20",
+      "IM30"
+    ],
+    "top_k_ties": "fractional inclusion at the tied cutoff, not arbitrary row-order tie breaking"
+  },
+  "execution_order": [
+    [
+      "A",
+      42
+    ],
+    [
+      "W_two",
+      42
+    ],
+    [
+      "L",
+      42
+    ],
+    [
+      "W_two_perm",
+      42
+    ],
+    [
+      "L_perm",
+      42
+    ],
+    [
+      "L_const",
+      42
+    ],
+    [
+      "A",
+      123
+    ],
+    [
+      "W_two",
+      123
+    ],
+    [
+      "L",
+      123
+    ],
+    [
+      "W_two_perm",
+      123
+    ],
+    [
+      "L_perm",
+      123
+    ],
+    [
+      "L_const",
+      123
+    ],
+    [
+      "A",
+      456
+    ],
+    [
+      "W_two",
+      456
+    ],
+    [
+      "L",
+      456
+    ],
+    [
+      "W_two_perm",
+      456
+    ],
+    [
+      "L_perm",
+      456
+    ],
+    [
+      "L_const",
+      456
+    ]
+  ],
+  "existing_v13": "previously prepared candidate; preserve; do not assume author adoption",
+  "frozen_populations": {
+    "EL_train": {
+      "n": 1308196,
+      "positive": 63053
+    },
+    "EL_validation": {
+      "n": 145371,
+      "positive": 7006
+    },
+    "IMPROVE": {
+      "components": 38,
+      "n": 7788,
+      "positive": 227
+    },
+    "IM_train": {
+      "n": 3428,
+      "positive": 955
+    },
+    "Neo": {
+      "component_scope": "exact peptide; not authenticated independent patients",
+      "components": 265,
+      "n": 267,
+      "positive": 57
+    }
+  },
+  "handoff_policy": "aggregate results/code/figures/source tables with all private model/score/label/component mappings retained on WSL unless existing transfer permissions explicitly cover them",
+  "initialization_strategy": "ALL18_FRESH; old optimizer/native dataset order/RNG continuity not certified",
+  "not_authorized_in_this_task": [
+    "new teacher fitting or teacher replacement",
+    "different epoch/LR/data searches",
+    "new Tm fitting",
+    "modification of original repos/data/runs/checkpoints/manuscripts",
+    "Git push/public release/submission",
+    "inference of missing scientific results"
+  ],
+  "official_diagnostics": {
+    "do_not_finetune_official_models": true,
+    "evaluation_cohorts": [
+      "IMPROVE",
+      "Neo"
+    ],
+    "models": [
+      "official_EL_ensemble",
+      "official_IM_ensemble"
+    ],
+    "native_aggregation": "mean of member probabilities before evaluation; confirm pinned official code",
+    "overlap": "audit against identifiable official training data; unknown ancestry remains unknown",
+    "score_direction": "fixed from model definition",
+    "unavailable_handling": "attempt official public acquisition in a new directory, record concrete failures; lack of a local cached weight is not proof of unavailability"
+  },
+  "planned_counts": {
+    "epoch_metric_entries_if_fresh_complete_runs": 900,
+    "final_stage_checkpoints": 36,
+    "mean_AP_CIs": 20,
+    "mean_AUROC_CIs": 20,
+    "mean_contrasts": 20,
+    "primary_prediction_files": 72,
+    "seed_specific_contrasts": 60,
+    "stage_training_runs": 36,
+    "training_trajectories": 18
+  },
+  "purpose": "New primary matched experiment at EL20 -> IM30; replace main-result tables only after authentic outputs exist, regardless of outcome. Not an attempt to prove that extending training had no effect.",
+  "resume_retention": "two atomic slots/stage/newrun only",
+  "schema_version": 1,
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "single_GPU_worker": true,
+  "status": "SEALED_NOT_STARTED",
+  "training": {
+    "EL_actual_sampler": "original one-positive plus 16-negative batching; authenticate actual behavior rather than silently redefining batch size",
+    "EL_epochs": 20,
+    "EL_loss": "mean(row_weight * BCEWithLogits(reduction=none)) over original batch rows; no sum-of-weights normalization",
+    "IM_epochs": 30,
+    "IM_loss": "unweighted",
+    "IM_sampler": "original native implementation; record skipped all-negative batches",
+    "IM_updated_parameters": [
+      "condenser.att.weight",
+      "condenser.att.bias",
+      "condenser.out.weight",
+      "condenser.out.bias"
+    ],
+    "epoch_selection": "fixed final EL20 and IM30; no external-performance selection",
+    "initialization_and_order": "paired within training seed across all six arms; independent permutation RNG; retain original row/sampler order",
+    "learning_rate": 5e-05,
+    "negative_EL_weight": 1,
+    "optimizer": "AdamW; verify original configuration, optimizer-state transitions and defaults",
+    "requested_batch_size": 16,
+    "teacher": "original authenticated zero-retaining teacher, not the sensitivity-refit substitute"
+  },
+  "unknown_failure_policy": "stop, preserve receipts, no automatic retry"
+}

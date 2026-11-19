@@ -1,0 +1,47 @@
+{
+  "bigmhc_v4": {
+    "path": "bigmhc_v4/datasets.zip",
+    "version": "Mendeley v4, DOI 10.17632/dvmz6pkzvb.4",
+    "landing": "https://data.mendeley.com/datasets/dvmz6pkzvb/4",
+    "sha256": "0d152a452756cf2e0014ffced6afc25118e7c11cf1f626b26e49f50f79edffaa",
+    "license": "CC BY 4.0",
+    "access": "Download datasets.zip from v4; provide the original bytes."
+  },
+  "dtu": {
+    "path": "netmhcstabpan_2016/Stability.txt",
+    "version": "NetMHCstabpan 1.0 (2016), DOI 10.4049/jimmunol.1600582",
+    "url": "https://services.healthtech.dtu.dk/suppl/immunology/NetMHCstabpan-1.0/Stability.txt",
+    "sha256": "5f2c6e82d198705a66974b4e42a0ed1412124c4b1e8f7033c7cd43bbdac07f67",
+    "license": "Public download; separate redistribution permission unverified."
+  },
+  "improve": {
+    "path": "improve_paper/data.zip",
+    "version": "c67094276b52358b5202ad9e5597acd87888ea1d",
+    "url": "https://raw.githubusercontent.com/SRHgroup/IMPROVE_paper/c67094276b52358b5202ad9e5597acd87888ea1d/data.zip",
+    "sha256": "adf02eb5054a8aa4b6eccd3b6e0ff1200889d41ae05655fd6e55c5c347f720d9",
+    "license": "Public source; separate redistribution permission unverified."
+  },
+  "improve_crosscheck": {
+    "path": "improve_paper/neoepitope_tabels/In_house_neoepitope_for_CV.tsv",
+    "version": "c67094276b52358b5202ad9e5597acd87888ea1d",
+    "url": "https://raw.githubusercontent.com/SRHgroup/IMPROVE_paper/c67094276b52358b5202ad9e5597acd87888ea1d/neoepitope_tabels/In_house_neoepitope_for_CV.tsv",
+    "sha256": "ee837eb8ee1d6d42320ad49f33b5f2b159640dcba6e70da794b59b2e9bb64d2d",
+    "license": "Public source; separate redistribution permission unverified."
+  },
+  "bigmhc_code": {
+    "path": "hla_reproduction/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02",
+    "version": "199e890fa69a63646730bcecea0a520e08ca4f02",
+    "url_template": "https://raw.githubusercontent.com/KarchinLab/bigmhc/199e890fa69a63646730bcecea0a520e08ca4f02/{path}",
+    "manifest": "official_bigmhc_files.json",
+    "license": "https://github.com/KarchinLab/bigmhc/blob/199e890fa69a63646730bcecea0a520e08ca4f02/LICENSE",
+    "access": "Academic License applies; optional official ensemble also requires 280 tensors enumerated in the manifest."
+  },
+  "mix": {
+    "path": "hla_reproduction/mix/MixMHCpred-v3.0.tar.gz",
+    "version": "v3.0 0a7f9b9e20d1cf02236f4a0a90d16735be879b38",
+    "landing": "https://github.com/GfellerLab/MixMHCpred/releases/tag/v3.0",
+    "sha256": "ebd8f2b6e582909d4dc8cb2ab7da19f867b5cd3b3cf7502917ca12fecc4bc1b9",
+    "license": "Obtain the official audited tar archive under the upstream academic/non-commercial license; confirm intended use before running.",
+    "url": "https://codeload.github.com/GfellerLab/MixMHCpred/tar.gz/0a7f9b9e20d1cf02236f4a0a90d16735be879b38"
+  }
+}

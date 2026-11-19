@@ -1,0 +1,113 @@
+{
+  "cohorts": {
+    "IMPROVE": {
+      "identity_sha256": "33fbad5f142a93d0803b39800fa3dcb71437320c4134e92594080830b6f26986",
+      "n": 7788,
+      "outcome_field": "label",
+      "outcome_sha256": "64ed767d65e4e5f9895b1062f9ff160054d1d29b9b460d7bd3e8037279e31709",
+      "positives": 227,
+      "source_order_hash": "8118663ebf5c23de8f36a7a7c15aa0247a0609e04ade927657528d2986f6fee9"
+    },
+    "Neo": {
+      "identity_sha256": "1927116dc37d0cce108f2ebe852e59562fd35a3a4938644e5f7f54faf8efe71a",
+      "n": 267,
+      "outcome_field": "label",
+      "outcome_sha256": "b109ac92fa243466503dfbd159ed8cce2d8036e128478f9c7509922745c263c4",
+      "positives": 57,
+      "source_order_hash": "9199c11b764c5e4913068125027c382d8229efc0020af743b37ed75bf6673bf7"
+    }
+  },
+  "control_manifest_SHA256": "19e893529f5a7f5ea5310716568f36525d1d85beea5f4639457bf61cab091342",
+  "native_scientific_hashes": {
+    "configs/bigmhc_el_positive_upweighting_task2_31.json": "e1bf197bd06205a16f459ece02a93573e6a02ef4287c467b401c0bf9604f5e39",
+    "configs/bigmhc_fully_trained_auxiliary_task2_24.json": "cd4808df62e1634afa309027c04426a121e12a729f36ca00511cacad236517b2",
+    "configs/hla_extended_epoch_training.json": "2de870398ecef15773744da5b857f1b55cd5eff224f819a074e9100d2e9b4cb7",
+    "docs/HLA_EXTENDED_EPOCH_PROTOCOL.md": "5e5292da67c08e1900d3e5359544b3c53ac8c8ec1f09d5e5692afc655596235c",
+    "src/stability_label_curation/bigmhc_auxiliary_experiment.py": "808e840ada542f22769c3f7565c32fc4a11c1392569019c932e7c41e2d5ab7b5",
+    "src/stability_label_curation/bigmhc_baseline_runner.py": "83dfc88a7d7ff77c6d65ba550732a36fb78c6bac9cdbe1c29501d9d1f546f410",
+    "src/stability_label_curation/bigmhc_el_multiepoch.py": "d70fd73537a7f4399eb1982f1b6cd8529d892f03de883968e47ea10d7cf9c850",
+    "src/stability_label_curation/bigmhc_el_positive_upweighting.py": "99092a49effd90468f2f6e6b337d9716f9503e48121507bd8f4d94a85866651b",
+    "src/stability_label_curation/bigmhc_fully_trained_auxiliary.py": "abe0c85ce5b2475c2e252dfcd28e5227a4ebb59020f256635db9b3f4ce1694be",
+    "src/stability_label_curation/bigmhc_multiepoch.py": "e6373292b68744bc5eede9d553bfd11a7acec1cd9bcc205904b5c7ad2a4285df",
+    "src/stability_label_curation/bigmhc_stability_auxiliary.py": "e7073f466a58ed38a3c0f542440d33152ed6bdfed5ef2b631b0900f55ad3a837",
+    "src/stability_label_curation/el_low_stability_design.py": "e16ceda49664b7113092313832962c9156cbc521cb697e1b3910db32e0915e30",
+    "src/stability_label_curation/el_only_zero_shot_im.py": "f137ec36f9aa606a2a9dc7d1fd6a35e01b41fa7e133dced59f4e6f2c79befaf3",
+    "src/stability_label_curation/el_positive_weighting_design.py": "674d41c97182f8c68f02aacc423be552e64104499773a4c6872f6e93cf6c5024",
+    "src/stability_label_curation/el_stability_loss_adapter.py": "7b4d0bc68ae8c4962ce2f023437dc6f72530cb81ced3e3fb7f0163600c066c9a",
+    "src/stability_label_curation/hla_extended_epochs.py": "d3bcecbd4476d0ef493516e19afd80e65f7386c9a1e414ada10b6d74d99ce6c8",
+    "src/stability_label_curation/low_stability_hard_filter.py": "1f6877a298e34f59d025c0f6931ec2b71b8a90f67e9b726687e3d4a82fb95007",
+    "src/stability_label_curation/measured_tm_direct_transfer.py": "5f9ff1e4a9390d4547ce43d20bc8260f46a576950fe852ee77d59e2fa547e078",
+    "src/stability_label_curation/paths.py": "b0d3f74f5cd35a5f6cc508d77820d306d9d940b238da709e7122ea4b26bfcebd",
+    "tests/test_hla_extended_epochs.py": "71cc30d39eb3c6e108fb020793877ca21f6a973384d1008f293e1281bf8be15e"
+  },
+  "populations": {
+    "EL_train": {
+      "input_sha256": "7576a6b598669f45cbefb416e7464faeea3a9cc72700e9bf478387c334e0933a",
+      "n": 1308196,
+      "negative": 1245143,
+      "ordered_source_ID_hash": "1bd6c1a191af78534b3d4c9dfc35ebd648dd860b6aa71f70e0246251fda65f92",
+      "positive": 63053,
+      "unique_peptides": 1122528
+    },
+    "EL_validation": {
+      "input_sha256": "d4d3456022149cde265b0a44e5e2f1a03bf940f9ae490bf1118c66720394567a",
+      "n": 145371,
+      "negative": 138365,
+      "ordered_source_ID_hash": "92fac4101dc1b7dc6fe0090b58449a459159c09bf386b731f2848a389eb687bc",
+      "positive": 7006,
+      "unique_peptides": 124828
+    },
+    "IM_train": {
+      "input_sha256": "06d0abe44199dfa8cd294ed971c013106e184861bd82d951bc73441f981fbdf7",
+      "n": 3428,
+      "negative": 2473,
+      "ordered_source_ID_hash": "5e7e95bf7f5d03d61ca425a9ef198dd90b1750f2b81b72854e311a127d6392e3",
+      "positive": 955,
+      "unique_peptides": 3315
+    }
+  },
+  "teacher_original_sha256": "a28660fcad771c9c1cfccf72d5defc5e3d98ca833cf85e57eba37a4a59f0ce99",
+  "known_outputs": {
+    "trajectories": 18,
+    "epochs": 900,
+    "predictions": 72,
+    "prediction_rows": 289980,
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 262742,
+    "figures": 10
+  },
+  "teacher_split": {
+    "train": 21625,
+    "validation": 5406,
+    "trained_hlas": 67,
+    "reported_zeros": 4711,
+    "partition_sha256": "ec065f1d42b6c36149e42f7c7110cb956000bc229e9f14ea74d10107604bc1b5"
+  },
+  "base_native_commit": "c52a4b05d2e0e651b8e5c07410de38b2e3c8f610",
+  "historical_comparison_only": {
+    "EL": "5bf7fb7c25845aa171baae289a1bb8f00b185f1d5cce99c05609eabaca929fdf",
+    "EL_split": "6b3a6a0c00f86c26e51b84a8df1dd7e81d545117baa871dabd0707edaf89ac00",
+    "IM": "0c075ec2835d57885d1250a80cfef89957f0938e1ab157427e8915a435faec61",
+    "IM_provenance": "3c91358814203c85467953f2a25089c7639817ea089b56d405d3892314f9ad21",
+    "positive_scores": "ab0473b669f61792ff63a926185a5e737544209537c5de938b30e519a232e884",
+    "inputs/training_only_weights.csv.gz": "dc1ad529e07c6e7da5fdd0cb44cc277ae5a39ee304ff4ac678471d976e58a204"
+  },
+  "decoded_training_sha256": {
+    "EL_train": "09373c520a1135489fe94f20423235ef88eb954344333784ef984726de913a89",
+    "EL_validation": "551eb3f8b01ef949f41f644a8de467e05186cd6fca3638934ec98a04800913f9",
+    "IM_train": "946ed9cc53a839afbbd0377ced702a49d0888f5dcf083ef885745f318cf7b081",
+    "training_only_weights": "143216e62d7fc0a84f1f4aa97a815a3c4789777a210dabae5921d0ecae924667"
+  },
+  "audit_reference_output_sha256": {
+    "MAIN_72_METRICS.csv": "1fe96764cbaf8eeb7118771e8646386cdbb2e12be62323742a04cec4f04cdfa8",
+    "MAIN_ABSOLUTE_METRIC_MEANS.csv": "c2661d9a77d5d5a87e513dd9fd8cdaca4996899eac9f3b99190c668435a48553",
+    "MAIN_60_SEED_CONTRASTS.csv": "a6d1c02d50e3da64342c5452645da80f91ff6c0abdf785acb664ec37db01dbf5",
+    "MAIN_20_MEAN_CONTRASTS.csv": "1ee4f434570dddcbd22ae2c11df606ef3051e43117f62985bc9e1ff411864a27",
+    "MAIN_CONDITIONAL_CI.csv": "b6675147ae6878a33403885a44347684171f19f7667ddc5609341ab4ee4c7ecc",
+    "LARGEST_COMPONENT_EXCLUDED_MEAN_CONTRASTS.csv": "9c24628175d13236dba21026a133cea444cb4bc7262105a3ef47e5568a4abe71",
+    "LARGEST_COMPONENT_EXCLUDED_CI.csv": "39c4db9801eee5b5f3d42687597ec06b3d6b61f2371a5631c2eb3ca2bb090c6a",
+    "OFFICIAL_ENSEMBLE_METRICS.csv": "0df2ab92e0efe4c5a51e0c7d43627149ce65bd0313f269a02f5a8c19e42b7d87",
+    "OFFICIAL_PUBLIC_DATA_EXPOSURE.csv": "dbc92242f2066354e6ca73edd07f4aad46c8f2e196d9da624bc7ffe8953abc89"
+  },
+  "manuscript_closeout_sha256": "d473be1896f2df68cb85901e880fd1128d063a760b88ef1d10d320a18883fd40"
+}

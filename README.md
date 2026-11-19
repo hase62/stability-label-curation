@@ -321,3 +321,9 @@ installation, transfer and GPU validation are separate execution steps.
 Task 2.11 examines [low-stability EL positives and repeat-detection evidence](docs/EL_POSITIVE_STABILITY_HYPOTHESIS.md).
 `PYTHONPATH=src python3 -m stability_label_curation el-positive-analysis --json` is read-only.
 It uses original EL positives first, preserves labels, and selects no curation rule.
+
+## HLA manuscript reproducibility
+
+The fixed EL20→IM30 raw-input workflow, source manifest, execution environments,
+and figure/table lineage are described in [HLA EL20→IM30 reproducibility](docs/HLA_EL20_IM30_REPRODUCTION.md).
+Use `python3 scripts/hla_reproduction/run.py plan` to review the stage contracts.

@@ -1,0 +1,13 @@
+draft_number,pdf,source_csv,additional_source_csv,analysis_scope
+1,Figures/ABSOLUTE_AP.pdf,Figures/ABSOLUTE_AP_SOURCE.csv,,EL20 to IM30 primary experiment
+2,Figures/ALL_FIVE_PAIRED_CONTRASTS_AP.pdf,Figures/ALL_FIVE_PAIRED_CONTRASTS_AP_SOURCE.csv,,EL20 to IM30 primary experiment
+S1,Figures/ABSOLUTE_AUROC.pdf,Figures/ABSOLUTE_AUROC_SOURCE.csv,,EL20 to IM30 primary experiment
+S2,Figures/ALL_FIVE_PAIRED_CONTRASTS_AUROC.pdf,Figures/ALL_FIVE_PAIRED_CONTRASTS_AUROC_SOURCE.csv,,EL20 to IM30 primary experiment
+S3,Figures/ABSOLUTE_PPV10.pdf,Figures/ABSOLUTE_PPV10_SOURCE.csv,,EL20 to IM30 primary experiment
+S4,Figures/ABSOLUTE_PPV20.pdf,Figures/ABSOLUTE_PPV20_SOURCE.csv,,EL20 to IM30 primary experiment
+S5,Figures/CURVE_EL_train_update_BCE.pdf,Figures/CURVE_EL_train_update_BCE_SOURCE.csv,,EL20 to IM30 primary experiment
+S6,Figures/CURVE_EL_validation_AP.pdf,Figures/CURVE_EL_validation_AP_SOURCE.csv,,EL20 to IM30 primary experiment
+S7,Figures/CURVE_EL_validation_BCE.pdf,Figures/CURVE_EL_validation_BCE_SOURCE.csv,,EL20 to IM30 primary experiment
+S8,Figures/CURVE_IM_train_update_BCE.pdf,Figures/CURVE_IM_train_update_BCE_SOURCE.csv,,EL20 to IM30 primary experiment
+S9,Figures/Figure_S9_Measured_Tm_Transfer.pdf,Historical_Source_Data/S_Thermal_Transfer_9.csv,,Historical exploratory analysis
+S10,Figures/Figure_S10_Hard_Filtering.pdf,Historical_Source_Data/S_LowStability_Removal_7_Arms.csv,Historical_Source_Data/Historical_Deletion_Contrasts.csv,Historical exploratory analysis

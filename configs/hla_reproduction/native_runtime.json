@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "device": "cuda",
+  "cpu_threads": 4,
+  "num_workers": 0,
+  "persistent_workers": false,
+  "batch_size": 16,
+  "learning_rate": 5e-05,
+  "EL_epochs": 20,
+  "IM_epochs": 30,
+  "IM_training_authorized": true,
+  "label_policy": "original"
+}

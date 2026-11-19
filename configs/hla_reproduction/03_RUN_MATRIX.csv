@@ -1,0 +1,19 @@
+arm,training_seed,EL_epochs,IM_epochs,role,status
+A,42,20,30,unweighted positive reference,PLANNED_NOT_STARTED
+W_two,42,20,30,original within-HLA stability weighting,PLANNED_NOT_STARTED
+L,42,20,30,original low-stability downweighting,PLANNED_NOT_STARTED
+W_two_perm,42,20,30,same HLA-wise W_two distribution with rank-to-row correspondence shuffled,PLANNED_NOT_STARTED
+L_perm,42,20,30,same permutation as W_two_perm; original HLA-wise L distribution,PLANNED_NOT_STARTED
+L_const,42,20,30,constant positive weight per HLA equal to original HLA-specific L mean,PLANNED_NOT_STARTED
+A,123,20,30,unweighted positive reference,PLANNED_NOT_STARTED
+W_two,123,20,30,original within-HLA stability weighting,PLANNED_NOT_STARTED
+L,123,20,30,original low-stability downweighting,PLANNED_NOT_STARTED
+W_two_perm,123,20,30,same HLA-wise W_two distribution with rank-to-row correspondence shuffled,PLANNED_NOT_STARTED
+L_perm,123,20,30,same permutation as W_two_perm; original HLA-wise L distribution,PLANNED_NOT_STARTED
+L_const,123,20,30,constant positive weight per HLA equal to original HLA-specific L mean,PLANNED_NOT_STARTED
+A,456,20,30,unweighted positive reference,PLANNED_NOT_STARTED
+W_two,456,20,30,original within-HLA stability weighting,PLANNED_NOT_STARTED
+L,456,20,30,original low-stability downweighting,PLANNED_NOT_STARTED
+W_two_perm,456,20,30,same HLA-wise W_two distribution with rank-to-row correspondence shuffled,PLANNED_NOT_STARTED
+L_perm,456,20,30,same permutation as W_two_perm; original HLA-wise L distribution,PLANNED_NOT_STARTED
+L_const,456,20,30,constant positive weight per HLA equal to original HLA-specific L mean,PLANNED_NOT_STARTED
