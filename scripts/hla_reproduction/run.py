@@ -44,8 +44,10 @@ GRAPH = {
               ["receipts/{arm}_{seed}_predictions_frozen.json", "private/predictions/*.jsonl"]),
     "official": (["preflight/PRETRAINING_PROTOCOL_SEAL.json", "preflight/official_acquisition.json"],
                  ["receipts/OFFICIAL_PREDICTIONS_FROZEN.json", "private/official_predictions/*.jsonl"]),
-    "mix": (["preflight/PRETRAINING_PROTOCOL_SEAL.json", "preflight/raw_inputs.json#mix"],
-             ["metrics/MIX_SAVED_REFERENCE_DIAGNOSTIC.csv", "private/mix/"]),
+    "mix-score": (["preflight/PRETRAINING_PROTOCOL_SEAL.json", "preflight/raw_inputs.json#mix"],
+                   ["private/mix/mix_native.jsonl", "private/mix/frozen.json"]),
+    "mix-evaluate": (["private/mix/frozen.json", "preflight/PRETRAINING_PROTOCOL_SEAL.json"],
+                     ["metrics/MIX_SAVED_REFERENCE_DIAGNOSTIC.csv"]),
     "official-exposure": (["preflight/PRETRAINING_PROTOCOL_SEAL.json", "preflight/raw_inputs.json#bigmhc_v4"],
                           ["metrics/OFFICIAL_PUBLIC_DATA_EXPOSURE.csv"]),
     "supplement": (["receipts/{arm}_{seed}_predictions_frozen.json", "preflight/cohorts_generated.json"],
@@ -296,9 +298,8 @@ def dispatch(args, run: Path, storage) -> None:
     elif args.phase == "official":
         stage = read(run / "preflight/official_acquisition.json")
         worker(run, "official_diagnostic.py", official_dir=stage["root"])
-    elif args.phase == "mix":
-        worker(run, "mix_diagnostic.py", "score")
-        worker(run, "mix_diagnostic.py", "evaluate")
+    elif args.phase in ("mix-score", "mix-evaluate"):
+        worker(run, "mix_diagnostic.py", "score" if args.phase == "mix-score" else "evaluate")
     elif args.phase == "official-exposure":
         worker(run, "official_exposure.py")
     elif args.phase == "supplement":
@@ -349,8 +350,9 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--run is required")
     run = args.run.expanduser().resolve()
     need(run.parent == storage.project_runs_dir, f"Use a new direct child of {storage.project_runs_dir}")
-    roles = {"teacher": "cpu", "teacher-sensitivity": "cpu", "cohorts": "cpu", "seal": "gpu", "train": "gpu", "infer": "gpu", "official": "gpu",
-             "mix": "mix", "evaluate": "cpu", "qa": "cpu", "figures": "render"}
+    roles = {"teacher": "teacher", "teacher-sensitivity": "cpu", "cohorts": "cpu",
+             "seal": "gpu", "train": "gpu", "infer": "gpu", "official": "gpu",
+             "mix-score": "mix", "mix-evaluate": "cpu", "evaluate": "cpu", "qa": "cpu", "figures": "render"}
     if args.phase in roles:
         verify_environment(roles[args.phase])
     if args.phase == "init":
