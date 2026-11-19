@@ -99,6 +99,18 @@ def validate_seal(*, training=False):
             raise ValueError("External native input changed")
     return seal
 
+def cohort_identities(name):
+    path = D / f"cohorts/{name}_identities.jsonl"
+    spec = context()["cohorts"][name]
+    if sha(path) != spec["identity_sha256"]:
+        raise ValueError(f"Frozen cohort identity changed: {name}")
+    result = records(path)
+    keys = [row["source_id"] for row in result]
+    if len(keys) != spec["n"] or len(set(keys)) != len(keys) or digest(keys) != spec["source_order_hash"]:
+        raise ValueError(f"Cohort source identities are missing, repeated or reordered: {name}")
+    return result
+
+
 def commands():
     with (D / "logs/commands.jsonl").open("a", encoding="utf-8") as stream:
         stream.write(json.dumps({"UTC": utc(), "argv": [sys.executable, *sys.argv]}) + "\n")

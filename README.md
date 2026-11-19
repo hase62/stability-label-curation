@@ -326,4 +326,11 @@ It uses original EL positives first, preserves labels, and selects no curation r
 
 The fixed EL20→IM30 raw-input workflow, source manifest, execution environments,
 and figure/table lineage are described in [HLA EL20→IM30 reproducibility](docs/HLA_EL20_IM30_REPRODUCTION.md).
-Use `python3 scripts/hla_reproduction/run.py plan` to review the stage contracts.
+Use the full commit SHA from the manuscript's code-availability statement or
+delivery report to check out the fixed version (`git switch --detach <full-SHA>`).
+Verify it with `git rev-parse HEAD`. Then follow the
+[environment and execution instructions](docs/HLA_EL20_IM30_REPRODUCTION.md),
+[versioned source manifest](configs/hla_reproduction/sources.json), and
+[output map](configs/hla_reproduction/output_lineage.csv).
+`python3 scripts/hla_reproduction/run.py plan` prints the stage contracts,
+including the independent S9 and S10 branches.

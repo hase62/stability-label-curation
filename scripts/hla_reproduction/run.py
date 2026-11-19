@@ -8,6 +8,7 @@ import hashlib
 from importlib import metadata
 import json
 import os
+import platform
 from pathlib import Path
 import shutil
 import subprocess
@@ -57,7 +58,20 @@ GRAPH = {
     "qa": (["metrics/MAIN_72_METRICS.csv", "metrics/epochs/*.json"],
            ["reports/FINAL_QA.json", "metrics/ALL900_EPOCH_METRICS.csv"]),
     "figures": (["reports/FINAL_QA.json", "metrics/ALL900_EPOCH_METRICS.csv"],
-                ["figures/FIGURE_TABLE_SOURCE_MAP.csv", "figures/*_SOURCE.csv", "figures/manuscript/*.pdf"]),
+                ["figures/FIGURE_TABLE_SOURCE_MAP.csv", "figures/*_SOURCE.csv", "figures/manuscript/*.pdf", "figures/Graphical_TOC_Source.csv"]),
+    "historical-el10": (["preflight/PRETRAINING_PROTOCOL_SEAL.json"], ["receipts/historical/A_EL10.json"]),
+    "s9-prepare": (["preflight/PRETRAINING_PROTOCOL_SEAL.json", "preflight/raw_inputs.json#jappe_a02,jappe_b07"],
+                   ["receipts/historical/s9_inputs.json"]),
+    "s9-fit": (["receipts/historical/A_EL10.json", "receipts/historical/s9_inputs.json"], ["receipts/historical/s9_fits.json"]),
+    "s9-infer": (["receipts/historical/A_EL10.json", "receipts/historical/s9_fits.json"], ["receipts/historical/s9_predictions.json"]),
+    "s9-evaluate": (["receipts/historical/s9_predictions.json"], ["metrics/S_Thermal_Transfer_9.csv", "receipts/historical/s9_evaluation.json"]),
+    "s9-figure": (["receipts/historical/s9_evaluation.json"], ["figures/Figure_S9_Measured_Tm_Transfer.pdf"]),
+    "s10-prepare": (["preflight/PRETRAINING_PROTOCOL_SEAL.json"], ["receipts/historical/s10_selection.json"]),
+    "s10-fit": (["receipts/historical/A_EL10.json", "receipts/historical/s10_selection.json"], ["receipts/historical/{H,R1,R2,R3,R4,R5}_EL10.json"]),
+    "s10-infer": (["receipts/historical/{A,H,R1,R2,R3,R4,R5}_EL10.json"], ["receipts/historical/s10_predictions.json"]),
+    "s10-evaluate": (["receipts/historical/s10_predictions.json"], ["metrics/S_LowStability_Removal_7_Arms.csv",
+                    "metrics/Historical_Deletion_Contrasts.csv", "receipts/historical/s10_evaluation.json"]),
+    "s10-figure": (["receipts/historical/s10_evaluation.json"], ["figures/Figure_S10_Hard_Filtering.pdf"]),
 }
 
 
@@ -189,6 +203,12 @@ def init(run: Path) -> None:
     expected = read(CONFIG / "expected.json")["native_scientific_hashes"]
     for relative, digest in expected.items():
         need(sha(ROOT / relative) == digest, f"Authenticated native source differs: {relative}")
+    history_native = ("measured_tm_preflight.py", "measured_tm_direct_transfer.py",
+                      "measured_tm_direct_transfer_evaluation.py", "jappe_2020_sources.py",
+                      "third_party_evaluation.py", "sequence_hamming.py", "stability_teacher.py")
+    for filename in history_native:
+        relative = "src/stability_label_curation/" + filename
+        expected.setdefault(relative, sha(ROOT / relative))
     run.mkdir(mode=0o700, exist_ok=False, parents=True)
     for directory in LAYOUT:
         (run / directory).mkdir(mode=0o700)
@@ -205,6 +225,7 @@ def init(run: Path) -> None:
 def check_checkout(run: Path) -> None:
     receipt = read(run / "preflight/checkout.json")
     need(git("rev-parse", "HEAD") == receipt["git_commit"], "Checkout commit differs from run initialization")
+    need(not git("status", "--porcelain", "--untracked-files=normal"), "Working tree changed after initialization")
     need(sources_identity() == receipt["recipe_hashes"], "Recipe differs from initialized source")
     for relative, expected in receipt["copied_hashes"].items():
         need(sha(run / relative) == expected, f"Run recipe file changed: {relative}")
@@ -247,13 +268,15 @@ def make_seal(run: Path) -> None:
         "teacher_original_sha256": read(run / "config/expected.json")["teacher_original_sha256"],
     })
     worker(run, "preflight_model_gate.py")
-    preflight_names = ("authenticated_context.json", "initializations.json", "model_storage_and_integration_gate.json")
+    preflight_names = ("authenticated_context.json", "initializations.json", "model_storage_and_integration_gate.json",
+                       "training_inputs_generated.json")
     write(run / "preflight/PRETRAINING_PROTOCOL_SEAL.json", {
         "status": "PASS",
         "native_hashes": read(run / "preflight/checkout.json")["scientific_native_hashes"],
         "source_hashes": read(run / "preflight/checkout.json")["copied_hashes"],
         "input_hashes": {str(p.relative_to(run)): sha(p) for p in (
             *(run / f"inputs/{n}.csv.gz" for n in ("EL_train", "EL_validation", "IM_train")),
+            run / "inputs/all_el_positive_peptides.txt.gz",
             *(run / "controls_private").glob("positive_control_weights_seed*.csv.gz"),
             *(run / "preflight" / n for n in preflight_names)) if p.is_file()},
         "evaluation_hashes": {str(p.relative_to(run)): sha(p) for p in (run / "cohorts").glob("*.jsonl")},
@@ -284,6 +307,19 @@ def jobs(run: Path, phase: str) -> None:
             worker(run, script, "--arm", arm, "--seed", str(seed))
 
 
+def historical_jobs(run: Path, arms: tuple[str, ...]) -> None:
+    receipts = run / "receipts/historical"
+    if arms != ("A",):
+        need((receipts / "A_EL10.json").is_file(), "Generate the fresh Task 2.23 ancestor with historical-el10")
+        need((receipts / "s10_selection.json").is_file(), "Generate fixed hard-filter selections with s10-prepare")
+    for arm in arms:
+        if (receipts / f"{arm}_EL10.json").is_file():
+            continue
+        need(not (receipts / f"{arm}_EL10_STARTED.json").exists(),
+             f"{arm} historical fit previously started; preserve the attempt and inspect the checks")
+        worker(run, "historical_el.py", "fit", "--arm", arm)
+
+
 def dispatch(args, run: Path, storage) -> None:
     if args.phase == "verify-assets":
         verified_assets(args, storage, run)
@@ -311,10 +347,24 @@ def dispatch(args, run: Path, storage) -> None:
     elif args.phase == "figures":
         worker(run, "render_main.py")
         worker(run, "plot_manuscript.py", str(run / "figures"), str(run / "figures/manuscript"))
+        worker(run, "toc_source.py")
+    elif args.phase == "historical-el10":
+        historical_jobs(run, ("A",))
+    elif args.phase == "s10-fit":
+        historical_jobs(run, ("H", "R1", "R2", "R3", "R4", "R5"))
+    elif args.phase in ("s9-figure", "s10-figure"):
+        worker(run, "historical_figures.py", args.phase.split("-")[0].upper())
+    elif args.phase.startswith(("s9-", "s10-")):
+        family, step = args.phase.split("-")
+        worker(run, "historical_tm.py" if family == "s9" else "historical_el.py", step)
 
 
 def verify_environment(role: str) -> None:
     need(sys.version_info[:3] == (3, 13, 5), "Use the pinned Python 3.13.5 interpreter")
+    if role == "teacher" and platform.system() == "Linux" and platform.machine() == "x86_64":
+        # The WSL2 refit authenticated every downstream rank and weight in the
+        # 2026-11-08 numerical audit. Use that locked CPU environment on Linux.
+        role = "cpu"
     for line in (CONFIG / f"requirements-{role}.txt").read_text().splitlines():
         if not line.strip() or line.startswith("#"):
             continue
@@ -352,7 +402,9 @@ def main(argv: list[str] | None = None) -> int:
     need(run.parent == storage.project_runs_dir, f"Use a new direct child of {storage.project_runs_dir}")
     roles = {"teacher": "teacher", "teacher-sensitivity": "cpu", "cohorts": "cpu",
              "seal": "gpu", "train": "gpu", "infer": "gpu", "official": "gpu",
-             "mix-score": "mix", "mix-evaluate": "cpu", "evaluate": "cpu", "qa": "cpu", "figures": "render"}
+             "mix-score": "mix", "mix-evaluate": "cpu", "evaluate": "cpu", "qa": "cpu", "figures": "render",
+             "historical-el10": "gpu", "s9-fit": "gpu", "s9-infer": "gpu", "s9-evaluate": "cpu", "s9-figure": "render",
+             "s10-fit": "gpu", "s10-infer": "gpu", "s10-evaluate": "cpu", "s10-figure": "render"}
     if args.phase in roles:
         verify_environment(roles[args.phase])
     if args.phase == "init":

@@ -1,0 +1,57 @@
+{
+  "el10": {
+    "seed": 42,
+    "epochs": 10,
+    "batch_size": 16,
+    "learning_rate": 5e-05,
+    "cpu_threads": 4,
+    "device": "cuda"
+  },
+  "hard_filter": {
+    "selection_seeds": [
+      20264101,
+      20264102,
+      20264103,
+      20264104,
+      20264105
+    ],
+    "removed_positives": 6279,
+    "bootstrap_seed": 262742,
+    "draws": 10000
+  },
+  "tm": {
+    "treatment_hla": "HLA-A*02:01",
+    "seeds": [
+      123,
+      456,
+      789
+    ],
+    "passes": 20,
+    "batch_size": 64,
+    "inference_batch_size": 16,
+    "optimizer": {
+      "lr": 0.001,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.01,
+      "amsgrad": false,
+      "foreach": false,
+      "fused": false
+    },
+    "measured_uncurated": 711,
+    "measured": 710,
+    "decoys": 11360,
+    "measured_weight": 16,
+    "decoy_weight": 1,
+    "draws": 10000,
+    "bootstrap_seeds": {
+      "IMPROVE_A02": 237001,
+      "IMPROVE_full": 262742,
+      "neoepitope": 24242
+    },
+    "decoy_ordered_pair_sha256": "0f7fe52a5842eb963eb22e54a254d295e0063673e19a3dc3f1e4dd49e568fdba"
+  }
+}

@@ -9,7 +9,7 @@ def infer(arm,seed):
   for stage,epoch in [('EL',20),('IM',30)]:
    cp=read(D/'receipts'/f'{arm}_{seed}_{stage}_{epoch:02d}_checkpoint.json');path=Path(cp['checkpoint']);assert runner.checkpoint_identity(path,cp['keys'])==cp['files'];model=runner.load_checkpoint(torch,BigMHC,path,cp['keys'],device=device);assert runner.state_hashes(model)==cp['state'];model.eval()
    for cohort in ['IMPROVE','Neo']:
-    rr=records(D/'cohorts'/f'{cohort}_identities.jsonl');data=scoring.native_dataset(Dataset,torch,enc,rr);data.makebats(16,shuffle=False,negfrac=None);output=[]
+    rr=cohort_identities(cohort);data=scoring.native_dataset(Dataset,torch,enc,rr);data.makebats(16,shuffle=False,negfrac=None);output=[]
     with torch.no_grad():
      for idx in range(len(data)):
       b=data[idx];ids=data.getbat(idx,enc=False)['_source_id'].tolist();logits,_=model(b.mhc.float().to(device),b.pep.float().to(device));probs=torch.sigmoid(logits)

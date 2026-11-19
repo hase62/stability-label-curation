@@ -6,7 +6,7 @@ def main():
  validate_seal(training=True);acq=read(D/'preflight/official_acquisition.json');assert acq['status']=='PASS';root=Path(W['official_download_dir']);files={r['path']:r for r in acq['files']};cfg=context()['native_training_config'];runner.seed_runtime(torch,np,cfg);device=runner.runtime_device(torch,cfg)
  for name,r in files.items():assert sha(root/name)==r['sha256']
  local={name:root/('src/'+name.removeprefix('source_')+'.py') for name in ['source_mhcuid','source_encseq','source_dataset','source_bigmhc']};local.update(reference=root/'data/pseudoseqs.csv')
- cohorts={n:records(D/'cohorts'/f'{n}_identities.jsonl') for n in ['IMPROVE','Neo']};needed={r['hla'] for rr in cohorts.values() for r in rr};enc=scoring.encoding_map(torch,local['reference'],needed);mapping=[]
+ cohorts={n:cohort_identities(n) for n in ['IMPROVE','Neo']};needed={r['hla'] for rr in cohorts.values() for r in rr};enc=scoring.encoding_map(torch,local['reference'],needed);mapping=[]
  oldenc=reuse.encodings_for(torch,resolved()['reference'])
  for h in sorted(needed):mapping.append({'canonical_HLA':h,'encoding_length':len(enc[h]),'official_encoding_SHA256':hashlib.sha256(enc[h].numpy().tobytes()).hexdigest(),'historical_encoding_SHA256':hashlib.sha256(oldenc[h].numpy().tobytes()).hexdigest(),'encoding_equal':bool(torch.equal(enc[h],oldenc[h])),'mapping':'EXACT_KEY; fuzzy mapping disabled'})
  csvout(D/'metrics/OFFICIAL_HLA_MAPPING.csv',mapping);outdir=D/'private/official_predictions';outdir.mkdir(exist_ok=True);member={n:{s:[] for s in ['EL','IM']} for n in cohorts};receipts=[]

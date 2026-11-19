@@ -11,7 +11,7 @@ import subprocess
 import sys
 import tarfile
 
-from common import D, csvout, native, put, records, sha, validate_seal
+from common import D, cohort_identities, csvout, native, put, records, sha, validate_seal
 from prepare import raw_path
 
 
@@ -46,7 +46,7 @@ def score_model():
         tar.extractall(root, members=members, filter="data")
     launcher = root / "MixMHCpred-0a7f9b9e20d1cf02236f4a0a90d16735be879b38/MixMHCpred"
     env = {**os.environ, "PATH": str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"]}
-    identities = records(D / "cohorts/IMPROVE_identities.jsonl")
+    identities = cohort_identities("IMPROVE")
     per_key = {}
     for allele in sorted({r["hla"] for r in identities}):
         slug = mix_allele(allele)

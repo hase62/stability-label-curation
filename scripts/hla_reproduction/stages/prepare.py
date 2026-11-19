@@ -195,6 +195,13 @@ def write_el(archive, members, context, reference, dev_index, excluded, opened, 
     train, validation, removed = el_split.split_el(rows, excluded)
     el_split.verify_el(rows, train, validation, removed, excluded)
     check(len(rows) == 1453578 and len(removed) == 11, "Prepared EL or IM selection exclusion differs")
+    # Task 2.35 vetoed exact peptide matches to every EL positive, even
+    # validation and the rows excluded from the Task 2.23 EL split.
+    positives = sorted({r["peptide"] for r in rows if r["original_label"] == "1"})
+    with (INPUTS / "all_el_positive_peptides.txt.gz").open("xb") as raw:
+        with gzip.GzipFile(filename="", fileobj=raw, mode="wb", mtime=0) as stream:
+            for peptide in positives:
+                stream.write((peptide + "\n").encode("ascii"))
     native.write_rows(INPUTS / "EL_train.csv.gz", train)
     native.write_rows(INPUTS / "EL_validation.csv.gz", validation)
     return train, validation
@@ -243,7 +250,7 @@ def prepare_training():
         },
         "generated_sha256": {name: sha(INPUTS / name) for name in (
             "EL_train.csv.gz", "EL_validation.csv.gz", "IM_train.csv.gz",
-            "historical_IM_development.csv", "historical_IM_selection.txt")},
+            "historical_IM_development.csv", "historical_IM_selection.txt", "all_el_positive_peptides.txt.gz")},
     })
 
 

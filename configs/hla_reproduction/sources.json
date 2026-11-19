@@ -43,5 +43,19 @@
     "sha256": "ebd8f2b6e582909d4dc8cb2ab7da19f867b5cd3b3cf7502917ca12fecc4bc1b9",
     "license": "Obtain the official audited tar archive under the upstream academic/non-commercial license; confirm intended use before running.",
     "url": "https://codeload.github.com/GfellerLab/MixMHCpred/tar.gz/0a7f9b9e20d1cf02236f4a0a90d16735be879b38"
+  },
+  "jappe_a02": {
+    "path": "hla_reproduction/jappe/41467_2020_20166_MOESM6_ESM.xlsx",
+    "version": "Jappe et al. (2020) DOI 10.1038/s41467-020-20166-4, Supplementary Data 3",
+    "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM6_ESM.xlsx",
+    "sha256": "c15cdee1454aaeafc73574ebd456919e88a15acdc3d3e58cfabb0e44df6361aa",
+    "license": "Article CC BY 4.0 with third-party exceptions; consult supplement credit and license before redistribution."
+  },
+  "jappe_b07": {
+    "path": "hla_reproduction/jappe/41467_2020_20166_MOESM7_ESM.xlsx",
+    "version": "Jappe et al. (2020) DOI 10.1038/s41467-020-20166-4, Supplementary Data 4",
+    "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-020-20166-4/MediaObjects/41467_2020_20166_MOESM7_ESM.xlsx",
+    "sha256": "0b1b160265ae060a6fc353feb2290706c009628f9182ade778a9f2575bb619de",
+    "license": "Article CC BY 4.0 with third-party exceptions; consult supplement credit and license before redistribution."
   }
 }
