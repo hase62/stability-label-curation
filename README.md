@@ -1,5 +1,11 @@
 # Stability-guided curation of human HLA-I immunogenicity training labels
 
+## HLA manuscript source data and reproduction
+
+- [Published table and figure source index](manuscript/source_data/index.tsv)
+- [Render all 12 figures from the published aggregate CSVs](#render-the-published-figures-on-cpu)
+- [EL20→IM30 analysis from original inputs](docs/HLA_EL20_IM30_REPRODUCTION.md)
+
 Task 2.13 adds the optional [source-ID-safe EL loss adapter](docs/EL_STABILITY_LOSS_ADAPTER.md) and portable positive-score sidecar. Engineering tests do not authorize A/B/P training.
 
 Task 2.12 proposes a prospective **EL-positive loss-weighting A/B/P comparison**,
@@ -17,7 +23,7 @@ Task 2.15M adds [repository-controlled artifact recovery](docs/FRESH_CLONE_RECOV
 - `~/codex/repos`: Git repositories; this project lives in `stability-label-curation/`.
 - `~/codex/runs`: regenerable analysis outputs and run artifacts.
 
-Source data and run artifacts are not stored in Git. Paths should resolve from `$CODEX_ROOT` with fallback `~/codex`; `$CODEX_DATA_ROOT`, `$CODEX_REPOS_ROOT`, and `$CODEX_RUNS_ROOT` may override the respective derived roots.
+Raw source data and run artifacts are stored outside Git. The small manuscript aggregate CSVs are tracked for citation. Paths should resolve from `$CODEX_ROOT` with fallback `~/codex`; `$CODEX_DATA_ROOT`, `$CODEX_REPOS_ROOT`, and `$CODEX_RUNS_ROOT` may override the respective derived roots.
 
 Mac is the primary development and analysis environment. WSL2 with 2 x RTX 4090 is the GPU compute environment. GitHub will synchronize the repository between systems.
 
@@ -334,3 +340,24 @@ Verify it with `git rev-parse HEAD`. Then follow the
 [output map](configs/hla_reproduction/output_lineage.csv).
 `python3 scripts/hla_reproduction/run.py plan` prints the stage contracts,
 including the independent S9 and S10 branches.
+
+### Render the published figures on CPU
+
+From a checkout of the manuscript version, use a Python environment with
+[the rendering dependencies](configs/hla_reproduction/requirements-render.txt).
+The following command generates Main Figures 1–2 and Supplementary Figures
+S1–S10 as PDFs, plus a figure-to-source map. Choose a new or empty output directory.
+
+```sh
+python3 scripts/hla_reproduction/render_published.py manuscript/source_data figures-from-public-csv
+```
+
+The [source index](manuscript/source_data/index.tsv) maps both main tables, all
+12 supplementary tables, the 12 PDFs and the Graphical TOC numerics to the
+published CSVs. Main Table 1 and four absolute-metric figures share
+[one source table](manuscript/source_data/ABSOLUTE_AP_SOURCE.csv).
+Main Table 2 and Main Figure 2 share
+[the paired AP source table](manuscript/source_data/ALL_FIVE_PAIRED_CONTRASTS_AP_SOURCE.csv).
+Display rounding uses the precision of the manuscript item. The CSVs preserve
+the recorded values and any missing historical intervals. The rendering
+command does not need models, row-level scores, training receipts or a GPU.

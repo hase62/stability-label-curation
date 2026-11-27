@@ -1,0 +1,11 @@
+cohort,population,stage,contrast,mean_delta_AP,mean_delta_AUROC,mean_delta_PPV10,mean_delta_PPV20,aggregation
+IMPROVE,largest_component_excluded,EL20,W_two-A,-9.189353868366279e-05,6.671218792429305e-05,-0.03333333333333333,-0.05,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,EL20,L-A,0.0008294939568208338,0.007961510991814025,-0.03333333333333333,-0.05,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,EL20,W_two-W_two_perm,-0.00040848804993983784,0.00021877673392824612,0.0,-0.025,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,EL20,L-L_perm,0.0009744644128746616,0.004567822749640922,0.0,-0.016666666666666666,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,EL20,L-L_const,0.0015932982513823014,0.01081522293643509,0.0,0.0,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,IM30,W_two-A,0.0001728767560431344,-0.00046620046620047634,0.0,-0.03333333333333333,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,IM30,L-A,0.0012755240107372955,0.00912308791096674,0.0,-0.03333333333333333,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,IM30,W_two-W_two_perm,0.0003702235526766654,0.002562925290197989,0.0,0.0,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,IM30,L-L_perm,-0.00020014057189452159,0.001736479009206297,0.0,0.0,mean paired seed-specific metric differences
+IMPROVE,largest_component_excluded,IM30,L-L_const,0.0016733427086127646,0.010229332956605644,0.0,0.0,mean paired seed-specific metric differences

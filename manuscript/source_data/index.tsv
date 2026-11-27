@@ -1,0 +1,28 @@
+manuscript_item	source_csv	notes
+Table 1	ABSOLUTE_AP_SOURCE.csv	AP_mean / AUROC_mean
+Figure 1	ABSOLUTE_AP_SOURCE.csv	AP
+Figure S1	ABSOLUTE_AP_SOURCE.csv	AUROC
+Figure S3	ABSOLUTE_AP_SOURCE.csv	PPV10
+Figure S4	ABSOLUTE_AP_SOURCE.csv	PPV20
+Table 2	ALL_FIVE_PAIRED_CONTRASTS_AP_SOURCE.csv	Distinct cohort / stage / contrast, mean_delta and interval repeated across three seeds
+Figure 2	ALL_FIVE_PAIRED_CONTRASTS_AP_SOURCE.csv	
+Figure S2	ALL_FIVE_PAIRED_CONTRASTS_AUROC_SOURCE.csv	
+Figure S5	CURVE_EL_train_update_BCE_SOURCE.csv	
+Figure S6	CURVE_EL_validation_AP_SOURCE.csv	
+Figure S7	CURVE_EL_validation_BCE_SOURCE.csv	
+Figure S8	CURVE_IM_train_update_BCE_SOURCE.csv	
+Table S4	S_Thermal_Transfer_9.csv	
+Figure S9	S_Thermal_Transfer_9.csv	
+Table S5	S_LowStability_Removal_7_Arms.csv	
+Figure S10	S_LowStability_Removal_7_Arms.csv;Historical_Deletion_Contrasts.csv	Panels a–c: IM_AP, EL_validation_AP, Macro_HLA_EL_AP. Panel d: Delta AP and interval endpoints.
+Table S6	Historical_Deletion_Contrasts.csv	
+Table S1	IMPROVE_SELECTION_COMPLETE_COUNTS.csv;IMPROVE_ORIGINAL_RANKEL_DISTRIBUTION.csv	
+Table S2	OFFICIAL_ENSEMBLE_METRICS.csv;MIX_SAVED_REFERENCE_DIAGNOSTIC.csv	
+Table S3	LARGEST_COMPONENT_EXCLUDED_MEAN_CONTRASTS.csv;LARGEST_COMPONENT_EXCLUDED_CI.csv	
+Table S7	OFFICIAL_PUBLIC_DATA_EXPOSURE.csv	
+Table S8	STABILITY_TEACHER_ZERO_SENSITIVITY_REPORTED.csv	
+Table S9	ACTUAL_DEVELOPMENT_OVERLAP_EVIDENCE.csv	
+Table S10	HLA_PAIR_AUROC_CONTRASTS.csv	
+Table S11	EVAL_HLA_COVERAGE.csv	
+Table S12	COVERED_HLA_IM30_AP.csv	
+Graphical TOC	Graphical_TOC_Source.csv	

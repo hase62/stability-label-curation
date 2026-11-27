@@ -1,0 +1,2 @@
+cohort,n,positive,model,prediction_SHA256,source_freeze_SHA256,identity_alignment,AP,AUROC,PPV10,PPV20,score_min,score_max,score_outside_unit_interval_n,interpretation
+IMPROVE,7788,227,MixMHCpred v3.0 native designated-HLA score,c7420d76bbb6263c5c999dcc9bbef18521f07b9a1f35bca72c679bc94fc8d86a,e67c82c78790dedd1a3914ab70c14142c2eeb9fd7fa856d0d9a1b1e5909b4675,same exact full7788 observations,0.042408446786913565,0.5612615048122553,0.2,0.15,-4.098333,2.383347,6688,"descriptive comparison with fixed native scores, higher is stronger"

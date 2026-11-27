@@ -1,0 +1,15 @@
+input,input_rows,cohort,evaluation_rows,evaluation_positive,exact_peptide_matches,exact_peptide_match_positives,exact_pair_matches,exact_pair_match_positives,source_audit_sha256
+EL fitting,1308196,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+EL fitting,1308196,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+EL validation,145371,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+EL validation,145371,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+IM fitting,3428,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+IM fitting,3428,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+Teacher fitting partition,21625,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+Teacher fitting partition,21625,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+Teacher validation partition,5406,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+Teacher validation partition,5406,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+"Teacher fitting, 67 supported HLA groups",21559,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+"Teacher fitting, 67 supported HLA groups",21559,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+"Teacher validation, 67 supported HLA groups",5394,Neo,267,57,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda
+"Teacher validation, 67 supported HLA groups",5394,IMPROVE,7788,227,0,0,0,0,e851322709a36c390864e2be08237998e91b350bff1c9d67d2e9e6364c352bda

@@ -1,0 +1,3 @@
+validation_population,scoreable_rows,macro_HLA_Spearman_zero_retained,macro_HLA_Spearman_zero_excluded
+All scoreable validation,5394,0.617461,0.562973
+Common validation with half-life greater than zero,4482,0.597129,0.576972

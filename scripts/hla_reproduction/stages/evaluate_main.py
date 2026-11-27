@@ -23,7 +23,8 @@ def point(y,p):
 def frozen_cohort(name):
  spec=context()['cohorts'][name];rr=records(D/'cohorts'/f'{name}_identities.jsonl');yy=records(D/'cohorts'/f'{name}_outcomes.jsonl');assert sha(D/'cohorts'/f'{name}_identities.jsonl')==spec['identity_sha256'] and sha(D/'cohorts'/f'{name}_outcomes.jsonl')==spec['outcome_sha256'];native.assert_alignment([r['source_id'] for r in rr],[r['source_id'] for r in yy]);return rr,[int(r['label']) for r in yy]
 
-def group_bootstrap(rr,y,vectors,cohort,mode):
+def group_bootstrap(rr,y,vectors,cohort,mode, *, stages=('EL20','IM30'),
+                    contrasts=CONTRASTS, metrics=('AP','AUROC')):
  """Same authentic integer-multiplicity kernel and Python Random component draws."""
  field='patient_peptide_component' if cohort=='IMPROVE' else 'cluster_id';groups=sorted({r[field] for r in rr});lookup={g:i for i,g in enumerate(groups)};indices=np.array([lookup[r[field]] for r in rr],dtype=np.int64);ranks={}
  for key,p in vectors.items():
@@ -33,20 +34,20 @@ def group_bootstrap(rr,y,vectors,cohort,mode):
   for draw in range(10000):
    counts=np.bincount([rng.randrange(len(groups)) for _ in groups],minlength=len(groups));weights=counts[indices];pm={key:ranking.metrics(weights,top_k=False) for key,ranking in ranks.items()}
    if any(m['AP'] is None for m in pm.values()):reasons['single_class_or_empty']+=1
-   for stage in ['EL20','IM30']:
-    for contrast,left,right in CONTRASTS:
-     for metric in ['AP','AUROC']:
+   for stage in stages:
+    for contrast,left,right in contrasts:
+     for metric in metrics:
       values=[pm[left,seed,stage][metric]-pm[right,seed,stage][metric] for seed in SEEDS if pm[left,seed,stage][metric] is not None and pm[right,seed,stage][metric] is not None]
       if len(values)==3:samples[stage,contrast,metric].append(statistics.mean(values))
    log.write(json.dumps({'draw':draw+1,'counts':counts.tolist()},separators=(',',':'))+'\n')
    if (draw+1)%1000==0:print('BOOTSTRAP',cohort,mode,draw+1,flush=True)
  finally:log.close()
  ci=[]
- for stage in ['EL20','IM30']:
-  for contrast,left,right in CONTRASTS:
-   for metric in ['AP','AUROC']:
-    a=samples[stage,contrast,metric];ci.append({'cohort':cohort,'population':mode,'stage':stage,'contrast':contrast,'metric':metric,'lower_95':quantile(a,.025),'upper_95':quantile(a,.975),'attempts':10000,'valid_draws':len(a),'invalid_draws':10000-len(a),'component_n':len(groups),'seed':262742,'unit':field,'method':'native integer-multiplicity paired component bootstrap; percentile95; same draws all36 scores; seed-mean differences','quantile':'linear interpolation on sorted values, index=(n-1)*q','interpretation':'conditional fixed-model exploratory; no future seed/patient distribution uncertainty'})
- meta={'cohort':cohort,'population':mode,'components':len(groups),'attempts':10000,'invalid_reasons':dict(reasons),'seed':262742,'draws_shared_all36_conditions':True,'score_transform_recomputed':False,'private_draw_sha256':sha(private/f'{cohort}_{mode}_draw_multiplicities.jsonl.gz')};return ci,meta
+ for stage in stages:
+  for contrast,left,right in contrasts:
+   for metric in metrics:
+    a=samples[stage,contrast,metric];ci.append({'cohort':cohort,'population':mode,'stage':stage,'contrast':contrast,'metric':metric,'lower_95':quantile(a,.025),'upper_95':quantile(a,.975),'attempts':10000,'valid_draws':len(a),'invalid_draws':10000-len(a),'component_n':len(groups),'seed':262742,'unit':field,'method':f'native integer-multiplicity paired component bootstrap; percentile95; same draws all{len(vectors)} scores; seed-mean differences','quantile':'linear interpolation on sorted values, index=(n-1)*q','interpretation':'conditional fixed-model exploratory; no future seed/patient distribution uncertainty'})
+ meta={'cohort':cohort,'population':mode,'components':len(groups),'attempts':10000,'invalid_reasons':dict(reasons),'seed':262742,'draws_shared_all36_conditions':len(vectors)==36,'score_transform_recomputed':False,'private_draw_sha256':sha(private/f'{cohort}_{mode}_draw_multiplicities.jsonl.gz')};return ci,meta
 
 def summarize_points(points,population):
  means=[];contrasts=[];meancontr=[]

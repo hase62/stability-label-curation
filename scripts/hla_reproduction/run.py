@@ -51,8 +51,13 @@ GRAPH = {
                      ["metrics/MIX_SAVED_REFERENCE_DIAGNOSTIC.csv"]),
     "official-exposure": (["preflight/PRETRAINING_PROTOCOL_SEAL.json", "preflight/raw_inputs.json#bigmhc_v4"],
                           ["metrics/OFFICIAL_PUBLIC_DATA_EXPOSURE.csv"]),
-    "supplement": (["receipts/{arm}_{seed}_predictions_frozen.json", "preflight/cohorts_generated.json"],
-                   ["metrics/ACTUAL_DEVELOPMENT_OVERLAP_EVIDENCE.csv", "metrics/NEO_EL20_AUROC_PAIR_DECOMPOSITION.csv"]),
+    "supplement": (["receipts/{arm}_{seed}_predictions_frozen.json", "preflight/cohorts_generated.json",
+                    "metrics/CONTROL_CONSTANT_FP32_DIAGNOSTICS.csv", "metrics/ALL_HLA_DESCRIPTIVE_METRICS.csv",
+                    "metrics/MAIN_72_METRICS.csv"],
+                   ["metrics/ACTUAL_DEVELOPMENT_OVERLAP_EVIDENCE.csv", "metrics/NEO_EL20_AUROC_PAIR_DECOMPOSITION.csv",
+                    "metrics/HLA_EL_WEIGHTING_COVERAGE_SOURCE.csv", "metrics/EVAL_HLA_COVERAGE.csv",
+                    "metrics/EVAL_HLA_COVERAGE_BY_ALLELE.csv", "metrics/HLA_PAIR_AUROC_BY_SEED.csv",
+                    "metrics/HLA_PAIR_AUROC_CONTRASTS.csv", "metrics/COVERED_HLA_IM30_AP.csv"]),
     "evaluate": (["receipts/{arm}_{seed}_predictions_frozen.json"],
                  ["metrics/MAIN_72_METRICS.csv", "metrics/MAIN_CONDITIONAL_CI.csv", "private/bootstrap/*.jsonl.gz"]),
     "qa": (["metrics/MAIN_72_METRICS.csv", "metrics/epochs/*.json"],
@@ -339,6 +344,7 @@ def dispatch(args, run: Path, storage) -> None:
     elif args.phase == "official-exposure":
         worker(run, "official_exposure.py")
     elif args.phase == "supplement":
+        worker(run, "recalculate_hla.py", "metrics", "metrics")
         worker(run, "supplement.py")
     elif args.phase == "evaluate":
         worker(run, "evaluate_main.py")

@@ -146,6 +146,12 @@ def mapping_for(alleles):
         def get(self, value, default=None):
             allele = bigmhc.canonical_hla(value)
             return allele if allele in alleles else default
+
+        def __getitem__(self, value):
+            allele = self.get(value)
+            if allele is None:
+                raise KeyError(value)
+            return allele
     return ExactMapping()
 
 

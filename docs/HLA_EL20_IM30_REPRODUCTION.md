@@ -1,5 +1,10 @@
 # HLA EL20→IM30 reproducibility
 
+For a lightweight reproduction using the fixed manuscript aggregates, see the
+[published figure command](../README.md#render-the-published-figures-on-cpu)
+and the [source data index](../manuscript/source_data/index.tsv).
+
+
 This entry point implements the raw-input path for the November 18 submission closeout. It uses a clean checkout of this commit, version-pinned upstream bytes, and a new output directory. The historical run is evidence for expected hashes and dimensions. It is unnecessary at runtime. Scientific operations were excluded from the November 19 implementation audit.
 
 ## Storage, environment and sources
@@ -74,6 +79,8 @@ export CUDA_VISIBLE_DEVICES=0
 "$cpu_python" "$entry" supplement --run "$run"
 "$render_python" "$entry" figures --run "$run"
 ```
+
+The `prepare` stage includes the exact HLA lookup. After `evaluate`, `supplement` regenerates Tables S10–S12 from this run's metrics, prediction receipts, and regenerated cohorts. The [output map](../configs/hla_reproduction/output_lineage.csv) lists the resulting CSVs. Keep these outputs in the run directory.
 
 The acquired assets are read-only in scientific stages. Initialization, stage output, logs and status are confined to the new run. The fit command holds one local supervisor lock and invokes one worker at a time. Each seed's A is first. A started or failed incomplete fit stops the queue with the saved attempt and epoch-state receipts. A failed fit is never started automatically from a weights-only restart. At seal time the only fit-active data are cohort-independent training inputs, generated weight controls, and authenticated upstream encoder/source code. Training workers refuse access to cohort identities, outcomes and prediction files. Inference is a separate process and reads only cohort identities. The evaluation credential-free receipt is produced after verifying the 72 new prediction files.
 

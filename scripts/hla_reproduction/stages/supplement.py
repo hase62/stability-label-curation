@@ -1,7 +1,8 @@
-"""Supplementary exact-identity audit and Neo EL20 AUROC pair decomposition."""
+"""Supplementary identity audit, pair decomposition, and covered-HLA sensitivity."""
 from __future__ import annotations
 
 from collections import Counter
+import csv
 import statistics
 
 from common import D, SEEDS, csvout, native, read, records, rows, sha, validate_seal
@@ -87,7 +88,70 @@ def neo_decomposition():
     csvout(D / "metrics/NEO_EL20_AUROC_PAIR_DECOMPOSITION.csv", output)
 
 
+def covered_hla_sensitivity():
+    from evaluate_main import average_precision_score, frozen_cohort, group_bootstrap
+
+    with (D / "metrics/CONTROL_CONSTANT_FP32_DIAGNOSTICS.csv").open(newline="", encoding="utf-8") as stream:
+        controls = list(csv.DictReader(stream))
+    by_seed = {
+        seed: {row["hla"]: int(row["positive_n"]) for row in controls if int(row["seed"]) == seed}
+        for seed in SEEDS
+    }
+    covered = by_seed[SEEDS[0]]
+    if (len(controls) != len(SEEDS) * 49 or len(covered) != 49
+            or sum(covered.values()) != 63053 or any(group != covered for group in by_seed.values())):
+        raise ValueError("Covered HLA population differs from the fixed control design")
+
+    arms = ("W_two", "W_two_perm")
+    stage = "IM30"
+    contrast = ("W_two-W_two_perm", *arms)
+    output = []
+    for cohort, expected in (("IMPROVE", (4889, 138, 22, 38)), ("Neo", (179, 44, 24, 177))):
+        identities, labels = frozen_cohort(cohort)
+        keys = [row["source_id"] for row in identities]
+        retained = [index for index, row in enumerate(identities) if row["hla"] in covered]
+        subset = [identities[index] for index in retained]
+        targets = [labels[index] for index in retained]
+        component = "patient_peptide_component" if cohort == "IMPROVE" else "cluster_id"
+        counts = (len(subset), sum(targets), len({row["hla"] for row in subset}),
+                  len({row[component] for row in subset}))
+        if counts != expected:
+            raise ValueError(f"{cohort}: covered HLA census changed: {counts}")
+        base = dict(zip(("n", "positive", "hla_n", "component_n"), counts, strict=True))
+        base = {"cohort": cohort, "stage": stage, **base}
+
+        vectors = {}
+        for arm in arms:
+            for seed in SEEDS:
+                name = f"{arm}_{seed}_{stage}_{cohort}.jsonl"
+                path = D / "private/predictions" / name
+                receipt = read(D / f"receipts/{arm}_{seed}_predictions_frozen.json")
+                if sha(path) != receipt[name]["sha256"]:
+                    raise ValueError(f"Changed covered HLA prediction: {name}")
+                scores = records(path)
+                native.assert_alignment(keys, [row["source_id"] for row in scores])
+                vectors[arm, seed, stage] = [scores[index]["positive_probability"] for index in retained]
+        points = []
+        for seed in SEEDS:
+            left, right = (float(average_precision_score(targets, vectors[arm, seed, stage])) for arm in arms)
+            points.append({"W_two_AP": left, "W_two_perm_AP": right, "delta_AP": left - right})
+            output.append({**base, "seed": seed, **points[-1]})
+        intervals, _ = group_bootstrap(subset, targets, vectors, cohort, "covered_hla",
+                                       stages=(stage,), contrasts=(contrast,), metrics=("AP",))
+        ci, = intervals
+        output.append({
+            **base, "seed": "mean",
+            **{metric: statistics.mean(row[metric] for row in points) for metric in points[0]},
+            **{key: ci[key] for key in ("contrast", "metric", "lower_95", "upper_95", "attempts",
+                                       "valid_draws", "invalid_draws")},
+            "invalid_reason": "single_class_or_empty" if ci["invalid_draws"] else "",
+            "bootstrap_seed": ci["seed"],
+        })
+    csvout(D / "metrics/COVERED_HLA_IM30_AP.csv", output)
+
+
 if __name__ == "__main__":
     validate_seal()
     overlap_table()
     neo_decomposition()
+    covered_hla_sensitivity()

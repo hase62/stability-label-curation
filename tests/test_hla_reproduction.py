@@ -50,6 +50,13 @@ class HlaReproductionTest(unittest.TestCase):
         self.assertEqual(row, {"prepared_row_index": 1, "hla": hla, "peptide": "ACDEFGHIK", "original_label": "1"})
         self.assertEqual(binding["source_row_id"], prepare.pilot.row_id("f"*64, "im_train.csv", 1))
 
+    def test_exact_hla_lookup_supports_indexing(self):
+        hla = "HLA-A*02:01"
+        mapping = prepare.mapping_for({hla})
+        self.assertEqual(mapping[hla], hla)
+        with self.assertRaises(KeyError):
+            mapping["HLA-B*07:02"]
+
     def test_neo_identity_projection_does_not_decode_outcomes(self):
         [row] = neo.source_identities(BytesIO(b"mhc,pep,tgt\nHLA-A*02:01,ACDEFGHIK,opaque\n"))
         self.assertNotIn("label", row)

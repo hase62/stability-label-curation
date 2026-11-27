@@ -1,0 +1,5 @@
+cohort,stage,n,positive,ensemble_members,aggregation,AP,AUROC,PPV10,PPV20,score_sha256,checkpoint_revision,training_exposure
+IMPROVE,EL,7788,227,7,mean probability then metric,0.04555963623916984,0.5168640140950519,0.1,0.1,32004ac9a221607065aa111f2944e18d82f4b5908fb53c46ee0c6f3e9140d0c1,199e890fa69a63646730bcecea0a520e08ca4f02,see official source exposure audit; not presumed independent
+IMPROVE,IM,7788,227,7,mean probability then metric,0.03730491876801459,0.5652627353326571,0.0,0.0,a7da6a976a9b1882cd12ae430fe8fea28a6059f4e06ea9071c8f222808f50e09,199e890fa69a63646730bcecea0a520e08ca4f02,see official source exposure audit; not presumed independent
+Neo,EL,267,57,7,mean probability then metric,0.21685949539801613,0.5010860484544695,0.1,0.1,492a9b670211885dd47a98a134dcdb37b71adc764674cace8b3ad3b8bd84d75e,199e890fa69a63646730bcecea0a520e08ca4f02,see official source exposure audit; not presumed independent
+Neo,IM,267,57,7,mean probability then metric,0.24018633952161603,0.5137844611528821,0.3,0.25,63699cccbdcb93d438b98ad7e7c086728efff24e21029b4b2e2165c591f46d58,199e890fa69a63646730bcecea0a520e08ca4f02,see official source exposure audit; not presumed independent
