@@ -346,10 +346,10 @@ including the independent S9 and S10 branches.
 From a checkout of the manuscript version, use a Python environment with
 [the rendering dependencies](configs/hla_reproduction/requirements-render.txt).
 The following command generates Main Figures 1–2 and Supplementary Figures
-S1–S10 as PDFs, plus a figure-to-source map. Choose a new or empty output directory.
+S1–S10 as PDFs, plus a figure-to-source map. Choose a new or empty output directory outside the checkout.
 
 ```sh
-python3 scripts/hla_reproduction/render_published.py manuscript/source_data figures-from-public-csv
+python3 scripts/hla_reproduction/render_published.py manuscript/source_data ../hla-figures-from-public-csv
 ```
 
 The [source index](manuscript/source_data/index.tsv) maps both main tables, all
